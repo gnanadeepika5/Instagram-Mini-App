@@ -9,9 +9,7 @@ const posts = require('./routes/api/posts');
 const app = express();
 
 //Body parser configuration
-app.use(bodyparser.urlencoded({
-    extended: false
-}));
+app.use(bodyparser.urlencoded({extended: false}));
 app.use(bodyparser.json());
 
 //Passport configuration
