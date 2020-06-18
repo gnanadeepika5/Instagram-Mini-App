@@ -1,5 +1,6 @@
-const mongoose = rquire('mongoose');
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
 //create User schema
 const UserSchema = new Schema({
   name : {
@@ -9,21 +10,20 @@ const UserSchema = new Schema({
   email: {
     type : String,
     required : true
-  }
-,
-password: {
+  },
+  password: {
   type: String,
-  required :true
-},
-//talking to external api gravatar to get a picture of a user
-avatar:{
-  type:sring,
-  required:false
-},
-date:{
+  required : true
+  },
+  //talking to external api gravatar to get a picture of a user
+  avatar: {
+  type: String,
+  required: false
+  },
+  date: {
   type: Date,
   default: Date.now //now gives current date and time.
-}
+  }
 });
 User = mongoose.model('users', UserSchema); // User gets actual collection of user data from mongodb
 module.exports = User; //export that collected user data.
