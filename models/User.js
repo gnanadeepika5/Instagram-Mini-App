@@ -25,5 +25,5 @@ const UserSchema = new Schema({
   default: Date.now //now gives current date and time.
   }
 });
-User = mongoose.model('users', UserSchema); // User gets actual collection of user data from mongodb
-module.exports = User; //export that collected user data.
+
+module.exports = User = mongoose.model('users', UserSchema);
