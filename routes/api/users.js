@@ -2,6 +2,7 @@ const express = require('express');
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 const router = express.Router();
 const User = require('../../models/User');
 const keys = require('../../config/keys');
@@ -83,4 +84,15 @@ router.post('/login', (req, res) => {
     })
     .catch();
 })
+
+// @route   CET api/users/current
+// @desc    Return current user
+// @access  Private
+router.get('/current', 
+passport.authenticate('jwt', {session:false}),
+(req,res) => {
+  return res.json({msg:'Success'});
+})
+
+
 module.exports = router;
