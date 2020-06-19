@@ -21,8 +21,11 @@ router.post('/newPost', (req, res) =>
          .catch(err => console.log(err));
 
 })
-router.get('/Post',(req,res) =>{
-  Post.find({"email":"gnana5@gmail.com"})
+router.get('/Post',(req,res) => {
+  console.log("printing");
+  console.log(req.query);//in postman, give email:some id from db in params tab
+  const email = (req.query).email;
+  Post.find({email})
   .then((post) => res.json(post))
   // .then(res.send({msg:'found' }))
   .catch(err=>console.log(err));
