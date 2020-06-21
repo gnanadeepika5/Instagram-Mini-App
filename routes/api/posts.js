@@ -29,9 +29,8 @@ router.get('/Post',(req,res) => {
   .then((post) => res.json(post))
   // .then(res.send({msg:'found' }))
   .catch(err=>console.log(err));
-  
-  
 })
+
 
 
 module.exports = router;
