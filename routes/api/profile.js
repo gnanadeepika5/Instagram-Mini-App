@@ -9,7 +9,7 @@ const router = express.Router();
 // @desc Private
 // @desc get the profile details
 
-router.get('/', passport.authenticate('jwt', {
+router.get('/profile', passport.authenticate('jwt', {
     session: false
 }, (req, res) => {
     let errors = {};
