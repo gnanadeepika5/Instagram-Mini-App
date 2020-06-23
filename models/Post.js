@@ -73,6 +73,9 @@ user:{
   type: Schema.Types.ObjectId,
    ref:'users'
 },
+// user:{
+//   type: String
+// },
 
   name : {
     type: String,
