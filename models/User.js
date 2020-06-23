@@ -15,6 +15,10 @@ const UserSchema = new Schema({
   type: String,
   required : true
   },
+  handle: {
+    type: String,
+    required: true
+  },
   //talking to external api gravatar to get a picture of a user
   avatar: {
   type: String,

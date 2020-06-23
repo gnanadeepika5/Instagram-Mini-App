@@ -69,16 +69,29 @@ const PostSchema = new Schema({
 
 
 
-
+user:{
+  type: Schema.Types.ObjectId,
+   ref:'users'
+},
 
   name : {
     type: String,
-  required:true
+  required: true
   },
-  email: {
-    type : String,
-    required : true
+  avatar:
+  {
+    type: String,
+    required: true
   },
+  handle:{
+    type:String,
+    required:true
+  },
+  imageOrVideo:{
+      type:String,
+      required:false
+    },
+
   date: {
   type: Date,
   default: Date.now //now gives current date and time.
