@@ -24,10 +24,10 @@ const passport = require('passport');
 router.post('/', (req, res) =>
 {
   const newPost = new Post({
-    user: req.body.id,
-    name: req.body.name,
-    avatar: req.body.avatar,
-    handle: req.body.handle,
+    user: req.body.id, //later it comes from token
+    name: req.body.name,//later it comes from token
+    avatar: req.body.avatar,//later it comes from token
+    handle: req.body.handle,//later it comes from token
     imageOrVideo: req.body.imageOrVideo
   });
   console.log(`NewPost created. Post details - ${newPost.id}, ${newPost.name}, ${newPost.avatar}, ${newPost.imageOrVideo} `);
@@ -74,7 +74,7 @@ router.delete('/id/:postid', (req,res) =>
 {
   Post.findOne({_id:req.params.postid})
       .then(post => {
-                    post.remove()
+                    post.deleteOne()
                         .then(()=>res.json({msg:'Post deleted successfully'}))
                         .catch(err => res.json({msg:'post not found'}));
       })
@@ -94,18 +94,65 @@ router.delete('/handle/:handle', (req,res) => {
     for(i=0;i<post.length;i++)
     {postListItem = post[i];
       console.log('post is'+post[i])
-      post[i].remove()
+      post[i].deleteOne()
             .then(()=>console.log(postListItem))
             .catch(err => console.log(err));
     }
     res.json({msg:'All the posts associated with handle got deleted successfully'})
-   
-    // post.deleteMany()
-    //     .then(() => res.json({msg: 'All of your posts have been successfully deleted.'}))
-    //     .catch(err => console.log(err));
   })
   .catch(err => console.log(err));
       
+})
+
+// @router POST /api/posts/comment/:id
+// @desc comment a post based on post id
+// @access public
+router.post('/comment/:id', (req,res) =>
+{
+  Post.findById(req.params.id)
+      .then(post =>{
+        //create a new comment
+        const newComment = {
+          user: req.body.id,//later it comes from token
+          text:req.body.text,
+          name:req.body.name,
+          avatar:req.body.avatar
+        }
+        //append the new comment to the comments array by using unshift() method.And this will also returns the new length after appending new comment everytime.To append back of array use push() method
+        post.comments.unshift(newComment);
+        //save in db
+        post.save()
+            .then(post, res.json(post))
+            .catch(err => console.log(err));
+      })
+      .catch(err=> console.log(err));
+})
+
+//@router delete api/posts/comment/:post_id/:comment_id
+//@desc delete comment on post  by comment id(go to post so post id,find a comment want to delete so comment id)
+//access public
+router.delete('/comment/:post_id/:comment_id', (req,res)=>{
+  //find   a post by post_id
+  Post.findById(req.params.post_id)
+      .then(post=> {
+        //find the comment you want to delete from the comments array in the post
+        if(post.comments.filter(comment=>comment._id.toString() === req.params.comment_id).length===0)
+        {
+          return res.json({commentUnavailable: 'No comment to be deleted'});
+        }
+        // console.log('comment length'+ req.params.comment_id.length);
+        //comment exists, find index of the comment to be deleted
+        const removeIndex = post.comments
+                                .map(comment => comment._id.toString()) // goes to every comment and get the comment id in string type so that our comment_id passed in params can be found
+                                .indexOf(req.params.comment_id);//gets the index of comment_id which found through map() function above
+        //splice the array
+        post.comments.splice(removeIndex, 1);
+        //save
+        post.save()
+            .then(post=>res.json(post))
+            .catch(err =>console.log(err));
+      })
+      .catch(err=>console.log(err));
 })
 
 

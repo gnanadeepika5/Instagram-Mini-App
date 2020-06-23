@@ -13,59 +13,13 @@ const Schema= mongoose.Schema;
 
 //create Post Schema
 const PostSchema = new Schema({
-  // user:{
-  //   type:Schema.Types.ObjectId,
-  //   ref:'users'
-  // },
-  // name:{
-  //   type:string,
-  //   required:true
-  // },
-  // avatar:{
-  //   type:string
-  // },
-  // handle:
-  // {
-  //   type:string
-  // },
-  // imageOrVideo:{
-  //   type:string,
-  //   required:false
-  // },
-  // text:{
-  //   type:string
-  // },
   // likes:[{
   //   user:{
   //     type:Schema.Types.ObjectId,
   //     ref:'users'
   //   }
 
-  // }],
-  // comments:[{
-  //   user:{
-  //       type:Schema.Types.ObjectId,
-  //       ref:'users'
-  //   },
-  //   name:{
-  //     type:string,
-  //   },
-  //   avatar:{
-  //     type:string
-  //   },
-  //   text:{
-  //     type:string,
-  //     required:true
-  //   },
-  //   date:{
-  //     type:Date,
-  //     default:Date.now
-  //   }
-  // }],
-  // date:{
-  //   type:Date,
-  //   default:Date.now
-  // }
+  // }]
 
 
 
@@ -73,10 +27,6 @@ user:{
   type: Schema.Types.ObjectId,
    ref:'users'
 },
-// user:{
-//   type: String
-// },
-
   name : {
     type: String,
   required: true
@@ -92,8 +42,33 @@ user:{
   },
   imageOrVideo:{
       type:String,
-      required:false
+      required:true
     },
+    text:{
+      type:String
+    },
+    comments:[{
+    user:{
+        type:Schema.Types.ObjectId,
+        ref:'users'
+    },
+    name:{
+      type:String,
+    },
+    avatar:{
+      type:String
+    },
+    text:{
+      type:String,
+      required:true
+    },
+    date:{
+      type:Date,
+      default:Date.now
+    }
+  }],
+    
+    
 
   date: {
   type: Date,
