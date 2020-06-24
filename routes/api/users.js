@@ -7,6 +7,7 @@ const router = express.Router();
 const User = require('../../models/User');
 const keys = require('../../config/keys');
 const validateRegisterInput = require('../../validations/register');
+const validateLoginInput = require('../../validations/login');
 
 
 // @route   POST api/users/register
@@ -126,6 +127,13 @@ router.get('/test', (req, res) => {
 // @desc    Login user/returning a token
 // @access  Public 
 router.post('/login', (req, res) => {
+//Validation
+const {errors, isValid} = validateLoginInput(req.body);
+
+if (!isValid) {
+  return res.status(400).json(errors);
+}
+
   const email = req.body.email;
   
   const password = req.body.password;
