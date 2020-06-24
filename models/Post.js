@@ -13,13 +13,7 @@ const Schema= mongoose.Schema;
 
 //create Post Schema
 const PostSchema = new Schema({
-  // likes:[{
-  //   user:{
-  //     type:Schema.Types.ObjectId,
-  //     ref:'users'
-  //   }
-
-  // }]
+  
 
 
 
@@ -66,6 +60,13 @@ user:{
       type:Date,
       default:Date.now
     }
+  }],
+  likes:[{
+    user:{
+      type:Schema.Types.ObjectId,
+      ref:'users'
+    }
+
   }],
     
     
