@@ -2,6 +2,7 @@ const express = require('express');
 const Post = require('../../models/Post');
 const passport = require('passport');
 const validatePostInput = require('../../validations/post');
+const validateComment = require('../../validations/comment');
 const isEmpty = require('../../validations/isEmpty');
 
 const router = express.Router();
@@ -27,6 +28,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
     name: req.user.name,//later it comes from token
     avatar: req.user.avatar,//later it comes from token
     handle: req.user.handle,//later it comes from token
+    text: req.body.text,
     imageOrVideo: req.body.imageOrVideo
   });
   console.log(`NewPost created. Post details - ${newPost.id}, ${newPost.name}, ${newPost.avatar}, ${newPost.imageOrVideo} `);
@@ -71,20 +73,7 @@ router.get('/handle/:handle', passport.authenticate('jwt', {session: false}), (r
 
 
 
-// //@route Delete api/posts/id/:id
-// //@access public
-// //@desc delete a post based on post id
-// router.delete('/id/:postid', (req,res) =>
-// {
-//   Post.findOne({_id:req.params.postid})
-//       .then(post => {
-//                     post.remove()
-//                         .then(()=>res.json({msg:'Post deleted successfully'}))
-//                         .catch(err => res.json({msg:'post not found'}));
-//       })
-//       .catch(err =>console.log(err));
 
-// })
 
 // @route   DELETE /api/posts/id/:id
 // @access  private
@@ -114,8 +103,8 @@ router.delete('/user/:id', passport.authenticate('jwt', {session: false}), (req,
 
   Post.find({user: req.params.id})
   .then(post => {
-    console.log('post details: name= ' + post)
-    console.log('post length'+ post.length);
+    // console.log('post details: name= ' + post)
+    // console.log('post length'+ post.length);
 
     for(i=0;i<post.length;i++)
     {
@@ -124,7 +113,7 @@ router.delete('/user/:id', passport.authenticate('jwt', {session: false}), (req,
 
       if(postUser != req.user.id)
       {
-       return res.json({msg:'you are not a valid user to delete this post'});
+       return res.json({msg:'UnAuthorized user to delete this post'});
       }
       else{
       
@@ -135,7 +124,7 @@ router.delete('/user/:id', passport.authenticate('jwt', {session: false}), (req,
             .catch(err => console.log(err));
       }
     }
-    res.json({msg:'All the posts associated with handle got deleted successfully'})
+    res.json({msg:'All the posts associated which you created got deleted successfully'})
   })
   .catch(err => console.log(err));
       
@@ -145,20 +134,19 @@ router.delete('/user/:id', passport.authenticate('jwt', {session: false}), (req,
 // @access private
 router.post('/comment/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
   //validation
-  const {errors, isValid} = validatePostInput(req.body);
+  const {errors, isValid} = validateComment(req.body);
   if(!isValid){
     return res.json(errors);
   }
-//router.post('/comment/:id', (req,res) =>
-//{
+
   Post.findById(req.params.id)
       .then(post =>{
         //create a new comment
         const newComment = {
           user: req.user.id,//later it comes from token
           text:req.body.text,
-          name:req.body.name,
-          avatar:req.body.avatar
+          name:req.user.name,//later it comes from token
+          avatar:req.user.avatar//later it comes from token
         }
         //append the new comment to the comments array by using unshift() method.And this will also returns the new length after appending new comment everytime.To append back of array use push() method
         post.comments.unshift(newComment);
@@ -203,23 +191,31 @@ router.delete('/comment/:post_id/:comment_id', passport.authenticate('jwt', {ses
 // @router    POST /api/posts/like/:id
 // @desc      Like a post based on postId
 // @access    Private
+
+
 router.post('/like/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
 
   Post.findById(req.params.id)
       .then(post => {
         // Loop through the likes array in the post collection
         // to check whether the user has liked the post before
-        if((post.likes.filter(like => like.user.toString() === req.user.id).length > 0)){
+        likesLength = post.likes.filter(like => like.user.toString() === req.user.id).length
+        console.log(`likes length is like ${likesLength}`);
+        //if((post.likes.filter(like => like.user.toString() === req.user.id).length > 0)){
+          if(likesLength>0){
           
-          // User already liked the post, delete him from likes list
+          // User already liked the post, so user in payload and user in post db are same. 
+          //lets take length of the user likes(how many likes this user did) if user liked 1 or more than 1 time 
+          //that means,if index will be 0 or more than 0
+          //so get the index of one of his likes object and put it in removeIndex
+          //so write if removeIndex is 0 or more than 0, that means not -1, then return response that user already liked this post
             // The below sentence does not enable a user who has liked a post to like it again.
             // return res.status(400).json({msg: 'Already liked the post. Cannot relike.'})
 
             const removeIndex = post.likes.map(like => like.user)
                                         .indexOf(req.user.id);
-          
-            if(removeIndex == -1)
-            {
+             console.log(`removeindex in like : ${removeIndex}`);
+            if(removeIndex != -1){
               return res.status(400).json({likeError: 'Already liked the post'})
             }                           
 
@@ -241,8 +237,10 @@ router.post('/like/:id', passport.authenticate('jwt', {session: false}), (req, r
             .then(post => res.json(post))
             .catch(err => console.log(err));
       })
-      .catch(err => res.status(400).json({msg: 'Could not like the post'}));
+      .catch(err => res.status(400).json({msg: 'Could not like the post as post is not found with this id'}));
 })
+
+
 
 
 
@@ -254,9 +252,11 @@ router.post('/unlike/:id',passport.authenticate('jwt', {session:false}), (req,re
   Post.findById(req.params.id)
   //check if user already liked the post
       .then(post =>{
-        if(post.likes.filter(like=>(like.user.toString() === req.user.id)).length ===0){
+        likesLength = post.likes.filter(like=>(like.user.toString() === req.user.id)).length;
+        console.log(`likes length is unlike ${likesLength}`);
+        if(likesLength === 0){
           //user has not liked the post
-          return res.status(400).json({notLiked: 'You have not yet liked this post'});
+          return res.status(400).json({notLiked: 'you wont be able to unlike this post as, You have not yet liked this post'});
         }
         else{
           //user has liked it, so dislike the post

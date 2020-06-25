@@ -39,7 +39,8 @@ user:{
       required:true
     },
     text:{
-      type:String
+      type:String,
+      required:true
     },
     comments:[{
     user:{
