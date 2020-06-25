@@ -1,9 +1,11 @@
 const express = require('express');
 const Post = require('../../models/Post');
-const router = express.Router();
 const passport = require('passport');
-//const validatePostInput = require('../../validations/post');
-//const isEmpty = require('../../validations/isEmpty');
+const validatePostInput = require('../../validations/post');
+const isEmpty = require('../../validations/isEmpty');
+
+const router = express.Router();
+
 // //test route from posts
 // router.get('/Post', (req,res) => res.json({msg:'posts worked'}));
 
@@ -13,16 +15,13 @@ const passport = require('passport');
 // @desc    Create and upload a new audio/video post
 //code for private access aunthenticationa dn validation begins
 router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
-//   // Validation
-//   const {errors, isValid} = validatePostInput(req.body);
-//   console.log('In the post route of posts');
-//   if(!isValid)
-//   {
-//     return res.json(errors);
-//   }
-// code for private access ends here
-//router.post('/', (req, res) =>
-//{
+  // Validation
+  const {errors, isValid} = validatePostInput(req.body);
+  console.log('In the post route of posts');
+  if(!isValid)
+  {
+    return res.json(errors);
+  }
   const newPost = new Post({
     user: req.user.id, //later it comes from token
     name: req.user.name,//later it comes from token
@@ -145,6 +144,11 @@ router.delete('/user/:id', passport.authenticate('jwt', {session: false}), (req,
 // @desc comment a post based on post id
 // @access private
 router.post('/comment/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
+  //validation
+  const {errors, isValid} = validatePostInput(req.body);
+  if(!isValid){
+    return res.json(errors);
+  }
 //router.post('/comment/:id', (req,res) =>
 //{
   Post.findById(req.params.id)
@@ -248,8 +252,8 @@ router.post('/like/:id', passport.authenticate('jwt', {session: false}), (req, r
 router.post('/unlike/:id',passport.authenticate('jwt', {session:false}), (req,res) =>{
   //find the post which need to be unliked
   Post.findById(req.params.id)
+  //check if user already liked the post
       .then(post =>{
-        //check if user already liked the post
         if(post.likes.filter(like=>(like.user.toString() === req.user.id)).length ===0){
           //user has not liked the post
           return res.status(400).json({notLiked: 'You have not yet liked this post'});
