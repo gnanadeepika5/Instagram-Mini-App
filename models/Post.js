@@ -50,6 +50,9 @@ user:{
     name:{
       type:String,
     },
+    handle:{
+      type:String
+    },
     avatar:{
       type:String
     },
