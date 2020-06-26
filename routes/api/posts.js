@@ -14,7 +14,7 @@ const router = express.Router();
 // @route   POST /api/posts
 // @access  private
 // @desc    Create and upload a new audio/video post
-//code for private access aunthenticationa dn validation begins
+
 router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
   // Validation
   const {errors, isValid} = validatePostInput(req.body);
