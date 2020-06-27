@@ -14,7 +14,6 @@ router.get('/',
             session: false
         },
         (req, res) => {
-            // console.log(req);
             const errors = {};
 
             // Find the user from DB
