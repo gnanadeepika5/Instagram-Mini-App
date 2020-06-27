@@ -8,6 +8,7 @@ const User = require('../../models/User');
 const keys = require('../../config/keys');
 const validateRegisterInput = require('../../validations/register');
 const validateLoginInput = require('../../validations/login');
+const validateMessage = require('../../validations/messages');
 
 
 // @route   POST api/users/register
@@ -92,22 +93,45 @@ router.get('/showMatches', (req, res) => {
   return res.status(200).send(`{msg: respond with matching people}`);
 })
 
-// @route   post api/users/:userName
-// @desc    post message to a user
-// @access  Public 
-router.post('/messages', (req, res) => {
-  const toUser =  req.body.toUser;
-  const msg =  req.body.msg;
-  if(toUser=='')
-    {
-      return res.status(400).send ({msg: 'user is mandatory'});
-    }
-  if(msg =="" || msg === undefined)
-    {
-      return res.status(400).send({msg: 'blank messages can not be sent'});
-    }
-  return res.status(200).send(`{msg: sending message ${msg} to user ${toUser}}`);
+// @route   post api/users/mssages/:id
+// @desc    post a message to a user by user id
+// @access  private 
+router.post('/messages/:id',passport.authenticate('jwt', {session: false}) , (req, res) => {
+
+//validation
+const {errors, isValid} = validateMessage(req.body);
+  if(!isValid){
+    return res.json(errors);
+  }
+//code
+User.findOne({_id:req.params.id})
+    .then(user => {
+      if(!user){
+        return res.status(400).json({errors: 'user not found. Check the post id.'})
+      }
+      //create a new message
+
+      const newMessage ={
+        fromUserId: req.user.id,//comes from token
+        fromUserName:req.user.name,//comes from token
+        toUser: req.params.id,
+        msg:req.body.msg
+      }
+      console.log(`from user id is ${req.user.id}`);
+      console.log(`from user name is ${req.user.name}`);
+      user.messages.unshift(newMessage);
+      //save in db
+      user.save()
+      .then(user, res.json(user))
+      .catch(err => console.log(err));
+    })
+    .catch(err=> console.log(err));
 })
+
+// @route   delete api/users/messages
+// @desc    delete all the messages of a user by user id
+// @access  Public
+
 
 // @route   get api/users/messages
 // @desc    post message to a user
