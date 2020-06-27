@@ -6,6 +6,7 @@ const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
 const search = require('./routes/api/search');
+const messages = require('./routes/api/messages');
 const app = express();
 
 //Body parser configuration
@@ -33,6 +34,7 @@ app.use('/api/users', users);
 app.use('/api/profile', profile);
 app.use('/api/posts', posts);
 app.use('/api/search', search);
+app.use('/api/messages', messages);
 
 //added port number
 const port = 10000;

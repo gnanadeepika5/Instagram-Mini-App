@@ -219,9 +219,4 @@ req.user.remove()
   .then(( ) => res.status(200).json({message: successMessage}))
   .catch(( ) => res.status(400).json({message: errorMessage}))
     })
-  
-
-
-
-
 module.exports = router;

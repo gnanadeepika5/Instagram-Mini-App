@@ -10,7 +10,6 @@ const router = express.Router();
 // //test route from posts
 // router.get('/Post', (req,res) => res.json({msg:'posts worked'}));
 
-
 // @route   POST /api/posts
 // @access  private
 // @desc    Create and upload a new audio/video post
@@ -41,7 +40,6 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 // @access  private
 // @desc    Get all posts
 router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
-  
   Post.find()
       .sort({date: -1}) // give the sorted data  by date in descending order
       .then(posts => res.json(posts))
@@ -64,10 +62,10 @@ router.get('/id/:postid', passport.authenticate('jwt', {session: false}), (req, 
 router.get('/user/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
   Post.find({user: req.params.id})
   .then(post => {
-    // console.log(`post inside getting all posts by yser is ${post}`);
+    // console.log(`post inside getting all posts by user is ${post}`);
     res.json(post)
   })
-  .catch(err => res.satus(400).json({NoPostMade: 'No post made by that user'}));
+  .catch(err => res.status(400).json({NoPostMade: 'No post made by that user'}));
 })
 
 // @route   GET /api/posts/handle/:handle
@@ -87,7 +85,7 @@ router.get('/handle/:handle', passport.authenticate('jwt', {session: false}), (r
 router.delete('/id/:postid', passport.authenticate('jwt', {session: false}), (req, res) => {
   Post.findOne({_id: req.params.postid})
       .then(post => {
-        //onsole.log(`post in delete by post id id: ${post}`);
+        //console.log(`post in delete by post id id: ${post}`);
 
         // check if the user is the author of the post
         if(post.user.toString() != req.user.id){
@@ -206,7 +204,6 @@ router.delete('/comment/:post_id/:comment_id', passport.authenticate('jwt', {ses
 
 
 router.post('/like/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
-
   Post.findById(req.params.id)
       .then(post => {
         // Loop through the likes array in the post collection
@@ -251,10 +248,6 @@ router.post('/like/:id', passport.authenticate('jwt', {session: false}), (req, r
       })
       .catch(err => res.status(400).json({UnableToLike: 'Could not like the post as post is not found with this id'}));
 })
-
-
-
-
 
 // @router    POST /api/posts/unlike/:id
 // @desc      Unlike a post based on postId

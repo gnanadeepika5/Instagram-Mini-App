@@ -72,9 +72,7 @@ user:{
     }
 
   }],
-    
-    
-
+  
   date: {
   type: Date,
   default: Date.now //now gives current date and time.

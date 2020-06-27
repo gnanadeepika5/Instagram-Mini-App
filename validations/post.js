@@ -9,7 +9,7 @@ module.exports = validatePostInput = data => {
   }
 
   if(isEmpty(data.text)){
-    errors.text = 'text (Caption/Descrription of post) cannot be empty';
+    errors.text = 'text (Caption/Description of post) cannot be empty';
   }
 
   return{
