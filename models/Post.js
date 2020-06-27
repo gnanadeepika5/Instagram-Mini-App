@@ -81,4 +81,4 @@ user:{
   }
 
 }); 
-module.exports = Post = mongoose.model('posts', PostSchema);
+module.exports = Post = mongoose.model('communications', PostSchema);
