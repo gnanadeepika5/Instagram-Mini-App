@@ -9,18 +9,17 @@ const isEmpty = require('../../validations/isEmpty');
 const validateMessage = require('../../validations/messages');
 const router = express.Router();
 
-// @route   post api/communication/conversation/:fromid/:toid
+// @route   post api/communication/conversation/:fromId/:toId
 // @desc    post a message to a user by user id
 // @access  private 
-router.post('/conversation/:toid',passport.authenticate('jwt', {session: false}) , (req, res) => {
-
+router.post('/conversation/:toId',passport.authenticate('jwt', {session: false}) , (req, res) => {
   //validation
   const {errors, isValid} = validateMessage(req.body);
     if(!isValid){
       return res.json(errors);
     }
   const fromUserId = req.user.id;
-  const toUserId = req.params.toid;
+  const toUserId = req.params.toId;
   var conversationId='';
   if(fromUserId < toUserId){
     conversationId = fromUserId+'ADD'+toUserId;
@@ -31,7 +30,7 @@ router.post('/conversation/:toid',passport.authenticate('jwt', {session: false})
   
   console.log(`before finding anything yet,from user id is ${fromUserId}, to user id is ${toUserId} and conversation is is ${conversationId}`);
  
-  User.findOne({_id:req.params.toid})
+  User.findOne({_id:req.params.toId})
       .then(user => {
         if(!user){
           return res.status(400).json({errors: 'user not found. Check the user id.'})
@@ -53,7 +52,7 @@ router.post('/conversation/:toid',passport.authenticate('jwt', {session: false})
                           .catch(err => console.log(err)); 
                        }  
                        else{
-                         //create a new convewrsation
+                         //create a new conversation
                           const newConversation = new Communication({
                                conversationId,
                              fromUserId: fromUserId,//comes from token
@@ -77,17 +76,13 @@ router.post('/conversation/:toid',passport.authenticate('jwt', {session: false})
                         
                      })
                      .catch(err=>console.log(err));
+  });
 
-                    
-      
-       
-  })
-
-//@route   post api/users/mssages/:id
+//@route   post api/users/messages/:id
 // @desc    post a message to a user by user id
 // @access  private 
 router.post('/messages/:id',passport.authenticate('jwt', {session: false}) , (req, res) => {
-})
+});
 
 
 
