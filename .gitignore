@@ -1,3 +1,5 @@
 /node_modules
 package-lock.json
 /config/keys.js
+/instagram-mini-app-client/node_modules
+/instagram-mini-app-client/package-lock.json
