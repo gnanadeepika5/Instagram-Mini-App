@@ -147,6 +147,7 @@ router.get('/messages', (req, res) => {
 router.get('/test', (req, res) => {
     return res.status(200).send('{msg: user test}')
   });
+
 // @route   POST api/users/login
 // @desc    Login user/returning a token
 // @access  Public 
@@ -206,6 +207,19 @@ passport.authenticate('jwt', {session:false}),
 (req,res) => {
   return res.json(req.user);
 })
+
+// @route   POST api/users/delete
+// @desc    Delete user
+// @access  Public 
+router.post('/delete', passport.authenticate('jwt', {session:false}), function(req, res){
+    
+const successMessage = `User has been deleted.`;
+const errorMessage = `User has not been deleted!`;
+req.user.remove()
+  .then(( ) => res.status(200).json({message: successMessage}))
+  .catch(( ) => res.status(400).json({message: errorMessage}))
+    })
+  
 
 
 
