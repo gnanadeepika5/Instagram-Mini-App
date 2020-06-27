@@ -5,43 +5,49 @@ const validateProfileInput = require('../../validations/profile');
 
 const router = express.Router();
 
-// @router api/profiles/
+// @router api/profile
 // @desc Private
 // @desc get the profile details
 
-router.get('/profile', passport.authenticate('jwt', {
-    session: false
-}, (req, res) => {
-    let errors = {};
+router.get('/',
+    passport.authenticate('jwt', {
+            session: false
+        },
+        (req, res) => {
+            // console.log(req);
+            const errors = {};
 
-    // Find the user from DB
-    Profile.findOne({
-            user: req.user.id
-        })
-        .then(profile => {
-            if (!profile) {
-                errors.noProfile = "There is no Profile for this User.";
-                return res.status(400).json(errors)
-            }
-            return res.json(profile);
-        }).catch(err => console.log(err));
-}))
+            // Find the user from DB
+            Profile.findOne({
+                    user: req.params.id
+                })
+                .populate("user", ["name", "avatar"])
+                .then(profile => {
+                    if (!profile) {
+                        errors.noProfile = "There is no Profile for this User.";
+                        return res.status(404).json(errors)
+                    }
+                    return res.json(profile);
+                }).catch(err => console.log(err));
+        }))
 
 // @router api/profiles/handle: userhandle
 // @desc Private
 // @desc get the profile details based on the handle name
 
-router.get('/handle/userhandle', passport.authenticate('jwt', {
+router.get('/handle/:userhandle', passport.authenticate('jwt', {
     session: false
 }, (req, res) => {
-    let errors = {};
+    const errors = {};
+
     Profile.findOne({
             handle: req.params.userhandle
         })
+        .populate("user", ["name", "avatar"])
         .then(profile => {
             if (!profile) {
                 errors.noProfile = "There is no profile with that handle.";
-                return res.status(400).json(errors);
+                return res.status(404).json(errors);
             }
             return res.json(profile);
         }).catch(err => console.log(err));
@@ -51,17 +57,19 @@ router.get('/handle/userhandle', passport.authenticate('jwt', {
 // @desc Private
 // @desc get the profile details based on name
 
-router.get('/name/username', passport.authenticate('jwt', {
+router.get('/name/:username', passport.authenticate('jwt', {
     session: false
 }, (req, res) => {
-    let errors = {};
+    const errors = {};
+
     Profile.findOne({
             name: req.params.username
         })
+        .populate("user", ["name", "avatar"])
         .then(profile => {
             if (!profile) {
                 errors.noProfile = "There is no profile with that name.";
-                return res.status(400).json(errors);
+                return res.status(404).json(errors);
             }
             return res.json(profile);
         }).catch(err => console.log(err));
@@ -71,17 +79,18 @@ router.get('/name/username', passport.authenticate('jwt', {
 // @desc Private
 // @desc get the profile details based on email id
 
-router.get('/email/useremail', passport.authenticate('jwt', {
+router.get('/email/:useremail', passport.authenticate('jwt', {
     session: false
 }, (req, res) => {
-    let errors = {};
+    const errors = {};
     Profile.findOne({
             email: req.params.useremail
         })
+        .populate("user", ["name", "avatar"])
         .then(profile => {
             if (!profile) {
                 errors.noProfile = "There is no profile with that email.";
-                return res.status(400).json(errors);
+                return res.status(404).json(errors);
             }
             return res.json(profile);
         }).catch(err => console.log(err));
@@ -94,14 +103,15 @@ router.get('/email/useremail', passport.authenticate('jwt', {
 router.get('/all', passport.authenticate('jwt', {
     session: false
 }, (req, res) => {
-    let errors = {};
+    const errors = {};
 
     //Find the user from DB
     Profile.find()
+        .populate("user", ["name", "avatar"])
         .then(profile => {
             if (!profile) {
                 errors.noProfile = "There are no profiles.";
-                return res.status(400).json(errors);
+                return res.status(404).json(errors);
             }
             return res.json(profile);
         }).catch(err => console.log(err));
@@ -111,7 +121,7 @@ router.get('/all', passport.authenticate('jwt', {
 // @desc Private
 // @desc edit the Profile page
 
-router.post('/edit', passport.authenticate('jwt', {
+router.post('/', passport.authenticate('jwt', {
     session: false
 }), (req, res) => {
     // Validations here.
@@ -119,10 +129,13 @@ router.post('/edit', passport.authenticate('jwt', {
         errors,
         isValid
     } = validateProfileInput(req.body)
+    // Check Validation
     if (!isValid) {
+        // Return any errors with 400 status 
         return res.status(400).json(errors);
     }
 
+    // Get Fields
     const profileFields = {};
     profileFields.user = req.user.id;
     if (req.body.website) profileFields.website = req.body.website;
@@ -140,6 +153,11 @@ router.post('/edit', passport.authenticate('jwt', {
     if (typeof req.body.places !== 'undefined') {
         profileFields.places = req.body.places.split(',');
     }
+    // Social
+    profileFields.social = {};
+    if (req.body.youtube) profileFields.social.youtube = req.body.youtube;
+    if (req.body.twitter) profileFields.social.twitter = req.body.twitter;
+    if (req.body.facebook) profileFields.social.facebook = req.body.facebook;
 
     Profile.findOne({
             user: req.user.id
@@ -160,5 +178,174 @@ router.post('/edit', passport.authenticate('jwt', {
         })
         .catch(err => console.log(err));
 });
+
+// @router  api/profiles/follow/handle/:handle
+// @access  Private
+// @desc    Following a user whose userhandle + avatar is passed in route
+router.post('/follow/handle/:handle/:avatarId', passport.authenticate('jwt', {
+    session: false
+}), (req, res) => {
+
+    // Add req.params.handle to following[] of req.user
+    Profile.findOne({
+            email: req.user.email
+        })
+        .then(profile => {
+
+            // Check if following[] of req.user has req.params.handle
+            if ((profile.following.filter(item => item.handle === req.params.handle).length > 0) ||
+                (req.params.handle === req.user.handle)) {
+                // User already following the handle
+                return res.status(400).json({
+                    error: 'invalid request'
+                });
+            }
+
+            // Add req.params.handle to following[] list of req.user
+            const newFollowing = {
+                handle: req.params.handle,
+                avatar: req.params.avatar,
+                name: req.params.name
+            }
+
+            profile.following.unshift(newFollowing);
+            profile.save()
+                .then(() => res.json(profile))
+                .catch(err => console.log(err));
+
+            // Add req.user to followers[] list of req.params.handle
+            Profile.findOne({
+                    handle: req.params.handle
+                })
+                .then(profile => {
+
+                    // Check if the follower of req.params.handle has req.user
+                    if ((profile.followers.filter(item => item.handle === req.user.handle).length > 0) ||
+                        (req.user.handle === req.params.handle)) {
+                        // Invalid addition to followers array of req.params.handle
+                        return res.status(400).json({
+                            invalid: 'invalid request'
+                        });
+                    }
+
+                    const newFollower = {
+                        handle: req.user.handle,
+                        avatar: req.user.avatar,
+                        name: req.user.name
+                    }
+
+                    profile.followers.unshift(newFollower);
+                    profile.save()
+                        .then(() => res.json(profile))
+                        .catch(err => console.log(err));
+                })
+                .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
+});
+
+// @router  api/profiles/unfollow/handle/:handle
+// @access  Private
+// @desc    Following a user whose userhandle is passed in route
+router.post('/unfollow/handle/:handle', passport.authenticate('jwt', {
+    session: false
+}), (req, res) => {
+
+    // remove req.params.handle from following[] of req.user
+    Profile.findOne({
+            email: req.user.email
+        })
+        .then(profile => {
+
+            // Check if following[] of req.user has req.params.handle
+            if (profile.following.filter(item => item.handle === req.params.handle).length === 0) {
+                // User not in the following array
+                return res.status(400).json({
+                    inValid: 'Invalid request'
+                });
+            }
+
+            // identify req.params index from the following[] array 
+            // remove req.params from following[] of req.users
+            const removeIndex = profile.following.map(item => item.handle)
+                .indexOf(req.params.handle);
+            // Splice the array
+            profile.following.splice(removeIndex, 1);
+
+            // Save
+            profile.save()
+                .then(() => res.json(profile))
+                .catch(err => console.log(err));
+
+            // remove req.user from followers[] of req.params.handle
+            Profile.findOne({
+                    handle: req.params.handle
+                })
+                .then(profile => {
+                    // Check if followers[] of req.params.handle has req.user
+                    if (profile.followers.filter(item => item.handle === req.user.handle).length === 0) {
+                        // req.user not in the followers[] of req.params.handle. cannot perform remove operation
+                        return res.json({
+                            inValid: 'InValid request'
+                        })
+                    }
+
+                    // identify the index of req.user from the followers[]
+                    // remove req.user from followers[] of req.params.handle
+                    const removeIndex = profile.followers.map(item => item.handle)
+                        .indexOf(req.user.handle);
+
+                    // Splice the array
+                    profile.followers.splice(removeIndex, 1);
+
+                    // Save
+                    profile.save()
+                        .then(() => res.json(profile))
+                        .catch(err => console.log(err));
+                })
+                .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
+});
+
+// @router  api/profiles/following/handle/:handle
+// @access  Private
+// @desc    Get the list of people whom the user is following given the userHandle
+router.get('/following/handle/:handle', passport.authenticate('jwt', {
+    session: false
+}), (req, res) => {
+    const errors = {}
+    Profile.findOne({
+            handle: req.params.handle
+        })
+        .then(profile => {
+            if (isEmpty(profile.following) && profile.following[0] !== "") {
+                errors.followingNone = 'You are not following anyone.';
+                return res.status(400).json(errors)
+            }
+            return res.json(profile.following);
+        })
+        .catch(err => console.log(err));
+})
+
+// router api/profiles/followers/handle/:handle
+// @access Private
+// @desc Get the list of followers of a user given the userHandle
+router.get('/followers/handle/:handle', passport.authenticate('jwt', {
+    session: false
+}), (req, res) => {
+    const errors = {}
+    Profile.findOne({
+            handle: req.params.handle
+        })
+        .then(profile => {
+            if (isEmpty(profile.followers) && profile.followers[0] !== "") {
+                errors.noFollowers = 'You do not have any followers';
+                return res.status(400).json(errors);
+            }
+            return res.json(profile.followers);
+        })
+        .catch(err => console.log(err));
+})
 
 module.exports = router;

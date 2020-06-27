@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const profileSchema = new schema({
+    user: {
+        type: schema.Types.ObjectId,
+        ref: 'users'
+    },
     name: {
         type: String
     },
@@ -39,6 +43,10 @@ const profileSchema = new schema({
     },
 
     following: [{
+        user: {
+            type: schema.Types.ObjectId,
+            ref: 'users'
+        },
         handle: {
             type: String
         },
@@ -55,6 +63,10 @@ const profileSchema = new schema({
     }],
 
     followers: [{
+        user: {
+            type: schema.Types.ObjectId,
+            ref: 'users'
+        },
         handle: {
             type: String
         },
@@ -68,7 +80,19 @@ const profileSchema = new schema({
             type: Date,
             default: Date.now()
         }
-    }]
+    }],
+
+    social: {
+        youtube: {
+            type: String
+        },
+        twitter: {
+            type: String
+        },
+        facebook: {
+            type: String
+        }
+    }
 
 });
 
