@@ -9,7 +9,7 @@ const router = express.Router();
 // @desc Private
 // @desc get the profile details
 
-router.get('/',
+router.get('/id/:id',
     passport.authenticate('jwt', {
             session: false
         },
@@ -52,7 +52,7 @@ router.get('/handle/:userhandle', passport.authenticate('jwt', {
         }).catch(err => console.log(err));
 }))
 
-// @router api/profiles/name: username
+// @router api/profile/name: username
 // @desc Private
 // @desc get the profile details based on name
 

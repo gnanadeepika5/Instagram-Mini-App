@@ -6,7 +6,6 @@ const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
 const search = require('./routes/api/search');
-const messages = require('./routes/api/messages');
 const communications = require('./routes/api/communications');
 const app = express();
 
@@ -35,7 +34,6 @@ app.use('/api/users', users);
 app.use('/api/profile', profile);
 app.use('/api/posts', posts);
 app.use('/api/search', search);
-app.use('/api/messages', messages);
 app.use('/api/communications', communications);
 
 //added port number
