@@ -18,7 +18,7 @@ const router = express.Router();
 // @desc Private
 // @desc get the profile details
 
-router.get('/',
+router.get('/id/:id',
     passport.authenticate('jwt', {
             session: false
         },

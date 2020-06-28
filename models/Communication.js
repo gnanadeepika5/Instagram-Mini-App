@@ -16,17 +16,17 @@ const CommunicationSchema = new Schema({
     required:true
   },
   messages:[{
-  //   fromUserId:{
-  //     type:Schema.Types.ObjectId,
-  //     ref:'users'
-  // },
+    fromUserId:{
+      type:Schema.Types.ObjectId,
+      ref:'users'
+  },
   // fromUserName:{
   //   type:String,
   // },
-  // toUser:{
-  //   type:Schema.Types.ObjectId,
-  //     ref:'users'
-  // },
+  toUserId:{
+    type:Schema.Types.ObjectId,
+      ref:'users'
+  },
   msg:{
     type:String,
     required:true
@@ -41,4 +41,5 @@ const CommunicationSchema = new Schema({
     type: Date,
     default: Date.now //now gives current date and time.
     }
-});module.exports = Communication = mongoose.model('Communications', CommunicationSchema);
+});
+module.exports = Communication = mongoose.model('Communications', CommunicationSchema);
