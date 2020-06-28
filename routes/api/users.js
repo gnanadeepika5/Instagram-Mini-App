@@ -70,30 +70,88 @@ User.findOne({email: req.body.email})
 })
 
 
-// @route   get api/users/search
+/**
+ * Get users names mathing to userName criteria
+ * @route GET /api/users/search
+ * @group Users
+ * @param {string} userName.query.required - username or email - eg: syam
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
+// Search the users matching the name to be shown on the UI
+// @route   get api/users/search 
 // @desc    search user
 // @access  Public 
-router.get('/search/:userName', (req, res) => {
+router.get('/search/:userName', 
+  passport.authenticate('jwt', {
+  session: false
+  }),
+  (req, res) => {
     const {userName} = req.params;
-    return res.status(200).send(`{msg: searching user ${userName}}`);
-})
 
+    //validation
+    const {errors, isValid} = validateMessage(req.body);
+    if(!isValid){
+      return res.status(500).json(errors);
+    }
+    Users.findOne({name: req.param.name})
+    .then(user => {
+       if(!user){
+         return res.status(400).json({errors: 'no user not found with the name '});
+       }
+       console.log(user);
+    })
+    .catch(err =>  console.log(`failed to get the user info ${err}`));
+    return res.status(200).send(`{msg: searching user ${userName}}`);
+});
+
+
+
+/**
+ * Gte Random list of People info
+ * @route GET /api/users/showPeople
+ * @group Users
+ * @param {string} userName.query.required - username or email - eg: syam
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
 // @route   get api/users/showPeople
 // @desc    showPeople
 // @access  Public 
 router.get('/showPeople', (req, res) => {
     return res.status(200).send(`{msg: respond with all people info}`);
-})
+});
 
+
+/**
+ * Get users names matching criteria of age group, same hobbies
+ * @route GET /api/users/showMatches
+ * @group Users
+ * @param {string} userName.query.required - username or email - eg: syam
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
 // @route   get api/users/showMatches
 // @desc    show Matches
 // @access  Public 
 router.get('/showMatches', (req, res) => {
   
   return res.status(200).send(`{msg: respond with matching people}`);
-})
+});
 
-// // @route   post api/users/mssages/:id
+
+
+/**
+ * Post a message fromUser to different User
+ * @route Post api/users/messages/:id
+ * @group Users
+ * @param {string} fromId.query.required - username or email - eg: syam
+ * @param {string} toId.query.required - username or email - eg: deepika
+ * @param {string} message.required - username or email - eg: how are you
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
+// // @route   post api/users/messages/:id
 // // @desc    post a message to a user by user id
 // // @access  private 
 // router.post('/messages/:id',passport.authenticate('jwt', {session: false}) , (req, res) => {
@@ -132,14 +190,24 @@ router.get('/showMatches', (req, res) => {
 // @desc    delete all the messages of a user by user id
 // @access  Public
 
+/**
+ * Get a message fromUser to different User
+ * @route get api/users/messages
+ * @group Users
+ * @param {string} fromId.query.required - username or email - eg: syam
+ * @param {string} toId.query.required - username or email - eg: deepika
+ * @param {string} message.required - username or email - eg: how are you
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
+
 
 // @route   get api/users/messages
 // @desc    post message to a user
 // @access  Public 
 router.get('/messages', (req, res) => {
   return res.status(200).send(`{msg: get Messages from others}`);
-
-})
+});
 
 // @route   POST api/users/test
 // @desc    Register user
@@ -194,10 +262,7 @@ if (!isValid) {
         })        
     })
     .catch();
-})
-
-
-
+});
 
 // @route   GET api/users/current
 // @desc    Return current user
@@ -208,9 +273,17 @@ passport.authenticate('jwt', {session:false}),
   return res.json(req.user);
 })
 
-// @route   POST api/users/delete
+
+/**
+ * Delete a user
+ * @route Delete api/users/messages/:id
+ * @group Users
+ * @returns {object} 200 - User Deleted
+ * @returns {Error}  default - 500
+ */
+// @route   Delete api/users/delete
 // @desc    Delete user
-// @access  Public 
+// @access  private  
 router.post('/delete', passport.authenticate('jwt', {session:false}), function(req, res){
     
 const successMessage = `User has been deleted.`;

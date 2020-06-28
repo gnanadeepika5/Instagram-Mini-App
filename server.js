@@ -6,9 +6,39 @@ const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
 const search = require('./routes/api/search');
-const messages = require('./routes/api/messages');
 const communications = require('./routes/api/communications');
+
 const app = express();
+const expressSwagger = require('express-swagger-generator')(app);
+
+let options = {
+    swaggerDefinition: {
+        info: {
+            description: 'This is a sample server',
+            title: 'Swagger',
+            version: '1.0.0',
+        },
+        host: 'localhost:10000',
+        basePath: '/v1',
+        produces: [
+            "application/json",
+            "application/xml"
+        ],
+        schemes: ['http', 'https'],
+        securityDefinitions: {
+            JWT: {
+                type: 'apiKey',
+                in: 'header',
+                name: 'Authorization',
+                description: "",
+            }
+        }
+    },
+    basedir: __dirname, //app absolute path
+    files: ['./routes/**/*.js'] //Path to the API handle folder
+};
+
+expressSwagger(options)
 
 //Body parser configuration
 app.use(bodyparser.urlencoded({extended: false}));
@@ -35,7 +65,6 @@ app.use('/api/users', users);
 app.use('/api/profile', profile);
 app.use('/api/posts', posts);
 app.use('/api/search', search);
-app.use('/api/messages', messages);
 app.use('/api/communications', communications);
 
 //added port number

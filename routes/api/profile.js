@@ -5,6 +5,15 @@ const validateProfileInput = require('../../validations/profile');
 
 const router = express.Router();
 
+
+/**
+ * Get profile of user
+ * @route Get api/profiles/:id
+ * @group Profile
+ * @param {string} id.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
 // @router api/profile
 // @desc Private
 // @desc get the profile details
@@ -28,8 +37,18 @@ router.get('/',
                     }
                     return res.json(profile);
                 }).catch(err => console.log(err));
-        }))
+        }));
 
+
+/**
+ * Get profile of user
+ * @route Get api/profiles/handle/:userHandle
+ * @group Profile
+ * @param {string} id.required
+ * @param {string} userHandle.body.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
 // @router api/profiles/handle: userhandle
 // @desc Private
 // @desc get the profile details based on the handle name
@@ -52,10 +71,19 @@ router.get('/handle/:userhandle', passport.authenticate('jwt', {
         }).catch(err => console.log(err));
 }))
 
+
+/**
+ * Get profile of user by userName
+ * @route Get api/profiles/name/:userName
+ * @group Profile
+ * @param {string} id.required
+ * @param {string} userName.query.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
 // @router api/profiles/name: username
 // @desc Private
 // @desc get the profile details based on name
-
 router.get('/name/:username', passport.authenticate('jwt', {
     session: false
 }, (req, res) => {
@@ -72,7 +100,19 @@ router.get('/name/:username', passport.authenticate('jwt', {
             }
             return res.json(profile);
         }).catch(err => console.log(err));
-}))
+}));
+
+
+
+/**
+ * Get profile of user by email
+ * @route Get api/profiles/email:userEmail
+ * @group Profile
+ * @param {string} id.required
+ * @param {string} userHandle.body.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
 
 // @router api/profiles/email: useremail
 // @desc Private
@@ -95,6 +135,16 @@ router.get('/email/:useremail', passport.authenticate('jwt', {
         }).catch(err => console.log(err));
 }))
 
+
+
+/**
+ * Get profile of all user
+ * @route Get api/profiles/all
+ * @group Profile
+ * @param {string} id.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
 // @router api/profiles/all
 // @desc Private
 // @desc get the profile details of a single user
@@ -114,8 +164,19 @@ router.get('/all', passport.authenticate('jwt', {
             }
             return res.json(profile);
         }).catch(err => console.log(err));
-}))
+}));
 
+
+
+/**
+ * Edit profile of user
+ * @route Post api/profiles/edit
+ * @group Profile
+ * @param {string} id.required
+ * @param {string} userHandle.body.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
 // @router api/profiles/edit
 // @desc Private
 // @desc edit the Profile page
@@ -243,6 +304,16 @@ router.post('/follow/handle/:handle/:avatarId', passport.authenticate('jwt', {
         .catch(err => console.log(err));
 });
 
+
+
+/**
+ * Get profile of user
+ * @route Get api/profiles/unfollow
+ * @group Profile
+ * @param {string} id.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
 // @router  api/profiles/unfollow/handle/:handle
 // @access  Private
 // @desc    Following a user whose userhandle is passed in route

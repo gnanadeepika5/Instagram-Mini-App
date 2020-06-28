@@ -14,6 +14,17 @@ const router = express.Router();
 // @access  private
 // @desc    Create and upload a new audio/video post
 
+
+/**
+ * Create a new Post
+ * @route Post api/profiles/handle/:userHandle
+ * @group Posts
+ * @param {string} id.required
+ * @param {string} userHandle.body.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
+
 router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
   // Validation
   const {errors, isValid} = validatePostInput(req.body);
@@ -34,7 +45,17 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
   newPost.save()
          .then(post => res.json(post))
          .catch(err => console.log(err));
-})
+});
+
+
+/**
+ * Get profile of user
+ * @route Get api/posts
+ * @group Posts
+ * @param {string} id.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
 
 // @route   GET /api/posts
 // @access  private
@@ -44,8 +65,18 @@ router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
       .sort({date: -1}) // give the sorted data  by date in descending order
       .then(posts => res.json(posts))
       .catch(err => res.status(404).json({NoPostFound: 'No posts found'}));
-})
+});
 
+
+
+/**
+ * Get post by the postId
+ * @route Get api/profiles/handle/:userHandle
+ * @group Posts
+ * @param {string} id.required
+ * @returns {object} 200 - Post by the user
+ * @returns {Error}  default - 400 user profile not found
+ */
 // @route   GET /api/posts/id/:postid
 // @access  private
 // @desc    Get single post details based on postid
@@ -54,7 +85,7 @@ router.get('/id/:postid', passport.authenticate('jwt', {session: false}), (req, 
   Post.findById(req.params.postid)
       .then(post => res.json(post))
       .catch(err => res.status(400).json({NoPostFound: 'No post with that id found'}));
-})
+});
 
 // @route   GET /api/posts/id/:userid
 // @access  PRIVATE
@@ -66,7 +97,7 @@ router.get('/user/:id', passport.authenticate('jwt', {session: false}), (req, re
     res.json(post)
   })
   .catch(err => res.status(400).json({NoPostMade: 'No post made by that user'}));
-})
+});
 
 // @route   GET /api/posts/handle/:handle
 // @access  PRIVATE
@@ -76,7 +107,7 @@ router.get('/handle/:handle', passport.authenticate('jwt', {session: false}), (r
   Post.find({handle: req.params.handle})
       .then(post => res.json(post))
       .catch(err => res.status(400).json({NoPostMade: 'No post made by that user'}));
-})
+});
 
 
 // @route   DELETE /api/posts/id/:postid
@@ -98,7 +129,7 @@ router.delete('/id/:postid', passport.authenticate('jwt', {session: false}), (re
         }
       })
       .catch(err => console.log(err));
-})
+});
 
 // @route   DELETE /api/posts/user/:userid
 // @access  PRIVATE
@@ -132,7 +163,19 @@ router.delete('/user/:id', passport.authenticate('jwt', {session: false}), (req,
   })
   .catch(err => console.log(err));
       
-})
+});
+
+
+
+/**
+ * Post a comment on a Post of a user
+ * @route Post api/posts/comments/:id
+ * @group Posts
+ * @param {string} id.required
+ * @param {string} userHandle.body.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
 // @router POST /api/posts/comment/:id
 // @desc comment a post based on post id
 // @access private
@@ -249,6 +292,17 @@ router.post('/like/:id', passport.authenticate('jwt', {session: false}), (req, r
       .catch(err => res.status(400).json({UnableToLike: 'Could not like the post as post is not found with this id'}));
 })
 
+
+/**
+ * Post unlike a post
+ * @route Post api/posts/unlike/:Id
+ * @group Posts
+ * @param {string} id.required
+ * @param {string} userHandle.body.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
+
 // @router    POST /api/posts/unlike/:id
 // @desc      Unlike a post based on postId
 // @access    Private
@@ -278,6 +332,17 @@ router.post('/unlike/:id',passport.authenticate('jwt', {session:false}), (req,re
       .catch(err => res.status(400).json({postNotFound: 'Post Not Found'}));
 });
 
+
+
+/**
+ * Get Posts liked by a users
+ * @route Get api/posts/likedUsers/:postId
+ * @group Posts
+ * @param {string} id.required
+ * @param {string} userHandle.body.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
 // @route   GET /api/posts/likedUsers/post_id
 // @access  PRIVATE
 // @desc    Get all the likedUser profiles of a post
@@ -291,9 +356,5 @@ router.get('/likedUsers/:post_id', passport.authenticate('jwt', {session: false}
         }
       })
       .catch(err => res.json({msg: 'No one has liked this post yet'}));
-})
-
+});
 module.exports = router;
-
-
-

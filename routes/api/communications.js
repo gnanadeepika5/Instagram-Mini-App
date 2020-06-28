@@ -83,7 +83,4 @@ router.post('/conversation/:toId',passport.authenticate('jwt', {session: false})
 // @access  private 
 router.post('/messages/:id',passport.authenticate('jwt', {session: false}) , (req, res) => {
 });
-
-
-
   module.exports = router;

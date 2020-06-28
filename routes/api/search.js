@@ -17,7 +17,6 @@ router.get('/caption/:text', passport.authenticate('jwt', {session: false}), (re
         //res.json(post)
         for(i=0;i<post.length;i++)
         {
-          
           captionText = post[i].text;
           console.log(`captionText is ${captionText}`);
           if(captionText.includes(req.params.text) == true){
