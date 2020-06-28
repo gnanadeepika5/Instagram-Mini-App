@@ -80,7 +80,7 @@ router.post('/conversation/:toId',passport.authenticate('jwt', {session: false})
                      .catch(err=>console.log(err));
   });
 
-  //@route   post api/communications/:fromUserId/:toUserId
+  //@route  get api/communications/:fromUserId/:toUserId
 // @desc    get all messages(chat history) from a conversation by conversation id
 // @access  private 
 router.get('/conversation/:toid',passport.authenticate('jwt', {session: false}) , (req, res) => {
@@ -110,7 +110,19 @@ router.get('/conversation/:toid',passport.authenticate('jwt', {session: false}) 
                    return res.status(400).json({UnAuthorizedUser:'UnAuthorized user to see this conversation'});
                   }
                   else{
-                  res.json(conversation)
+                  //flagRead = true;
+                  //res.json(conversation);
+                  messagesList = conversation.messages;
+                  console.log(`messages list ${messagesList}`);
+                  for(i=0;i<messagesList.length;i++)
+                  {
+                    messageListItem =messagesList[i];
+                    messageListItem.flagRead = true;
+                  }
+                  conversation.save()
+                              .then(conversation=>res.json(conversation))
+                              .catch(err =>console.log(err));
+
                   }
                 
                 }
@@ -120,7 +132,7 @@ router.get('/conversation/:toid',passport.authenticate('jwt', {session: false}) 
   
   
 })
-    //@route   post api/communications/:fromUserId/:toUserId
+//@route    delete api/communications/:fromUserId/:toUserId
 // @desc    delete all message from a conversation
 // @access  private 
 router.delete('/conversation/:toid',passport.authenticate('jwt', {session: false}) , (req, res) => {
@@ -186,13 +198,25 @@ router.delete('/conversation/:toid',passport.authenticate('jwt', {session: false
 
 
 })
-  //@route   post api/communications/:conversation_id/:message_id  ggg
+
+  //@route   delete api/communications/:conversation_id/:message_id  ggg
 // @desc    delete a message from a conversation by conversation id, message id
 // @access  private 
 
-router.delete('/:conversation_id/:message_id',passport.authenticate('jwt', {session: false}) , (req, res) => {
-
-  Communication.findById(req.params.conversation_id)
+router.delete('/conversation/:toId/:message_id',passport.authenticate('jwt', {session: false}) , (req, res) => {
+  const fromUserId = req.user.id;
+  const toUserId = req.params.toId;
+  var conversationId='';
+  if(fromUserId < toUserId){
+    conversationId = fromUserId+'ADD'+toUserId;
+  }
+  else{
+   conversationId = toUserId+'ADD'+fromUserId;
+  }
+  
+  console.log(`before finding anything yet,from user id is ${fromUserId}, to user id is ${toUserId} and conversation is is ${conversationId}`);
+ 
+  Communication.findOne({conversationId: conversationId})
                .then(conversation =>{
                  if(!conversation)
                  {
@@ -241,18 +265,10 @@ router.delete('/:conversation_id/:message_id',passport.authenticate('jwt', {sess
                .catch(err=>console.log(err));
 })
 
-
 //@route   post api/users/messages/:id
 // @desc    delete a message from a user by user id
 //checkfrom user is author of message and if deleted should not be shown in from user chat anymore but should show in to user chat still
 // @access  private 
-router.post('/messages/:id',passport.authenticate('jwt', {session: false}) , (req, res) => {
-});
-router.delete('/message/:id',passport.authenticate('jwt', {session: false}) , (req, res) => {
-
-   
-})
-
 
 
 
