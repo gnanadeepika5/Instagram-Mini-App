@@ -27,7 +27,7 @@ router.get('/id/:id',
 
             // Find the user from DB
             Profile.findOne({
-                    user: req.params.id
+                    _id: req.params.id
                 })
                 .populate("user", ["name", "avatar"])
                 .then(profile => {

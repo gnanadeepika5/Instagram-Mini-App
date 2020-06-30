@@ -19,9 +19,9 @@ const profileSchema = new schema({
     email: {
         type: String
     },
-    phone: {
-        type: String
-    },
+    // phone: {
+    //     type: String
+    // },
     website: {
         type: String,
     },
