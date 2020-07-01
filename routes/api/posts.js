@@ -1,5 +1,6 @@
 const express = require('express');
 const Post = require('../../models/Post');
+const Logout = require('../../models/Logout');
 const passport = require('passport');
 const validatePostInput = require('../../validations/post');
 const validateComment = require('../../validations/comment');
@@ -33,6 +34,25 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
   {
     return res.json(errors);
   }
+  //code to see whether user logged in or out
+  Logout.findOne({email:req.user.email})
+        .then(logoutUser =>
+          {
+            if(logoutUser)
+            {
+              if(logoutUser.LogoutTokenList.filter(tokenitem=> tokenitem.token.toString() ===  req.headers['authorization'].toString().length !=0))
+              {
+                return res.json({LoggingOut:'You are successfully logged out.Please login to continue.'})
+
+              }
+            }
+          })
+        .catch(err=>console.log(err))
+  // console.log(`user logout token from request is ${req.user.LogoutToken}`);
+  // if(!isEmpty(req.user.LogoutToken))
+  //                 {
+  //                    return res.json({Logout:'You are successfully logged out'});
+  //                 }
   const newPost = new Post({
     user: req.user.id, //later it comes from token
     name: req.user.name,//later it comes from token
@@ -61,6 +81,25 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 // @access  private
 // @desc    Get all posts
 router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
+  console.log(`email from token is ${req.user.email}`);
+  Logout.findOne({email:req.user.email})
+        .then(logoutUser =>
+          {
+            if(logoutUser)
+            {
+              if(logoutUser.LogoutTokenList.filter(tokenitem=> tokenitem.token.toString() ===  req.headers['authorization'].toString().length !=0))
+              {
+                return res.json({LoggingOut:'You are successfully logged out.Please login to continue.'})
+
+              }
+            }
+          })
+        .catch(err=>console.log(err))
+  //console.log(`user logout token from request is ${req.user.LogoutToken}`);
+  // if(!isEmpty(req.user.LogoutToken))
+  //                 {
+  //                    return res.json({Logout:'You are logged out. Please Login to access'});
+  //                 }
   Post.find()
       .sort({date: -1}) // give the sorted data  by date in descending order
       .then(posts => res.json(posts))
@@ -81,7 +120,20 @@ router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 // @access  private
 // @desc    Get single post details based on postid
 router.get('/id/:postid', passport.authenticate('jwt', {session: false}), (req, res) => {
-  
+  //code to see whether user logged in or out
+  Logout.findOne({email:req.user.email})
+        .then(logoutUser =>
+          {
+            if(logoutUser)
+            {
+              if(logoutUser.LogoutTokenList.filter(tokenitem=> tokenitem.token.toString() ===  req.headers['authorization'].toString().length !=0))
+              {
+                return res.json({LoggingOut:'You are successfully logged out.Please login to continue.'})
+
+              }
+            }
+          })
+        .catch(err=>console.log(err));
   Post.findById(req.params.postid)
       .then(post => res.json(post))
       .catch(err => res.status(400).json({NoPostFound: 'No post with that id found'}));
@@ -91,6 +143,21 @@ router.get('/id/:postid', passport.authenticate('jwt', {session: false}), (req, 
 // @access  PRIVATE
 // @desc    Get all posts made by a user(unique handle)
 router.get('/user/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
+  
+  //code to see whether user logged in or out
+  Logout.findOne({email:req.user.email})
+        .then(logoutUser =>
+          {
+            if(logoutUser)
+            {
+              if(logoutUser.LogoutTokenList.filter(tokenitem=> tokenitem.token.toString() ===  req.headers['authorization'].toString().length !=0))
+              {
+                return res.json({LoggingOut:'You are successfully logged out.Please login to continue.'})
+
+              }
+            }
+          })
+        .catch(err=>console.log(err));
   Post.find({user: req.params.id})
   .then(post => {
     // console.log(`post inside getting all posts by user is ${post}`);
@@ -103,6 +170,20 @@ router.get('/user/:id', passport.authenticate('jwt', {session: false}), (req, re
 // @access  PRIVATE
 // @desc    Get posts made by a user(unique handle)
 router.get('/handle/:handle', passport.authenticate('jwt', {session: false}), (req, res) => {
+  //code to see whether user logged in or out
+  Logout.findOne({email:req.user.email})
+        .then(logoutUser =>
+          {
+            if(logoutUser)
+            {
+              if(logoutUser.LogoutTokenList.filter(tokenitem=> tokenitem.token.toString() ===  req.headers['authorization'].toString().length !=0))
+              {
+                return res.json({LoggingOut:'You are successfully logged out.Please login to continue.'})
+
+              }
+            }
+          })
+        .catch(err=>console.log(err));
   
   Post.find({handle: req.params.handle})
       .then(post => res.json(post))
@@ -114,6 +195,22 @@ router.get('/handle/:handle', passport.authenticate('jwt', {session: false}), (r
 // @access  private
 // @desc    Delete a post made by a user based on postid
 router.delete('/id/:postid', passport.authenticate('jwt', {session: false}), (req, res) => {
+
+  //code to see whether user logged in or out
+  Logout.findOne({email:req.user.email})
+        .then(logoutUser =>
+          {
+            if(logoutUser)
+            {
+              if(logoutUser.LogoutTokenList.filter(tokenitem=> tokenitem.token.toString() ===  req.headers['authorization'].toString().length !=0))
+              {
+                return res.json({LoggingOut:'You are successfully logged out.Please login to continue.'})
+
+              }
+            }
+          })
+        .catch(err=>console.log(err));
+
   Post.findOne({_id: req.params.postid})
       .then(post => {
         //console.log(`post in delete by post id id: ${post}`);
@@ -135,6 +232,22 @@ router.delete('/id/:postid', passport.authenticate('jwt', {session: false}), (re
 // @access  PRIVATE
 // @desc    Delete all posts made by the userid
 router.delete('/user/:id', passport.authenticate('jwt', {session: false}), (req,res) => {
+
+  //code to see whether user logged in or out
+  Logout.findOne({email:req.user.email})
+        .then(logoutUser =>
+          {
+            if(logoutUser)
+            {
+              if(logoutUser.LogoutTokenList.filter(tokenitem=> tokenitem.token.toString() ===  req.headers['authorization'].toString().length !=0))
+              {
+                return res.json({LoggingOut:'You are successfully logged out.Please login to continue.'})
+
+              }
+            }
+          })
+        .catch(err=>console.log(err));
+
 
   Post.find({user: req.params.id})
   .then(post => {
@@ -180,6 +293,21 @@ router.delete('/user/:id', passport.authenticate('jwt', {session: false}), (req,
 // @desc comment a post based on post id
 // @access private
 router.post('/comment/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
+
+  //code to see whether user logged in or out
+  Logout.findOne({email:req.user.email})
+        .then(logoutUser =>
+          {
+            if(logoutUser)
+            {
+              if(logoutUser.LogoutTokenList.filter(tokenitem=> tokenitem.token.toString() ===  req.headers['authorization'].toString().length !=0))
+              {
+                return res.json({LoggingOut:'You are successfully logged out.Please login to continue.'})
+
+              }
+            }
+          })
+        .catch(err=>console.log(err));
   //validation
   const {errors, isValid} = validateComment(req.body);
   if(!isValid){
@@ -216,6 +344,20 @@ router.post('/comment/:id', passport.authenticate('jwt', {session: false}), (req
 //access private
 
 router.delete('/comment/:post_id/:comment_id', passport.authenticate('jwt', {session: false}), (req,res)=>{
+  //code to see whether user logged in or out
+  Logout.findOne({email:req.user.email})
+        .then(logoutUser =>
+          {
+            if(logoutUser)
+            {
+              if(logoutUser.LogoutTokenList.filter(tokenitem=> tokenitem.token.toString() ===  req.headers['authorization'].toString().length !=0))
+              {
+                return res.json({LoggingOut:'You are successfully logged out.Please login to continue.'})
+
+              }
+            }
+          })
+        .catch(err=>console.log(err));
   //find   a post by post_id
   Post.findById(req.params.post_id)
       .then(post=> {
@@ -247,6 +389,20 @@ router.delete('/comment/:post_id/:comment_id', passport.authenticate('jwt', {ses
 
 
 router.post('/like/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
+  //code to see whether user logged in or out
+  Logout.findOne({email:req.user.email})
+        .then(logoutUser =>
+          {
+            if(logoutUser)
+            {
+              if(logoutUser.LogoutTokenList.filter(tokenitem=> tokenitem.token.toString() ===  req.headers['authorization'].toString().length !=0))
+              {
+                return res.json({LoggingOut:'You are successfully logged out.Please login to continue.'})
+
+              }
+            }
+          })
+        .catch(err=>console.log(err));
   Post.findById(req.params.id)
       .then(post => {
         // Loop through the likes array in the post collection
@@ -307,6 +463,20 @@ router.post('/like/:id', passport.authenticate('jwt', {session: false}), (req, r
 // @desc      Unlike a post based on postId
 // @access    Private
 router.post('/unlike/:id',passport.authenticate('jwt', {session:false}), (req,res) =>{
+  //code to see whether user logged in or out
+  Logout.findOne({email:req.user.email})
+        .then(logoutUser =>
+          {
+            if(logoutUser)
+            {
+              if(logoutUser.LogoutTokenList.filter(tokenitem=> tokenitem.token.toString() ===  req.headers['authorization'].toString().length !=0))
+              {
+                return res.json({LoggingOut:'You are successfully logged out.Please login to continue.'})
+
+              }
+            }
+          })
+        .catch(err=>console.log(err));
   //find the post which need to be unliked
   Post.findById(req.params.id)
   //check if user already liked the post
@@ -347,6 +517,20 @@ router.post('/unlike/:id',passport.authenticate('jwt', {session:false}), (req,re
 // @access  PRIVATE
 // @desc    Get all the likedUser profiles of a post
 router.get('/likedUsers/:post_id', passport.authenticate('jwt', {session: false}), (req, res) => {
+  //code to see whether user logged in or out
+  Logout.findOne({email:req.user.email})
+        .then(logoutUser =>
+          {
+            if(logoutUser)
+            {
+              if(logoutUser.LogoutTokenList.filter(tokenitem=> tokenitem.token.toString() ===  req.headers['authorization'].toString().length !=0))
+              {
+                return res.json({LoggingOut:'You are successfully logged out.Please login to continue.'})
+
+              }
+            }
+          })
+        .catch(err=>console.log(err));
   Post.findById(req.params.post_id)
       .then(post => {
         

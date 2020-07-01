@@ -7,13 +7,14 @@ const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
 const search = require('./routes/api/search');
 const communications = require('./routes/api/communications');
+const logout = require('./routes/api/logout');
 
 const app = express();
 const expressSwagger = require('express-swagger-generator')(app);
 
 let options = {
     swaggerDefinition: {
-        info: {
+        info: { 
             description: 'This is a sample server',
             title: 'Swagger',
             version: '1.0.0',
@@ -64,6 +65,7 @@ app.get('/', (req, res) => res.send('welcome :-)'));
 app.use('/api/users', users);
 app.use('/api/profile', profile);
 app.use('/api/posts', posts);
+app.use('/api/logout',logout);
 app.use('/api/search', search);
 app.use('/api/communications', communications);
 

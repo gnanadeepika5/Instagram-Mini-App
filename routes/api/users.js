@@ -9,6 +9,8 @@ const keys = require('../../config/keys');
 const validateRegisterInput = require('../../validations/register');
 const validateLoginInput = require('../../validations/login');
 const validateMessage = require('../../validations/messages');
+const isEmpty = require ('../../validations/isEmpty');
+const { json } = require('body-parser');
 
 
 // @route   POST api/users/register
@@ -182,73 +184,14 @@ router.get('/showMatches', (req, res) => {
 
 
 
-/**
- * Post a message fromUser to different User
- * @route Post api/users/messages/:id
- * @group Users
- * @param {string} fromId.query.required - username or email - eg: syam
- * @param {string} toId.query.required - username or email - eg: deepika
- * @param {string} message.required - username or email - eg: how are you
- * @returns {object} 200 - An array of user info
- * @returns {Error}  default - 500
- */
-// // @route   post api/users/messages/:id
-// // @desc    post a message to a user by user id
-// // @access  private 
-// router.post('/messages/:id',passport.authenticate('jwt', {session: false}) , (req, res) => {
-
-// //validation
-// const {errors, isValid} = validateMessage(req.body);
-//   if(!isValid){
-//     return res.json(errors);
-//   }
-// //code
-// User.findOne({_id:req.params.id})
-//     .then(user => {
-//       if(!user){
-//         return res.status(400).json({errors: 'user not found. Check the post id.'})
-//       }
-//       //create a new message
-
-//       const newMessage ={
-//         fromUserId: req.user.id,//comes from token
-//         fromUserName:req.user.name,//comes from token
-//         toUser: req.params.id,
-//         msg:req.body.msg
-//       }
-//       console.log(`from user id is ${req.user.id}`);
-//       console.log(`from user name is ${req.user.name}`);
-//       user.messages.unshift(newMessage);
-//       //save in db
-//       user.save()
-//       .then(user, res.json(user))
-//       .catch(err => console.log(err));
-//     })
-//     .catch(err=> console.log(err));
-// })
-
-// @route   delete api/users/messages[]
-// @desc    delete all the messages of a user by user id
-// @access  Public
-
-/**
- * Get a message fromUser to different User
- * @route get api/users/messages
- * @group Users
- * @param {string} fromId.query.required - username or email - eg: syam
- * @param {string} toId.query.required - username or email - eg: deepika
- * @param {string} message.required - username or email - eg: how are you
- * @returns {object} 200 - An array of user info
- * @returns {Error}  default - 500
- */
 
 
-// @route   get api/users/messages
-// @desc    post message to a user
-// @access  Public 
-router.get('/messages', (req, res) => {
-  return res.status(200).send(`{msg: get Messages from others}`);
-});
+// // @route   get api/users/messages
+// // @desc    post message to a user
+// // @access  Public 
+// router.get('/messages', (req, res) => {
+//   return res.status(200).send(`{msg: get Messages from others}`);
+// });
 
 // @route   POST api/users/test
 // @desc    Register user
@@ -261,11 +204,13 @@ router.get('/test', (req, res) => {
 // @desc    Login user/returning a token
 // @access  Public 
 router.post('/login', (req, res) => {
+
   //Validation
   const {
     errors,
     isValid
   } = validateLoginInput(req.body);
+
 
   if (!isValid) {
     return res.status(400).json(errors);
@@ -286,17 +231,15 @@ router.post('/login', (req, res) => {
           email: 'User not found'
         });
       }
+      
 
       //Check password
       bcrypt.compare(password, user.password)
         .then(isMatch => {
           if (isMatch) {
             //Payload
-            const payload = {
-              id: user.id,
-              name: user.name,
-              avatar: user.avatar
-            };
+
+            const payload = {id: user.id, name: user.name, email:user.email,avatar: user.avatar, TokenExpirationTime: (new Date().getTime() + 60 * 60 * 1000)/1000};
             //sign token
             jwt.sign(
               payload,
@@ -330,6 +273,46 @@ router.get('/current',
     return res.json(req.user);
   })
 
+// @route   post api/users/logout/:id
+// @desc    logout a user by userid
+// @access  private  
+router.post('/logout/:id', passport.authenticate('jwt', {session:false}), function(req, res){
+  User.findById(req.params.id) 
+      .then(user=>{
+        if(user)
+        {
+          console.log(`parameter id${req.params.id} `);
+          console.log(`email id from token ${req.user.email} `);
+          console.log(`user id from token ${req.user.id} `);
+
+          if(req.params.id != req.user.id)
+          {
+            return res.json({UnAuthorizedUser:'You are not Authorized User'});
+          }
+          else{
+            let LogoutToken = req.headers['authorization'];
+            console.log(`token assed is ${LogoutToken}`);
+            user.LogoutToken = LogoutToken;
+            console.log(`token assed is ${user.LogoutToken}`);
+            user.save()
+                .then(user=> {
+                  console.log(`user after saving with token in d is ${user}`);
+                  if(!isEmpty(user.LogoutToken))
+                  {
+                     return res.json({Logout:'You are successfully logged out'});
+                  }
+                })
+                .catch(err=>console.log(err));
+            
+          }
+        }
+      })
+      .catch(err=>console.log(err));
+  
+  
+})
+
+
 
 /**
  * Delete a user
@@ -341,18 +324,13 @@ router.get('/current',
 // @route   Delete api/users/delete
 // @desc    Delete user
 // @access  private  
-router.post('/delete', passport.authenticate('jwt', {
-  session: false
-}), function (req, res) {
 
-  const successMessage = `User has been deleted.`;
-  const errorMessage = `User has not been deleted!`;
-  req.user.remove()
-    .then(() => res.status(200).json({
-      message: successMessage
-    }))
-    .catch(() => res.status(400).json({
-      message: errorMessage
-    }))
-})
+router.post('/delete', passport.authenticate('jwt', {session:false}), function(req, res){
+    
+const successMessage = `User has been deleted.`;
+const errorMessage = `User has not been deleted!`;
+req.user.remove()
+  .then(( ) => res.status(200).json({message: successMessage}))
+  .catch(( ) => res.status(400).json({message: errorMessage}))
+    })
 module.exports = router;
