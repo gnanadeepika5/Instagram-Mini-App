@@ -92,7 +92,59 @@ const profileSchema = new schema({
         facebook: {
             type: String
         }
-    }
+    },
+
+    experience: [{
+        title: {
+            type: String,
+            required: true
+        },
+        company: {
+            type: String,
+            required: true
+        },
+        location: {
+            type: String,
+            required: true
+        },
+        from: {
+            type: Date,
+            required: true
+        },
+        to: {
+            type: Date
+        },
+        current: {
+            type: Boolean,
+            default: false
+        }
+    }],
+
+    education: [{
+        school: {
+            type: String,
+            required: true
+        },
+        degree: {
+            type: String,
+            required: true
+        },
+        fieldofstudy: {
+            type: String,
+            required: true
+        },
+        from: {
+            type: Date,
+            required: true
+        },
+        to: {
+            type: Date
+        },
+        current: {
+            type: Boolean,
+            required: false
+        }
+    }]
 
 });
 
