@@ -28,6 +28,7 @@ router.get('/test', (req,res) => res.json({msg:'posts worked'}));
  */
 
 router.post('/', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
+
   // Validation
   const {errors, isValid} = validatePostInput(req.body);
   console.log('In the post route of posts');
@@ -35,6 +36,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), tokenValidator,
   {
     return res.json(errors);
   }
+
   //creating a new post
   const newPost = new Post({
     user: req.user.id, //later it comes from token
@@ -51,6 +53,46 @@ router.post('/', passport.authenticate('jwt', {session: false}), tokenValidator,
          .catch(err => console.log(err));
 });
 
+/**
+ * Edit Post
+ * @group Posts
+ * @returns {object} 200 - Edited Post
+ * @returns {Error} default - 400 timeout
+ */
+
+router.patch('/:postId', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
+
+  // Validation
+  const {errors, isValid} = validatePostInput(req.body);
+  console.log('In the post route of posts');
+  if(!isValid)
+  {
+    return res.json(errors);
+  }
+
+  Post.find({_id: req.params.postId})
+      .then(([post]) => {
+
+        if (String(post.user).trim() !== String(req.user.id).trim()) {
+          return res.status(403).json({NotAuthorized: 'Not Authorized'});
+        }
+
+        const timeout = +new Date(post.date) + 24*60*60*1000;
+
+        if (timeout < +new Date) {
+          return res.status(400).json({Timeout: "Post can't be edited: time is out"});
+        }
+
+        post.text = req.body.text;
+        post.imageOrVideo = req.body.imageOrVideo;
+
+        post.save()
+        .then(() => res.status(200).json(post))
+        .catch((err) => res.status(400).json({Error: err.message}));
+      })
+      .catch(({message}) => res.status(400).json({NoPostFound: message}));
+});
+
 
 /**
  * Get profile of user
@@ -60,6 +102,8 @@ router.post('/', passport.authenticate('jwt', {session: false}), tokenValidator,
  * @returns {object} 200 - Profile of user
  * @returns {Error}  default - 400 user profile not found
  */
+
+
 
 // @route   GET /api/posts
 // @access  private
