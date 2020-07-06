@@ -25,7 +25,7 @@ router.get(
     "/",
     passport.authenticate("jwt", {
         session: false,
-    }), tokenValidator, 
+    }), tokenValidator,
     (req, res) => {
         const errors = {};
 
@@ -62,7 +62,7 @@ router.get(
     "/handle/:userhandle",
     passport.authenticate("jwt", {
         session: false,
-    }), tokenValidator, 
+    }), tokenValidator,
     (req, res) => {
         const errors = {};
 
@@ -97,7 +97,7 @@ router.get(
     "/name/:username",
     passport.authenticate("jwt", {
         session: false,
-    }), tokenValidator, 
+    }), tokenValidator,
     (req, res) => {
         const errors = {};
 
@@ -134,7 +134,7 @@ router.get(
     "/email/:useremail",
     passport.authenticate("jwt", {
         session: false,
-    }), tokenValidator, 
+    }), tokenValidator,
     (req, res) => {
         const errors = {};
         Profile.findOne({
@@ -168,7 +168,7 @@ router.get(
     "/all",
     passport.authenticate("jwt", {
         session: false,
-    }), tokenValidator, 
+    }), tokenValidator,
     (req, res) => {
         const errors = {};
 
@@ -203,7 +203,7 @@ router.post(
     "/",
     passport.authenticate("jwt", {
         session: false,
-    }), tokenValidator, 
+    }), tokenValidator,
     (req, res) => {
         // Validations here.
         const {
@@ -241,23 +241,35 @@ router.post(
         if (req.body.facebook) profileFields.social.facebook = req.body.facebook;
 
         Profile.findOne({
-                user: req.user.id,
-            })
-            .then((profile) => {
-                if (profile) {
-                    // Profile exists, update profile
-                    Profile.findOneAndUpdate({
-                            user: req.user.id,
-                        }, {
-                            $set: profileFields,
-                        }, {
-                            new: true,
-                        })
-                        .then((profile) => res.json(profile))
-                        .catch((err) => console.log(err));
-                }
-            })
-            .catch((err) => console.log(err));
+            user: req.user.id
+        }).then((profile) => {
+            if (profile) {
+                // Update
+                Profile.findOneAndUpdate({
+                    user: req.user.id
+                }, {
+                    $set: profileFields
+                }, {
+                    new: true
+                }).then((profile) => res.json(profile));
+            } else {
+                // Create
+
+                // Check if handle exists
+                Profile.findOne({
+                    handle: profileFields.handle
+                }).then((profile) => {
+                    if (profile) {
+                        errors.handle = "That handle already exists";
+                        return res.status(400).json(errors);
+                    }
+                    // Save Profile
+                    new Profile(profileFields)
+                        .save()
+                        .then((profile) => res.json(profile));
+                });
+            }
+        });
     }
 );
 
@@ -268,7 +280,7 @@ router.post(
     "/follow/handle/:handle/:avatarId",
     passport.authenticate("jwt", {
         session: false,
-    }), tokenValidator, 
+    }), tokenValidator,
     (req, res) => {
         // Add req.params.handle to following[] of req.user
         Profile.findOne({
@@ -351,7 +363,7 @@ router.post(
     "/unfollow/handle/:handle",
     passport.authenticate("jwt", {
         session: false,
-    }), tokenValidator, 
+    }), tokenValidator,
     (req, res) => {
         // remove req.params.handle from following[] of req.user
         Profile.findOne({
@@ -428,7 +440,7 @@ router.get(
     "/following/handle/:handle",
     passport.authenticate("jwt", {
         session: false,
-    }), tokenValidator, 
+    }), tokenValidator,
     (req, res) => {
         const errors = {};
         Profile.findOne({
@@ -452,7 +464,7 @@ router.get(
     "/followers/handle/:handle",
     passport.authenticate("jwt", {
         session: false,
-    }), tokenValidator, 
+    }), tokenValidator,
     (req, res) => {
         const errors = {};
         Profile.findOne({
@@ -477,7 +489,7 @@ router.delete(
     "/",
     passport.authenticate("jwt", {
         session: false
-    }), tokenValidator, 
+    }), tokenValidator,
     (req, res) => {
         Profile.findOneAndRemove({
             user: req.user.id
@@ -499,7 +511,7 @@ router.delete(
 
 router.post('/experience', passport.authenticate('jwt', {
     session: false
-}),  tokenValidator, (req, res) => {
+}), tokenValidator, (req, res) => {
     const {
         errors,
         isValid
@@ -539,7 +551,7 @@ router.post('/experience', passport.authenticate('jwt', {
 
 router.post('/education', passport.authenticate('jwt', {
     session: false
-}),  tokenValidator, (req, res) => {
+}), tokenValidator, (req, res) => {
     const {
         errors,
         isValid
@@ -578,7 +590,7 @@ router.delete(
     "/experience/:exp_id",
     passport.authenticate("jwt", {
         session: false
-    }), tokenValidator, 
+    }), tokenValidator,
     (req, res) => {
         let errors = {};
         Profile.findOne({
@@ -612,7 +624,7 @@ router.delete(
     "/education/:edu_id",
     passport.authenticate("jwt", {
         session: false
-    }), tokenValidator, 
+    }), tokenValidator,
     (req, res) => {
         Profile.findOne({
                 user: req.user.id
