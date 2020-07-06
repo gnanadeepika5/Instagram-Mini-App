@@ -11,7 +11,8 @@ const validateLoginInput = require('../../validations/login');
 const validateMessage = require('../../validations/messages');
 const isEmpty = require ('../../validations/isEmpty');
 const { json } = require('body-parser');
-
+const Logout = require('../../models/Logout');
+const tokenValidator = require('../../config/tokenValidator');
 
 // @route   POST api/users/register
 // @desc    Register user
@@ -150,48 +151,11 @@ router.get('/search/:userName',
 
 
 
-/**
- * Gte Random list of People info
- * @route GET /api/users/showPeople
- * @group Users
- * @param {string} userName.query.required - username or email - eg: syam
- * @returns {object} 200 - An array of user info
- * @returns {Error}  default - 500
- */
-// @route   get api/users/showPeople
-// @desc    showPeople
-// @access  Public 
-router.get('/showPeople', (req, res) => {
-  return res.status(200).send(`{msg: respond with all people info}`);
-});
-
-
-/**
- * Get users names matching criteria of age group, same hobbies
- * @route GET /api/users/showMatches
- * @group Users
- * @param {string} userName.query.required - username or email - eg: syam
- * @returns {object} 200 - An array of user info
- * @returns {Error}  default - 500
- */
-// @route   get api/users/showMatches
-// @desc    show Matches
-// @access  Public 
-router.get('/showMatches', (req, res) => {
-
-  return res.status(200).send(`{msg: respond with matching people}`);
-});
 
 
 
 
 
-// // @route   get api/users/messages
-// // @desc    post message to a user
-// // @access  Public 
-// router.get('/messages', (req, res) => {
-//   return res.status(200).send(`{msg: get Messages from others}`);
-// });
 
 // @route   POST api/users/test
 // @desc    Register user
@@ -204,6 +168,7 @@ router.get('/test', (req, res) => {
 // @desc    Login user/returning a token
 // @access  Public 
 router.post('/login', (req, res) => {
+  
 
   //Validation
   const {
@@ -239,7 +204,7 @@ router.post('/login', (req, res) => {
           if (isMatch) {
             //Payload
 
-            const payload = {id: user.id, name: user.name, email:user.email,avatar: user.avatar, TokenExpirationTime: (new Date().getTime() + 60 * 60 * 1000)/1000};
+            const payload = {id: user.id, name: user.name, email:user.email, avatar: user.avatar, TokenExpirationTime: (new Date().getTime() + 60 * 60 * 1000)/1000};
             //sign token
             jwt.sign(
               payload,
@@ -265,54 +230,10 @@ router.post('/login', (req, res) => {
 // @route   GET api/users/current
 // @desc    Return current user
 // @access  Private
-router.get('/current',
-  passport.authenticate('jwt', {
-    session: false
-  }),
-  (req, res) => {
+router.get('/current', passport.authenticate('jwt', { session: false}), tokenValidator, (req, res) => {
+    
     return res.json(req.user);
   })
-
-// @route   post api/users/logout/:id
-// @desc    logout a user by userid
-// @access  private  
-router.post('/logout/:id', passport.authenticate('jwt', {session:false}), function(req, res){
-  User.findById(req.params.id) 
-      .then(user=>{
-        if(user)
-        {
-          console.log(`parameter id${req.params.id} `);
-          console.log(`email id from token ${req.user.email} `);
-          console.log(`user id from token ${req.user.id} `);
-
-          if(req.params.id != req.user.id)
-          {
-            return res.json({UnAuthorizedUser:'You are not Authorized User'});
-          }
-          else{
-            let LogoutToken = req.headers['authorization'];
-            console.log(`token assed is ${LogoutToken}`);
-            user.LogoutToken = LogoutToken;
-            console.log(`token assed is ${user.LogoutToken}`);
-            user.save()
-                .then(user=> {
-                  console.log(`user after saving with token in d is ${user}`);
-                  if(!isEmpty(user.LogoutToken))
-                  {
-                     return res.json({Logout:'You are successfully logged out'});
-                  }
-                })
-                .catch(err=>console.log(err));
-            
-          }
-        }
-      })
-      .catch(err=>console.log(err));
-  
-  
-})
-
-
 
 /**
  * Delete a user
@@ -325,7 +246,7 @@ router.post('/logout/:id', passport.authenticate('jwt', {session:false}), functi
 // @desc    Delete user
 // @access  private  
 
-router.post('/delete', passport.authenticate('jwt', {session:false}), function(req, res){
+router.post('/delete', passport.authenticate('jwt', {session:false}), tokenValidator, function(req, res){
     
 const successMessage = `User has been deleted.`;
 const errorMessage = `User has not been deleted!`;

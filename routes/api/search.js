@@ -5,12 +5,15 @@ const search = require('../../models/Search');
 const passport = require('passport');
 //const isEmpty = require('../../validations/isEmpty');
 const validateSearch = require('../../validations/search');
+const tokenValidator = require('../../config/tokenValidator');
+
 const router = express.Router();
 
-// @route   get /api/search/caption/:text
+
+// @route   get /api/search/captionOrText
 // @access  private
 // @desc    get all posts in db/app by searching for caption text by giving some random matching word
-router.get('/captionOrText', passport.authenticate('jwt', {session:false}), (req,res) =>{
+router.get('/captionOrText', passport.authenticate('jwt', {session:false}), tokenValidator, (req,res) =>{
   // Validation
   const {errors, isValid} = validateSearch(req.body);
   console.log('In the post route of posts');
@@ -52,7 +55,7 @@ router.get('/captionOrText', passport.authenticate('jwt', {session:false}), (req
 // @route   get /api/posts/caption/:text
 // @access  private
 // @desc    get all the users of user by searching the user name by giving some random word
-router.get('/UserName/:searchText', passport.authenticate('jwt', {session: false}), (req, res) => {
+router.get('/UserName/:searchText', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
   User.find()
       .then(userList=>{
         console.log(`Total no of users in db- users list is ${userList.length}`);

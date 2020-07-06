@@ -18,16 +18,8 @@ const LogoutSchema = new Schema({
     type: String
   },
   TokenExpirationTime:{
-type:String
-  },
-  ActualTime: {
-    type: Date,
-    default: new Date().getTime()/1000
   }
   }],
-
-
-
   date: {
       type: Date,
       default: Date.now()   //now gives current date and time.

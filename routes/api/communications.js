@@ -3,6 +3,9 @@ const Communication = require('../../models/Communication');
 const passport = require('passport');
 const isEmpty = require('../../validations/isEmpty');
 const validateMessage = require('../../validations/messages');
+const Logout = require('../../models/Logout');
+const tokenValidator = require('../../config/tokenValidator');
+
 
 const router = express.Router();
 
@@ -10,7 +13,8 @@ const router = express.Router();
 // @route   post api/communication/conversation/:toId
 // @desc    post a message to a user by user id
 // @access  private 
-router.post('/conversation/:toId',passport.authenticate('jwt', {session: false}) , (req, res) => {
+router.post('/conversation/:toId',passport.authenticate('jwt', {session: false}) , tokenValidator, (req, res) => {
+  
   //validation
   const {errors, isValid} = validateMessage(req.body);
     if(!isValid){
@@ -83,7 +87,8 @@ router.post('/conversation/:toId',passport.authenticate('jwt', {session: false})
   //@route  get api/communications/:fromUserId/:toUserId
 // @desc    get all messages(chat history) from a conversation by conversation id
 // @access  private 
-router.get('/conversation/:toid',passport.authenticate('jwt', {session: false}) , (req, res) => {
+router.get('/conversation/:toid',passport.authenticate('jwt', {session: false}) , tokenValidator, (req, res) => {
+  
   const fromUserId = req.user.id;
   
   const toUserId = req.params.toid;
@@ -135,7 +140,8 @@ router.get('/conversation/:toid',passport.authenticate('jwt', {session: false}) 
 //@route    delete api/communications/:fromUserId/:toUserId
 // @desc    delete all message from a conversation
 // @access  private 
-router.delete('/conversation/:toid',passport.authenticate('jwt', {session: false}) , (req, res) => {
+router.delete('/conversation/:toid',passport.authenticate('jwt', {session: false}) , tokenValidator, (req, res) => {
+  
   const fromUserId = req.user.id;
   console.log(`printing req.params.toid then, ${req.params.toid}`);
   const toUserId = req.params.toid;
@@ -176,8 +182,8 @@ router.delete('/conversation/:toid',passport.authenticate('jwt', {session: false
                              messageListItem = messagesList[i];
                              console.log(`message list item is ${messageListItem}`);
                              const removeIndex = messagesList
-                                .map(messageListItem => messageListItem._id.toString()) // goes to every comment and get the comment id in string type so that our comment_id passed in params can be found
-                                .indexOf(messageListItem);//gets the index of comment_id which found through map() function above
+                                .map(messageListItem => messageListItem._id.toString()) // goes to every message and get the comment id in string type so that our comment_id passed in params can be found
+                                .indexOf(messageListItem);//gets the index of message_id which found through map() function above
                             console.log(`remove index in messages${removeIndex}`);
                           //splice the array
                             messagesList.splice(removeIndex, 1);
@@ -203,7 +209,8 @@ router.delete('/conversation/:toid',passport.authenticate('jwt', {session: false
 // @desc    delete a message from a conversation by conversation id, message id
 // @access  private 
 
-router.delete('/conversation/:toId/:message_id',passport.authenticate('jwt', {session: false}) , (req, res) => {
+router.delete('/conversation/:toId/:message_id',passport.authenticate('jwt', {session: false}) , tokenValidator, (req, res) => {
+  
   const fromUserId = req.user.id;
   const toUserId = req.params.toId;
   var conversationId='';
