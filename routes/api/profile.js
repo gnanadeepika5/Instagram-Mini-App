@@ -638,7 +638,7 @@ router.delete(
                 const removeIndex = profile.experience
                     .map((item) => item.id)
                     .indexOf(req.params.exp_id);
-
+                
                 if (removeIndex === -1) {
                     errors.experiencenotfound = "Experience not found";
                     // Return any errors with 404 status
@@ -682,7 +682,7 @@ router.delete(
                 const removeIndex = profile.education
                     .map((item) => item.id)
                     .indexOf(req.params.edu_id);
-
+                var errors ={};
                 if (removeIndex === -1) {
                     errors.educationnotfound = "Education not found";
                     // Return any errors with 404 status

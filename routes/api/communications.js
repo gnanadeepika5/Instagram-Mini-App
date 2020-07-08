@@ -81,7 +81,7 @@ router.post('/conversation/:toId',passport.authenticate('jwt', {session: false})
                        .catch(err=>console.log(err));
                         
                      })
-                     .catch(err=>console.log(err));
+                     .catch(err=> console.log(err));
   });
 
   //@route  get api/communications/:fromUserId/:toUserId
@@ -133,10 +133,7 @@ router.get('/conversation/:toid',passport.authenticate('jwt', {session: false}) 
                 }
               })
                 .catch(err=>console.log(err));
-
-  
-  
-})
+});
 //@route    delete api/communications/:fromUserId/:toUserId
 // @desc    delete all message from a conversation
 // @access  private 
@@ -200,10 +197,7 @@ router.delete('/conversation/:toid',passport.authenticate('jwt', {session: false
                   }
  })
    .catch(err=>console.log(err));
-
-
-
-})
+});
 
   //@route   delete api/communications/:conversation_id/:message_id  ggg
 // @desc    delete a message from a conversation by conversation id, message id
