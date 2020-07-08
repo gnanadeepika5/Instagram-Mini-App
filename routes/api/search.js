@@ -9,6 +9,19 @@ const tokenValidator = require('../../config/tokenValidator');
 
 const router = express.Router();
 
+/**
+ * Search API by caption or text
+ * @route GET /api/search/captionOrText
+ * @group Search
+ * @param {string} userName.body.required - username or email - eg: syam
+ * @param {string} handle.body.required 
+ * @param {string} email.body.required 
+ * @param {string} password.body.required 
+ * @param {string} password2.body.required 
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
+
 
 // @route   get /api/search/captionOrText
 // @access  private
@@ -25,11 +38,11 @@ router.get('/captionOrText', passport.authenticate('jwt', {session:false}), toke
       .then(postList =>{
         console.log(`Total no of posts in db- Post list is ${postList.length}`);
         // return res.json(postList);
-        let postArray =[];
+        var postArray =[];
         
-        for(i=0;i<postList.length;i++)
+        for(var i = 0; i < postList.length; i++)
         {
-           Caption = postList[i].text;
+          var Caption = postList[i].text;
           console.log(`captionText is ${Caption}`);
           if(Caption.includes(req.body.searchText) === true)
           {
@@ -43,15 +56,20 @@ router.get('/captionOrText', passport.authenticate('jwt', {session:false}), toke
           return res.json({NoPostFound:'No post found for the required search as Caption'});
         }
         else{
-        res.json(postArray);
+            return res.json(postArray);
         }
       })
-    
     .catch(err => console.log(err));
+});
 
-          
-})
-
+/**
+ * Search API by caption or text
+ * @route GET /api/search/UserName
+ * @group Search
+ * @param {string} searchText.query.required - username or email - eg: syam
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
 // @route   get /api/posts/caption/:text
 // @access  private
 // @desc    get all the users of user by searching the user name by giving some random word
@@ -60,11 +78,11 @@ router.get('/UserName/:searchText', passport.authenticate('jwt', {session: false
       .then(userList=>{
         console.log(`Total no of users in db- users list is ${userList.length}`);
         // return res.json(postList);
-        let userArray =[];
+        var userArray =[];
         
-        for(i=0;i<userList.length;i++)
+        for(var i = 0; i < userList.length; i++)
         {
-          UserNameText = userList[i].name;
+          var UserNameText = userList[i].name;
           console.log(`UserName Text is ${UserNameText}`);
           if(UserNameText.includes(req.body.searchText) === true)
           {
@@ -81,7 +99,12 @@ router.get('/UserName/:searchText', passport.authenticate('jwt', {session: false
         res.json(userArray);
         }
       } )
-      .catch()
+      .catch(err => {
+        return res.status(400).json({
+                    message: 'failed to query and get the users',
+                    innerException: err
+                  });
+      });
 });
 
 module.exports = router;

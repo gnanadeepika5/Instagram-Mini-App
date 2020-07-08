@@ -8,8 +8,8 @@ const crypto = require('crypto');
 // const { json } = require('body-parser');
 const tokenValidator = require('../../config/tokenValidator');
 
-
 const router = express.Router();
+
 // @route   post api/logout/
 // @desc    logout a user by user id
 // @access  private 
@@ -18,8 +18,6 @@ router.get('/test', (req,res)=>res.json({msg:'success'}));
 router.post('/', passport.authenticate('jwt', {session:false}),tokenValidator, function(req, res){
   const userID = req.user.id;
   console.log(`userID is ${userID}`);
-  
-
   User.findOne({_id: req.user.id}) 
       .then(user=>{
         if(!user)
@@ -33,7 +31,6 @@ router.post('/', passport.authenticate('jwt', {session:false}),tokenValidator, f
             Logout.findOne({user: userID})
                   .then(logoutUser =>{
                     //console.log(` user id inside logout finding is ${req.user.id}`);
-                    
                     if(!logoutUser)
                     {
                      // console.log(`there is no logoutUser with this user yet that means no token saved to db yet`);
@@ -54,21 +51,16 @@ router.post('/', passport.authenticate('jwt', {session:false}),tokenValidator, f
                       
                       newlogoutUser.LogoutTokenList = [newLogoutToken];
                       
-                      // //append the new LogoitToken to the LogoutToken array by using unshift() method.And this will also returns the new length after appending new LogoutToken everytime.To append back of array use push() method
+                      // append the new LogoutToken to the LogoutToken array by using unshift() method.And this will also returns the new length // after appending new LogoutToken everytime.To append back of array use push() method
                       // logoutUser.LogoutToken.unshift(newLogoutToken);
-                      //save in db
+                      // save in db
                       newlogoutUser.save()
                                 .then(newlogoutUser=>{
                                   //console.log(`newlogoutuser saved is ${newlogoutUser}`);
                                             res.json({msg:'log out success'});
                                           })
                                 .catch(err=>console.log(err));
-
                     }
-                
-                  
-                    
-
                     //user exists already just add a coming token as new token in db
                     else
                     {
@@ -92,17 +84,15 @@ router.post('/', passport.authenticate('jwt', {session:false}),tokenValidator, f
                                   if(tokenHash === TokenItem.token) {
                                     foundToken = true;
                                   }
-
                                 }         
                                 if(!foundToken) 
                                 {
                                               logoutUser.LogoutTokenList.unshift(newLogoutToken);
                                 }
-                      
                       logoutUser.save()
                                 .then(logoutUser =>{ 
                         //clean up code for token list
-                       const currentTime = (new Date().getTime())/1000;//current time in seconds
+                      const currentTime = (new Date().getTime())/1000;//current time in seconds
                        //console.log(`current time is ${currentTime}`);
                       AllTokens = new Array();
                       var removeIndex;
@@ -112,7 +102,7 @@ router.post('/', passport.authenticate('jwt', {session:false}),tokenValidator, f
                           filteredTokens=logoutUser.LogoutTokenList.filter(tokenItem=> (currentTime < tokenItem.TokenExpirationTime))
                           logoutUser.LogoutTokenList = filteredTokens;
                         //save
-                        logoutUser.save()  
+                      logoutUser.save()  
                              .then(logoutUser=>
                                  {
                                   res.json({msg:'log out success'});
@@ -121,17 +111,11 @@ router.post('/', passport.authenticate('jwt', {session:false}),tokenValidator, f
                                   .catch(err=>console.log(err));
                                })
                                .catch(err => console.log(err));                             
-
                             }                            
-                                                             
                   })
                   .catch(err => console.log(err));                             
         }
       })
       .catch(err=>console.log(err));
-
-      
-  
-  
-})
+});
 module.exports = router;

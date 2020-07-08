@@ -14,6 +14,20 @@ const { json } = require('body-parser');
 const Logout = require('../../models/Logout');
 const tokenValidator = require('../../config/tokenValidator');
 
+
+/**
+ * Register User API
+ * @route POST /api/users/register
+ * @group Users
+ * @param {string} userName.body.required - username or email - eg: syam
+ * @param {string} handle.body.required 
+ * @param {string} email.body.required 
+ * @param {string} password.body.required 
+ * @param {string} password2.body.required 
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
+
 // @route   POST api/users/register
 // @desc    Register user
 // @access  Public 
@@ -45,7 +59,7 @@ router.post('/register', (req, res) => {
           if (user) {
             return res.json({
               handle: 'Handle already taken. Choose another handle'
-            })
+            });
           }
 
           //create an avatar
@@ -54,7 +68,7 @@ router.post('/register', (req, res) => {
             r: 'pg',
             d: 'mm'
           });
-
+      
           const newUser = new User({
             name: req.body.name,
             email: req.body.email,
@@ -82,32 +96,36 @@ router.post('/register', (req, res) => {
                     avatar: user.avatar,
                     email: user.email,
                     handle: user.handle
-                  })
+                  });
                   newProfile
                     .save()
                     .then(profile => {
                       return res.status(200).json({
-                        msg: 'User and Profile created successfully',
+                        message : 'User and Profile created successfully',
                         userDetails: user,
                         profileDetails: profile
                       });
                     })
-                    .catch((err) => console.log(err));
+                    .catch((err) => 
+                    {
+                      return res.status(500).json(err);
+                    });
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => {
+                  return res.status(500).json(err);
+                });
             });
           });
-
-        })
-
+        });
     })
-    .catch(err => console.log(err));
+    .catch(err => { 
+      return res.status(500).json(err);
+    });
 })
-
 
 /**
  * Get users names matching to userName criteria
- * @route GET /api/users/search
+ * @route GET /api/users/search/:userName
  * @group Users
  * @param {string} userName.query.required - username or email - eg: syam
  * @returns {object} 200 - An array of user info
@@ -140,16 +158,15 @@ router.get('/search/:userName',
       .then(user => {
         if (!user) {
           return res.status(400).json({
-            errors: 'no user not found with the name '
+            errors: `No user found with the name ${req.params.userName}`
           });
         }
-        console.log(user);
       })
-      .catch(err => console.log(`failed to get the user info ${err}`));
-    return res.status(200).send(`{msg: searching user ${userName}}`);
+      .catch(err => {
+        return res.status(500).json( {message: `Failed to get the user info ${err}`});
+      });
+    return res.status(200).send({message: `Searching user ${userName}}`});
 });
-
-
 
 /**
  * Get Random list of People info
@@ -159,9 +176,6 @@ router.get('/search/:userName',
  * @returns {object} 200 - An array of user info
  * @returns {Error}  default - 500
  */
-// @route   get api/users/showPeople
-// @desc    showPeople
-// @access  Public 
 router.get('/showPeople', (req, res) => {
     return res.status(200).send(`{msg: respond with all people info}`);
 });
@@ -172,7 +186,6 @@ router.get('/showPeople', (req, res) => {
  * @group Users
  * @param {string} fromId.query.required - username or email - eg: syam
  * @param {string} toId.query.required - username or email - eg: deepika
- * @param {string} message.required - username or email - eg: how are you
  * @returns {object} 200 - An array of user info
  * @returns {Error}  default - 500
  */
@@ -180,37 +193,41 @@ router.get('/showPeople', (req, res) => {
 // @desc    post message to a user
 // @access  Public 
 router.get('/messages', (req, res) => {
-  return res.status(200).send(`{msg: get Messages from others}`);
+  return res.status(200).send(`{msg: get messages from others}`);
 });
-
 
 
 // @route   POST api/users/test
 // @desc    Register user
 // @access  Public 
 router.get('/test', (req, res) => {
-  return res.status(200).send('{msg: user test}')
+  return res.status(200).send({message: 'user test'});
 });
 
+/**
+ * Login User API
+ * @route POST /api/users/login
+ * @group Users
+ * @param {string} email.body.required - username or email - eg: syam
+ * @param {string} password.body.required 
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
 // @route   POST api/users/login
 // @desc    Login user/returning a token
 // @access  Public 
 router.post('/login', (req, res) => {
-  
-
   //Validation
   const {
     errors,
     isValid
   } = validateLoginInput(req.body);
 
-
   if (!isValid) {
     return res.status(400).json(errors);
   }
 
   const email = req.body.email;
-
   const password = req.body.password;
 
   //Find user by email
@@ -224,14 +241,11 @@ router.post('/login', (req, res) => {
           email: 'User not found'
         });
       }
-      
-
       //Check password
       bcrypt.compare(password, user.password)
         .then(isMatch => {
           if (isMatch) {
             //Payload
-
             const payload = {id: user.id, name: user.name, email:user.email, avatar: user.avatar, TokenExpirationTime: (new Date().getTime() + 60 * 60 * 1000)/1000};
             //sign token
             jwt.sign(
@@ -259,9 +273,8 @@ router.post('/login', (req, res) => {
 // @desc    Return current user
 // @access  Private
 router.get('/current', passport.authenticate('jwt', { session: false}), tokenValidator, (req, res) => {
-    
     return res.json(req.user);
-  })
+});
 
 /**
  * Delete a user
@@ -281,5 +294,6 @@ const errorMessage = `User has not been deleted!`;
 req.user.remove()
   .then(( ) => res.status(200).json({message: successMessage}))
   .catch(( ) => res.status(400).json({message: errorMessage}))
-    })
+    });
+
 module.exports = router;

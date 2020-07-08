@@ -12,14 +12,9 @@ const router = express.Router();
 // //test route from posts
 router.get('/test', (req,res) => res.json({msg:'posts worked'}));
 
-// @route   POST /api/posts
-// @access  private
-// @desc    Create and upload a new audio/video post
-
-
 /**
- * Create a new Post
- * @route Post api/profiles/handle/:userHandle
+ * Create a new Post:  Create and upload a new audio/video post
+ * @route Post api/posts
  * @group Posts
  * @param {string} id.required
  * @param {string} userHandle.body.required
@@ -53,6 +48,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), tokenValidator,
          .catch(err => console.log(err));
 });
 
+
 /**
  * Edit Post
  * @group Posts
@@ -67,7 +63,7 @@ router.patch('/:postId', passport.authenticate('jwt', {session: false}), tokenVa
   console.log('In the post route of posts');
   if(!isValid)
   {
-    return res.json(errors);
+    return res.status(400).json(errors);
   }
 
   Post.find({_id: req.params.postId})
@@ -103,9 +99,7 @@ router.patch('/:postId', passport.authenticate('jwt', {session: false}), tokenVa
  * @returns {Error}  default - 400 user profile not found
  */
 
-
-
-// @route   GET /api/posts
+ // @route   GET /api/posts
 // @access  private
 // @desc    Get all posts
 router.get('/', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
@@ -116,48 +110,52 @@ router.get('/', passport.authenticate('jwt', {session: false}), tokenValidator, 
       .catch(err => res.status(404).json({NoPostFound: 'No posts found'}));
 });
 
-
-
 /**
  * Get post by the postId
- * @route Get api/profiles/handle/:userHandle
+ * @route Get api/posts/id/:postId
  * @group Posts
  * @param {string} id.required
  * @returns {object} 200 - Post by the user
  * @returns {Error}  default - 400 user profile not found
  */
-// @route   GET /api/posts/id/:postid
-// @access  private
-// @desc    Get single post details based on postid
+
 router.get('/id/:postid', passport.authenticate('jwt', {session: false}), tokenValidator,(req, res) => {
- 
-  Post.findById(req.params.postid)
+   Post.findById(req.params.postid)
       .then(post => res.json(post))
       .catch(err => res.status(400).json({NoPostFound: 'No post with that id found'}));
 });
+
+/**
+ * Get posts by the userId
+ * @route Get api/posts/id/:userId
+ * @group Posts
+ * @param {string} id.required
+ * @returns {object} 200 - Post by the user
+ * @returns {Error}  default - 400 user profile not found
+ */
 
 // @route   GET /api/posts/id/:userid
 // @access  PRIVATE
 // @desc    Get all posts made by a userid
 router.get('/id/:userid', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
-  
-
   Post.find({user: req.params.userid})
   .then(post => {
-
-    res.json(post)
+    res.status(200).json(post);
   })
-  .catch(err => res.status(400).json({NoPostMade: 'No post made by that user'}));
+  .catch(err => { 
+      return  res.status(400).json({NoPostMade: 'No post made by that user'});
+    }
+  );
 });
 
 // @route   GET /api/posts/handle/:handle
 // @access  PRIVATE
 // @desc    Get posts made by a userhandle(unique handle)
 router.get('/handle/:handle', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
-  
-  Post.find({handle: req.params.handle})
-      .then(post => res.json(post))
-      .catch(err => res.status(400).json({NoPostMade: 'No post made by that user'}));
+    Post.find({handle: req.params.handle})
+      .then(post => { return res.status(200).json(post);})
+      .catch(err => { return  res.status(400).json({NoPostMade: 'No post made by that user'});
+      });
 });
 
 
@@ -182,9 +180,16 @@ router.delete('/id/:postid', passport.authenticate('jwt', {session: false}), tok
       .catch(err => console.log(err));
 });
 
-// @route   DELETE /api/posts/user/:userid
-// @access  PRIVATE
-// @desc    Delete all posts made by the userid
+
+/**
+ * DELETE all posts by userId
+ * @route DELETE api/posts/users/:userId
+ * @group Posts
+ * @param {string} id.required
+ * @returns {object} 200 - Post by the user
+ * @returns {Error}  default - 400 user profile not found
+ */
+
 router.delete('/id/:userid', passport.authenticate('jwt', {session: false}), tokenValidator, (req,res) => {
 
   Post.find({user: req.params.id})
@@ -214,8 +219,6 @@ router.delete('/id/:userid', passport.authenticate('jwt', {session: false}), tok
       
 });
 
-
-
 /**
  * Post a comment on a Post of a user
  * @route Post api/posts/comments/:id
@@ -229,8 +232,6 @@ router.delete('/id/:userid', passport.authenticate('jwt', {session: false}), tok
 // @desc comment a post based on post id
 // @access private
 router.post('/comment/:id', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
-
- 
   //validation
   const {errors, isValid} = validateComment(req.body);
   if(!isValid){
@@ -267,7 +268,6 @@ router.post('/comment/:id', passport.authenticate('jwt', {session: false}), toke
 //access private
 
 router.delete('/comment/:post_id/:comment_id', passport.authenticate('jwt', {session: false}), tokenValidator, (req,res)=>{
- 
   //find   a post by post_id
   Post.findById(req.params.post_id)
       .then(post=> {
@@ -293,8 +293,14 @@ router.delete('/comment/:post_id/:comment_id', passport.authenticate('jwt', {ses
 })
 
 
-// @router    POST /api/posts/like/:id
-// @desc      Like a post based on postId
+/**
+ * POST  like based on postId
+ * @route POST api/posts/like/:id
+ * @group Posts
+ * @param {string} id.required
+ * @returns {object} 200 - Post by the user
+ * @returns {Error}  default - 400 user profile not found
+ */
 // @access    Private
 
 
@@ -324,7 +330,7 @@ router.post('/like/:id', passport.authenticate('jwt', {session: false}), tokenVa
               return res.status(400).json({likeError: 'Already liked the post'})
             }                           
 
-          // //User found, remove user from likes array
+          // User found, remove user from likes array
           // post.likes.splice(removeIndex, 1);
         }
         else{
@@ -347,7 +353,7 @@ router.post('/like/:id', passport.authenticate('jwt', {session: false}), tokenVa
 
 
 /**
- * Post unlike a post
+ * Post unlike a post based on postId
  * @route Post api/posts/unlike/:Id
  * @group Posts
  * @param {string} id.required
@@ -355,12 +361,9 @@ router.post('/like/:id', passport.authenticate('jwt', {session: false}), tokenVa
  * @returns {object} 200 - Profile of user
  * @returns {Error}  default - 400 user profile not found
  */
-
-// @router    POST /api/posts/unlike/:id
-// @desc      Unlike a post based on postId
 // @access    Private
+
 router.post('/unlike/:id',passport.authenticate('jwt', {session:false}), tokenValidator, (req,res) =>{
-  
   //find the post which need to be unliked
   Post.findById(req.params.id)
   //check if user already liked the post
@@ -386,8 +389,6 @@ router.post('/unlike/:id',passport.authenticate('jwt', {session:false}), tokenVa
       .catch(err => res.status(400).json({postNotFound: 'Post Not Found'}));
 });
 
-
-
 /**
  * Get Posts liked by a users
  * @route Get api/posts/likedUsers/:postId
@@ -397,11 +398,9 @@ router.post('/unlike/:id',passport.authenticate('jwt', {session:false}), tokenVa
  * @returns {object} 200 - Profile of user
  * @returns {Error}  default - 400 user profile not found
  */
-// @route   GET /api/posts/likedUsers/post_id
-// @access  PRIVATE
 // @desc    Get all the likedUser profiles of a post
+
 router.get('/likedUsers/:post_id', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
-  
   Post.findById(req.params.post_id)
       .then(post => {
         
@@ -412,4 +411,5 @@ router.get('/likedUsers/:post_id', passport.authenticate('jwt', {session: false}
       })
       .catch(err => res.json({NoLikes: 'No one has liked this post yet'}));
 });
+
 module.exports = router;

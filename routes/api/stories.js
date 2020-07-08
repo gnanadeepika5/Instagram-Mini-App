@@ -9,6 +9,19 @@ const tokenValidator = require('../../config/tokenValidator');
 
 const router = express.Router();
 
+/**
+ * Post a story API
+ * @route POST /api/stories
+ * @group Stories
+ * @param {string} userName.body.required - username or email - eg: syam
+ * @param {string} handle.body.required 
+ * @param {string} email.body.required 
+ * @param {string} password.body.required 
+ * @param {string} password2.body.required 
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
+
 // @route   POST /api/stories
 // @access  private
 // @desc    Create and upload a new audio/video post

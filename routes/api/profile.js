@@ -11,15 +11,12 @@ const router = express.Router();
 
 /**
  * Get profile of user
- * @route Get api/profiles/:id
+ * @route Get api/profile/:id
  * @group Profile
  * @param {string} id.required
  * @returns {object} 200 - Profile of user
  * @returns {Error}  default - 400 user profile not found
  */
-// @router GET api/profile
-// @desc Private
-// @desc get the profile details
 
 router.get(
     "/",
@@ -41,7 +38,7 @@ router.get(
                 }
                 res.json(profile);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => { return res.status(500).json(err);});
     }
 );
 
@@ -54,10 +51,6 @@ router.get(
  * @returns {object} 200 - Profile of user
  * @returns {Error}  default - 400 user profile not found
  */
-// @router GET api/profiles/handle: userhandle
-// @desc Private
-// @desc get the profile details based on the handle name
-
 router.get(
     "/handle/:userhandle",
     passport.authenticate("jwt", {
@@ -77,7 +70,7 @@ router.get(
                 }
                 res.json(profile);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => { return res.status(500).json(err);});
     }
 );
 
@@ -90,9 +83,6 @@ router.get(
  * @returns {object} 200 - Profile of user
  * @returns {Error}  default - 400 user profile not found
  */
-// @router GET api/profiles/name: username
-// @desc Private
-// @desc get the profile details based on name
 router.get(
     "/name/:username",
     passport.authenticate("jwt", {
@@ -112,7 +102,7 @@ router.get(
                 }
                 res.json(profile);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => { return res.status(500).json(err);});
     }
 );
 
@@ -182,7 +172,7 @@ router.get(
                 }
                 res.json(profile);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => { return res.status(500).json(err);});
     }
 );
 
@@ -273,6 +263,7 @@ router.post(
     }
 );
 
+
 // @router  POST api/profiles/follow/handle/:handle
 // @access  Private
 // @desc    Following a user whose userhandle + avatar is passed in route
@@ -349,8 +340,8 @@ router.post(
 );
 
 /**
- * Get profile of user
- * @route Get api/profiles/unfollow
+ * POST profile unfollow
+ * @route Get api/profile/unfollow/handle
  * @group Profile
  * @param {string} id.required
  * @returns {object} 200 - Profile of user
@@ -420,7 +411,6 @@ router.post(
 
                         // Splice the array
                         profile.followers.splice(removeIndex, 1);
-
                         // Save
                         profile
                             .save()
@@ -429,11 +419,20 @@ router.post(
                     })
                     .catch((err) => console.log(err));
             })
-            .catch((err) => console.log(err));
+            .catch((err) => { return res.status(500).json(err);});
     }
 );
 
-// @router  GET api/profiles/following/handle/:handle
+/**
+ * POST profile unfollow
+ * @route Get api/profile/unfollow/handle
+ * @group Profile
+ * @param {string} id.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
+
+// @router  GET api/profile/following/handle/:handle
 // @access  Private
 // @desc    Get the list of people whom the user is following given the userHandle
 router.get(
@@ -481,6 +480,15 @@ router.get(
     }
 );
 
+/**
+ * DELETE profile 
+ * @route DELETE api/profile
+ * @group Profile
+ * @param {string} id.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
+
 //@route DELETE api/profile
 //@desc Delete user and profile
 //@access Private
@@ -504,6 +512,16 @@ router.delete(
         });
     }
 );
+
+
+/**
+ * POST profile experience
+ * @route POST api/profile/experience
+ * @group Profile
+ * @param {string} id.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
 
 //@route POST api/profile/experience
 //@desc Add experience to profile
@@ -545,6 +563,15 @@ router.post('/experience', passport.authenticate('jwt', {
     });
 });
 
+/**
+ * POST profile education
+ * @route POST api/profile/education
+ * @group Profile
+ * @param {string} id.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
+
 //@route POST api/profile/education
 //@desc Add education to profile
 //@access Private
@@ -583,6 +610,16 @@ router.post('/education', passport.authenticate('jwt', {
     });
 });
 
+
+/**
+ * DELETE profile experience 
+ * @route DELETE api/profile/unfollow/handle
+ * @group Profile
+ * @param {string} id.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
+
 // @route   DELETE api/profile/experience/:exp_id
 // @desc    Delete experience from profile
 // @access  Private
@@ -616,6 +653,17 @@ router.delete(
             .catch((err) => res.status(404).json(err));
     }
 );
+
+
+/**
+ * DELETE profile education
+ * @route DELETE api/profile/education/:edu_id
+ * @group Profile
+ * @param {string} id.required
+ * @returns {object} 200 - Profile of user
+ * @returns {Error}  default - 400 user profile not found
+ */
+
 
 // @route   DELETE api/profile/education/:edu_id
 // @desc    Delete education from profile
