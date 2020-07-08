@@ -71,7 +71,7 @@ User.findOne({email: req.body.email})
 
 
 /**
- * Get users names mathing to userName criteria
+ * Get users names matching to userName criteria
  * @route GET /api/users/search
  * @group Users
  * @param {string} userName.query.required - username or email - eg: syam
@@ -108,7 +108,7 @@ router.get('/search/:userName',
 
 
 /**
- * Gte Random list of People info
+ * Get Random list of People info
  * @route GET /api/users/showPeople
  * @group Users
  * @param {string} userName.query.required - username or email - eg: syam
@@ -200,8 +200,6 @@ router.get('/showMatches', (req, res) => {
  * @returns {object} 200 - An array of user info
  * @returns {Error}  default - 500
  */
-
-
 // @route   get api/users/messages
 // @desc    post message to a user
 // @access  Public 
