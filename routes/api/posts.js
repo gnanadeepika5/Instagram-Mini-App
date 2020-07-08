@@ -107,7 +107,7 @@ router.get('/', passport.authenticate('jwt', {session: false}), tokenValidator, 
   Post.find()
       .sort({date: -1}) // give the sorted data  by date in descending order
       .then(posts => res.json(posts))
-      .catch(err => res.status(404).json({NoPostFound: 'No posts found'}));
+      .catch(err => { res.status(404).json({NoPostFound: 'No posts found'});});
 });
 
 /**
@@ -119,10 +119,10 @@ router.get('/', passport.authenticate('jwt', {session: false}), tokenValidator, 
  * @returns {Error}  default - 400 user profile not found
  */
 
-router.get('/id/:postid', passport.authenticate('jwt', {session: false}), tokenValidator,(req, res) => {
-   Post.findById(req.params.postid)
+router.get('/id/:postId', passport.authenticate('jwt', {session: false}), tokenValidator,(req, res) => {
+   Post.findById(req.params.postId)
       .then(post => res.json(post))
-      .catch(err => res.status(400).json({NoPostFound: 'No post with that id found'}));
+      .catch(err => { res.status(400).json({NoPostFound: 'No post with that id found'});});
 });
 
 /**
@@ -134,11 +134,11 @@ router.get('/id/:postid', passport.authenticate('jwt', {session: false}), tokenV
  * @returns {Error}  default - 400 user profile not found
  */
 
-// @route   GET /api/posts/id/:userid
+// @route   GET /api/posts/id/:userId
 // @access  PRIVATE
-// @desc    Get all posts made by a userid
-router.get('/id/:userid', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
-  Post.find({user: req.params.userid})
+// @desc    Get all posts made by a userId
+router.get('/id/:userId', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
+  Post.find({user: req.params.userId})
   .then(post => {
     res.status(200).json(post);
   })
@@ -159,12 +159,12 @@ router.get('/handle/:handle', passport.authenticate('jwt', {session: false}), to
 });
 
 
-// @route   DELETE /api/posts/id/:postid
+// @route   DELETE /api/posts/id/:postId
 // @access  private
-// @desc    Delete a post made by a user based on postid
-router.delete('/id/:postid', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
+// @desc    Delete a post made by a user based on postId
+router.delete('/id/:postId', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
 
-  Post.findOne({_id: req.params.postid})
+  Post.findOne({_id: req.params.postId})
       .then(post => {
         
         // check if the user is the author of the post

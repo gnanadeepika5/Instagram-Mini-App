@@ -6,10 +6,17 @@ const validateMessage = require('../../validations/messages');
 const Logout = require('../../models/Logout');
 const tokenValidator = require('../../config/tokenValidator');
 
-
 const router = express.Router();
 
-
+/**
+ * post communications API
+ * @route POST /api/communications/conversation/:toId
+ * @group Communications 
+ * @param {string} toId.query.required - username or email - eg: Meghamala
+ * @param {string} msg.body.required 
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
 // @route   post api/communication/conversation/:toId
 // @desc    post a message to a user by user id
 // @access  private 
@@ -29,9 +36,8 @@ router.post('/conversation/:toId',passport.authenticate('jwt', {session: false})
   else{
    conversationId = toUserId+'ADD'+fromUserId;
   }
-  
+
   console.log(`before finding anything yet,from user id is ${fromUserId}, to user id is ${toUserId} and conversation is is ${conversationId}`);
- 
   User.findOne({_id:req.params.toId})
       .then(user => {
         if(!user){
@@ -75,23 +81,27 @@ router.post('/conversation/:toId',passport.authenticate('jwt', {session: false})
                             newConversation.save()
                                 .then(newConversation, res.json(newConversation))
                                 .catch(err => console.log(err)); 
-
                        }
                        }) 
                        .catch(err=>console.log(err));
-                        
                      })
                      .catch(err=> console.log(err));
   });
 
-  //@route  get api/communications/:fromUserId/:toUserId
+/**
+ * Get conversation from a user to user 
+ * @route GET /api/communications/conversation/:toId
+ * @group Communications
+ * @param {string} toId.query.required - username or email - eg: Iryna
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
+//@route  get api/communications/conversation/:fromUserId/:toUserId
 // @desc    get all messages(chat history) from a conversation by conversation id
 // @access  private 
-router.get('/conversation/:toid',passport.authenticate('jwt', {session: false}) , tokenValidator, (req, res) => {
-  
+router.get('/conversation/:toId',passport.authenticate('jwt', {session: false}) , tokenValidator, (req, res) => {
   const fromUserId = req.user.id;
-  
-  const toUserId = req.params.toid;
+  const toUserId = req.params.toId;
   var conversationId='';
   if(fromUserId < toUserId){
     conversationId = fromUserId+'ADD'+toUserId;
@@ -99,12 +109,9 @@ router.get('/conversation/:toid',passport.authenticate('jwt', {session: false}) 
   else{
    conversationId = toUserId+'ADD'+fromUserId;
   }
-  
   console.log(`before finding anything yet,from user id is ${fromUserId}, to user id is ${toUserId} and conversation is is ${conversationId}`);
- 
   Communication.findOne({conversationId: conversationId})
                .then(conversation =>{
-                 
                  if(!conversation)
                  {
                    return res.json({NoConversationFound:'No conversation found with this id'});
@@ -117,9 +124,9 @@ router.get('/conversation/:toid',passport.authenticate('jwt', {session: false}) 
                   else{
                   //flagRead = true;
                   //res.json(conversation);
-                  messagesList = conversation.messages;
+                  let messagesList = conversation.messages;
                   console.log(`messages list ${messagesList}`);
-                  for(i=0;i<messagesList.length;i++)
+                  for(let i = 0; i < messagesList.length; i++)
                   {
                     messageListItem =messagesList[i];
                     messageListItem.flagRead = true;
@@ -127,21 +134,29 @@ router.get('/conversation/:toid',passport.authenticate('jwt', {session: false}) 
                   conversation.save()
                               .then(conversation=>res.json(conversation))
                               .catch(err =>console.log(err));
-
                   }
-                
                 }
               })
                 .catch(err=>console.log(err));
 });
+
+/**
+ * Delete conversation 
+ * @route DELETE /api/communications/conversation
+ * @group Communications
+ * @param {string} userName.body.required - username or email - eg: Syam
+ * @param {string} handle.body.required 
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
 //@route    delete api/communications/:fromUserId/:toUserId
 // @desc    delete all message from a conversation
 // @access  private 
-router.delete('/conversation/:toid',passport.authenticate('jwt', {session: false}) , tokenValidator, (req, res) => {
+router.delete('/conversation/:toId',passport.authenticate('jwt', {session: false}) , tokenValidator, (req, res) => {
   
   const fromUserId = req.user.id;
-  console.log(`printing req.params.toid then, ${req.params.toid}`);
-  const toUserId = req.params.toid;
+  console.log(`printing req.params.toId then, ${req.params.toid}`);
+  const toUserId = req.params.toId;
   console.log(`printing toUserId then, ${toUserId}`);
   var conversationId='';
   if(fromUserId < toUserId){
@@ -155,7 +170,6 @@ router.delete('/conversation/:toid',passport.authenticate('jwt', {session: false
  
   Communication.findOne({conversationId: conversationId})
                .then(conversation =>{
-                 
                  if(!conversation)
                  {
                    return res.json({NoConversationFound:'No conversation found with this id'});
@@ -199,12 +213,19 @@ router.delete('/conversation/:toid',passport.authenticate('jwt', {session: false
    .catch(err=>console.log(err));
 });
 
-  //@route   delete api/communications/:conversation_id/:message_id  ggg
+/**
+ * Delete conversation on the base of message_id
+ * @route DELETE /api/communications/conversation/:toId/:message_id
+ * @group Communications
+ * @param {string} userName.body.required - username or email - eg: Gnana
+ * @returns {object} 200 - An array of user info
+ * @returns {Error}  default - 500
+ */
+//@route   delete api/communications/:conversation_id/:message_id  ggg
 // @desc    delete a message from a conversation by conversation id, message id
 // @access  private 
 
 router.delete('/conversation/:toId/:message_id',passport.authenticate('jwt', {session: false}) , tokenValidator, (req, res) => {
-  
   const fromUserId = req.user.id;
   const toUserId = req.params.toId;
   var conversationId='';
@@ -216,7 +237,6 @@ router.delete('/conversation/:toId/:message_id',passport.authenticate('jwt', {se
   }
   
   console.log(`before finding anything yet,from user id is ${fromUserId}, to user id is ${toUserId} and conversation is is ${conversationId}`);
- 
   Communication.findOne({conversationId: conversationId})
                .then(conversation =>{
                  if(!conversation)
@@ -257,12 +277,8 @@ router.delete('/conversation/:toId/:message_id',passport.authenticate('jwt', {se
                   //   console.log(`user is coming from token is ${req.user.id}`);
                   return res.json({msg:'UnAuthorized to see this conversation'});
                 }
-
-
-                   }
-                 
-                 
-               })
+        }
+    })
                .catch(err=>console.log(err));
 })
 
@@ -271,6 +287,4 @@ router.delete('/conversation/:toId/:message_id',passport.authenticate('jwt', {se
 //checkfrom user is author of message and if deleted should not be shown in from user chat anymore but should show in to user chat still
 // @access  private 
 
-
-
-  module.exports = router;
+ module.exports = router;
