@@ -152,7 +152,7 @@ router.get('/search/:userName',
     if (!isValid) {
       return res.status(500).json(errors);
     }
-    Users.findOne({
+    User.findOne({
         name: req.param.name
       })
       .then(user => {
@@ -177,7 +177,22 @@ router.get('/search/:userName',
  * @returns {Error}  default - 500
  */
 router.get('/showPeople', (req, res) => {
-    return res.status(200).send(`{msg: respond with all people info}`);
+  User.findOne({
+    name: 'syam'
+  })
+    .then(users => {
+      if (!users) {
+        return res.status(400).json({
+          errors: `No user found with the name ${req.params.userName}`
+        });
+      }
+      console.log(' List of people');
+      return res.status(200).send(users);
+    })
+    .catch(err => {
+      return res.status(500).json( {message:`Failed to get the user info ${err}`});
+    });
+    
 });
 
 /**
@@ -193,7 +208,7 @@ router.get('/showPeople', (req, res) => {
 // @desc    post message to a user
 // @access  Public 
 router.get('/messages', (req, res) => {
-  return res.status(200).send(`{msg: get messages from others}`);
+  return res.status(200).send({message: `get messages from others`});
 });
 
 
