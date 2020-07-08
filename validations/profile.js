@@ -9,6 +9,11 @@ module.exports = function validateProfileInput(data) {
             errors.website = "Not a Valid URL.";
         }
     }
+
+    if (isEmpty(data.handle)) {
+        errors.handle = "Handle field is required";
+    }
+
     return {
         errors,
         isValid: isEmpty(errors)
