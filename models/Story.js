@@ -27,15 +27,12 @@ const StorySchema = new Schema({
   },
   text:{
     type:String
-  }
-,
-  ExpirationTime:{
-    type: Date,
-    default: new Date().getTime()
-    //default: (new Date().getTime() + 1 * 60 * 1000)/1000  //adding 1* 60 * 1000 gives 1 minutes in milli seconds. 
-    //divideing by 1000 gives seconds
-    //so current time + milli seconds of 60 minutes and divinding by 100 to get in seconds format
-  }
+  },
+  expire_at: {
+    type: Date, 
+    default: Date.now, 
+    expires: 300//5 minutes 24 hours is 86400
+    } 
 
 })
 module.exports = Story = mongoose.model('stories', StorySchema);

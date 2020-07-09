@@ -10,7 +10,7 @@ const tokenValidator = require('../../config/tokenValidator');
 const router = express.Router();
 
 
-// @route   post api/communication/conversation/:toId
+// @route   post api/communications/conversation/:toId
 // @desc    post a message to a user by user id
 // @access  private 
 router.post('/conversation/:toId',passport.authenticate('jwt', {session: false}) , tokenValidator, (req, res) => {
