@@ -177,9 +177,8 @@ router.get('/search/:userName',
  * @returns {Error}  default - 500
  */
 router.get('/showPeople', (req, res) => {
-  User.findOne({
-    name: 'syam'
-  })
+  User.find({})
+    .limit(10)
     .then(users => {
       if (!users) {
         return res.status(400).json({
