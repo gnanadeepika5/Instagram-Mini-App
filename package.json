@@ -18,9 +18,13 @@
     "mongoose": "^5.9.19",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "react-router-dom": "^5.2.0",
+    "typescript": "^3.9.6",
     "validator": "^13.1.1"
   },
   "devDependencies": {
+    "eslint": "^7.4.0",
+    "eslint-plugin-react": "^7.20.3",
     "express-swagger-generator": "^1.1.17",
     "nodemon": "^2.0.4"
   }

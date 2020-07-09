@@ -10,7 +10,7 @@ const tokenValidator = require('../../config/tokenValidator');
 const router = express.Router();
 
 
-// @route   post api/communications/conversation/:toId
+// @route   post api/communication/conversation/:toId
 // @desc    post a message to a user by user id
 // @access  private 
 router.post('/conversation/:toId',passport.authenticate('jwt', {session: false}) , tokenValidator, (req, res) => {
@@ -140,7 +140,7 @@ router.get('/conversation/:toid',passport.authenticate('jwt', {session: false}) 
 //@route    delete api/communications/:fromUserId/:toUserId
 // @desc    delete all message from a conversation
 // @access  private 
-router.delete('/conversation/:toid',passport.authenticate('jwt', {session: false}) , tokenValidator, (req, res) => {
+router.delete('/conversation/:toid',passport.authenticate('jwt', {session: false}) , (req, res) => {
   
   const fromUserId = req.user.id;
   console.log(`printing req.params.toid then, ${req.params.toid}`);
@@ -209,7 +209,7 @@ router.delete('/conversation/:toid',passport.authenticate('jwt', {session: false
 // @desc    delete a message from a conversation by conversation id, message id
 // @access  private 
 
-router.delete('/conversation/:toId/:message_id',passport.authenticate('jwt', {session: false}) , tokenValidator, (req, res) => {
+router.delete('/conversation/:toId/:message_id',passport.authenticate('jwt', {session: false}) , (req, res) => {
   
   const fromUserId = req.user.id;
   const toUserId = req.params.toId;

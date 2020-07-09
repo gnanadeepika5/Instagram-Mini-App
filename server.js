@@ -16,8 +16,8 @@ const expressSwagger = require('express-swagger-generator')(app);
 let options = {
     swaggerDefinition: {
         info: { 
-            description: 'This is a sample server',
-            title: 'Swagger',
+            description: 'This is a API swagger to support the Instagram App',
+            title: 'Swagger - Instagram API',
             version: '1.0.0',
         },
         host: 'localhost:10000',

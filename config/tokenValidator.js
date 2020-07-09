@@ -27,15 +27,10 @@ module.exports = function tokenValidator(req, res, next) {
                                   }
 
                                 }
-                                next();
-
-           
           } else {
             next();
           }
-         
         }
-
         )
-        .catch()
+        .catch();
 }
