@@ -44,7 +44,7 @@ router.get(
 
 /**
  * Get profile of user
- * @route Get api/profiles/handle/:userHandle
+ * @route Get api/profile/handle/:userHandle
  * @group Profile
  * @param {string} id.required
  * @param {string} userHandle.body.required
@@ -76,7 +76,7 @@ router.get(
 
 /**
  * Get profile of user by userName
- * @route Get api/profiles/name/:userName
+ * @route Get api/profile/name/:userName
  * @group Profile
  * @param {string} id.required
  * @param {string} userName.query.required
@@ -108,7 +108,7 @@ router.get(
 
 /**
  * Get profile of user by email
- * @route Get api/profiles/email:userEmail
+ * @route Get api/profile/email:userEmail
  * @group Profile
  * @param {string} id.required
  * @param {string} userHandle.body.required
@@ -116,7 +116,7 @@ router.get(
  * @returns {Error}  default - 400 user profile not found
  */
 
-// @router GET api/profiles/email: useremail
+// @router GET api/profile/email: useremail
 // @desc Private
 // @desc get the profile details based on email id
 
@@ -144,13 +144,13 @@ router.get(
 
 /**
  * Get profile of all user
- * @route Get api/profiles/all
+ * @route Get api/profile/all
  * @group Profile
  * @param {string} id.required
  * @returns {object} 200 - Profile of user
  * @returns {Error}  default - 400 user profile not found
  */
-// @router api/profiles/all
+// @router api/profile/all
 // @desc Private
 // @desc get the profile details of a single user
 
@@ -178,14 +178,14 @@ router.get(
 
 /**
  * Edit profile of user
- * @route Post api/profiles/edit
+ * @route Post api/profile/edit
  * @group Profile
  * @param {string} id.required
  * @param {string} userHandle.body.required
  * @returns {object} 200 - Profile of user
  * @returns {Error}  default - 400 user profile not found
  */
-// @router POST api/profiles/edit
+// @router POST api/profile/edit
 // @desc Private
 // @desc edit the Profile page
 
@@ -264,7 +264,7 @@ router.post(
 );
 
 
-// @router  POST api/profiles/follow/handle/:handle
+// @router  POST api/profile/follow/handle/:handle
 // @access  Private
 // @desc    Following a user whose userhandle + avatar is passed in route
 router.post(
@@ -347,7 +347,7 @@ router.post(
  * @returns {object} 200 - Profile of user
  * @returns {Error}  default - 400 user profile not found
  */
-// @router  POST api/profiles/unfollow/handle/:handle
+// @router  POST api/profile/unfollow/handle/:handle
 // @access  Private
 // @desc    Following a user whose userhandle is passed in route
 router.post(
@@ -456,7 +456,7 @@ router.get(
     }
 );
 
-// router GET api/profiles/followers/handle/:handle
+// router GET api/profile/followers/handle/:handle
 // @access Private
 // @desc Get the list of followers of a user given the userHandle
 router.get(
