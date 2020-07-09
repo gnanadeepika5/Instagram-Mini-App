@@ -98,11 +98,10 @@ router.patch('/:postId', passport.authenticate('jwt', {session: false}), tokenVa
  * @returns {object} 200 - Profile of user
  * @returns {Error}  default - 400 user profile not found
  */
-
- // @route   GET /api/posts
+// @route   GET /api/posts/all
 // @access  private
 // @desc    Get all posts
-router.get('/', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
+router.get('/all', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
   
   Post.find()
       .sort({date: -1}) // give the sorted data  by date in descending order
@@ -146,6 +145,19 @@ router.get('/id/:userId', passport.authenticate('jwt', {session: false}), tokenV
       return  res.status(400).json({NoPostMade: 'No post made by that user'});
     }
   );
+});
+// @route   GET /api/posts/id/:userid
+// @access  PRIVATE
+// @desc    Get all posts of a person who is making this api call
+router.get('/', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
+  
+
+  Post.find({user: req.user.id})
+  .then(post => {
+
+    res.json(post)
+  })
+  .catch(err => res.status(400).json({NoPostMade: 'No post made by that user'}));
 });
 
 // @route   GET /api/posts/handle/:handle
@@ -192,7 +204,7 @@ router.delete('/id/:postId', passport.authenticate('jwt', {session: false}), tok
 
 router.delete('/id/:userid', passport.authenticate('jwt', {session: false}), tokenValidator, (req,res) => {
 
-  Post.find({user: req.params.id})
+  Post.find({user: req.params.userid})
   .then(post => {
     
     for(i=0;i<post.length;i++)
@@ -211,7 +223,7 @@ router.delete('/id/:userid', passport.authenticate('jwt', {session: false}), tok
       post[i].deleteOne()
             .then(()=>console.log(postListItem))
             .catch(err => console.log(err));
-      }
+     }
     }
     res.json({PostsDeleteSuccess:'All the posts associated which you created got deleted successfully'})
   })
@@ -276,6 +288,7 @@ router.delete('/comment/:post_id/:comment_id', passport.authenticate('jwt', {ses
         {
           return res.status(400).json({commentUnavailable: 'No comment to be deleted'});
         }
+        
         // console.log('comment length'+ req.params.comment_id.length);
         //comment exists, find index of the comment to be deleted
         const removeIndex = post.comments
@@ -288,6 +301,7 @@ router.delete('/comment/:post_id/:comment_id', passport.authenticate('jwt', {ses
         post.save()
             .then(post=>res.json(post))
             .catch(err =>console.log(err));
+        
       })
       .catch(err=>console.log(err));
 })
