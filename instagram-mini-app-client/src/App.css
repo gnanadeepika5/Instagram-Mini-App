@@ -6,6 +6,12 @@
   height: 40vmin;
   pointer-events: none;
 }
+.videoTag{
+  height: 100%;
+width: 100%;
+top: 0;
+padding: none;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

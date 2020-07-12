@@ -1,12 +1,17 @@
 import React from 'react';
-import logo from './logo.svg';
+import video from './clouds-video.mp4';
+import image from './instagram-background-image.jpg';
+// import logo from './logo.svg';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+      <video className='videoTag' autoPlay loop muted>
+         <source src={video} type='video/mp4' />
+      </video>
+      {/* <img src={image} className='image' alt='image' /> */}
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>

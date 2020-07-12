@@ -136,7 +136,7 @@ router.get('/id/:postId', passport.authenticate('jwt', {session: false}), tokenV
 // @route   GET /api/posts/id/:userId
 // @access  PRIVATE
 // @desc    Get all posts made by a userId
-router.get('/id/:userId', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
+router.get('/userid/:userId', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
   Post.find({user: req.params.userId})
   .then(post => {
     res.status(200).json(post);
