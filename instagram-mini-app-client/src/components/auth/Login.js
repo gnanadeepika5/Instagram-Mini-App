@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class login extends Component {
+ class Login extends Component {
   render() {
     return (
       <div className="login">
@@ -8,7 +8,7 @@ class login extends Component {
       <div className="row">
         <div className="col-md-8 m-auto">
           <h1 className="display-4 text-center">Log In</h1>
-          <p className="lead text-center">Sign in to your Instagram Minі account</p>
+          <p className="lead text-center">Sign in to your Instagram account</p>
           <form action="dashboard.html">
             <div className="form-group">
               <input type="email" className="form-control form-control-lg" placeholder="Email Address" name="email" />
@@ -25,5 +25,4 @@ class login extends Component {
     )
   }
 }
-
-export default login;
+export default Login;
