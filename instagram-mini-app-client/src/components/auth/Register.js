@@ -1,6 +1,20 @@
 import React, { Component } from 'react'
 
  class Register extends Component {
+   constructor(){
+     super();
+     this.state = {
+       name: '',
+       email:'',
+       password: '',
+       password2: '',
+       errors: {}
+     }
+     this.onChange = this.onChange.bind(this);
+   }
+   onChange(e){
+     this.setState({[e.target.name]: e.target.value})
+   }
   render() {
     return (
       <div className="register">
@@ -11,20 +25,32 @@ import React, { Component } from 'react'
           <p className="lead text-center">Create your Instagram account</p>
           <form action="create-profile.html">
             <div className="form-group">
-              <input type="text" className="form-control form-control-lg" placeholder="Name" name="name" required />
+              <input type="text" className="form-control form-control-lg" placeholder="Name" name="name"
+              value={this.state.name}
+              onChange={this.onChange}
+              required />
             </div>
             <div className="form-group">
-              <input type="email" className="form-control form-control-lg" placeholder="Email Address" name="email" />
+              <input type="email" className="form-control form-control-lg" placeholder="Email Address" name="email"
+              value={this.state.email}
+              onChange={this.onChange} />
               <small className="form-text text-muted">This site uses Gravatar so if you want a profile image, use a Gravatar email</small>
             </div>
             <div className="form-group">
-              <input type="text" className="form-control form-control-lg" placeholder="User Handle" name="handle" required />
+              <input type="text" className="form-control form-control-lg" placeholder="User Handle" name="handle"
+              value={this.state.handle}
+              onChange={this.onChange}
+              required />
             </div>
             <div className="form-group">
-              <input type="password" className="form-control form-control-lg" placeholder="Password" name="password" />
+              <input type="password" className="form-control form-control-lg" placeholder="Password" name="password"
+              value={this.state.password}
+              onChange={this.onChange} />
             </div>
             <div className="form-group">
-              <input type="password" className="form-control form-control-lg" placeholder="Confirm Password" name="password2" />
+              <input type="password" className="form-control form-control-lg" placeholder="Confirm Password" name="password2"
+              value={this.state.password2}
+              onChange={this.onChange} />
             </div>
             <input type="submit" className="btn btn-info btn-block mt-4" />
           </form>
