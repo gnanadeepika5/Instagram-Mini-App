@@ -13,8 +13,8 @@ class Landing extends Component {
                 <p className="lead"> Telegram your precious memories to world.</p>
                 <p className="secondLead">Have world as your family</p>
                 <hr />
-                <Link to="/register" class="btn btn-lg btn-info mr-2">Sign Up</Link>
-                <Link to="/login" class="btn btn-lg btn-light">Login</Link>
+                <Link to="/register" className="btn btn-lg btn-info mr-2">Sign Up</Link>
+                <Link to="/login" className="btn btn-lg btn-light">Login</Link>
                </div>
             </div>
           </div>
