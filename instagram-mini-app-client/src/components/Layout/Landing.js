@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+import video from '../BackgroundVideo/plexus.mp4';
 
 class Landing extends Component {
   render() {
@@ -7,6 +8,18 @@ class Landing extends Component {
       <div className="landing">
         <div className="dark-overlay landing-inner text-light">
           <div className="container">
+            <video autoPlay loop muted 
+            style={{
+              position: "absolute", 
+              width: "100%", 
+              left: "50%", 
+              top : "50%", 
+              objectFit:"cover", 
+              transform:"translate(-50%, -50%)", zIndex:"-1"
+            }}
+            >
+              <source src={video} type="video/mp4" />
+            </video>
             <div className="row">
               <div className="col-md-12 text-center">
                 <h1 className="display-3 mb-4">Instagram Mini</h1>
