@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {Provider} from 'react-redux';
 //import BackgroundVideo from './components/BackgroundVideo/BackgroundVideo';
 import Navbar from './components/Layout/Navbar';
 import Footer from './components/Layout/Footer';
@@ -8,10 +9,12 @@ import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import PostForm from './components/posts/PostForm';
 import './App.css';
+import store from './store';
 
 class App extends Component {
   render() {
     return (
+      <Provider store={store}>
       <Router>
         <div className="App">
           {/* <BackgroundVideo /> */}
@@ -23,6 +26,7 @@ class App extends Component {
           <Footer />
         </div>
         </Router>
+        </Provider>
     );
   }
 }
