@@ -22,8 +22,15 @@ class Navbar extends Component {
             </a>
               </li>
             </ul> */}
+            
 
             <ul className="navbar-nav ml-auto">
+              <li className="nav-item">
+               <Link className="nav-link" to="/postForm"><i className="fas fa-plus"></i></Link>              
+              </li>
+              <li className="nav-item">
+               <Link className="nav-link" to="/dashboard"><i className="fas fa-home"></i></Link>              
+              </li>
               <li className="nav-item">
               <Link className="nav-link" to="/register">Sign Up</Link>
               </li>

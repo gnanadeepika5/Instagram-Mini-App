@@ -8,6 +8,9 @@ import Landing from './components/Layout/Landing';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import PostForm from './components/posts/PostForm';
+import Dashboard from './components/dashboard/dashboard';
+import Post from './components/posts/Post';
+//import LikesProfiles from './components/profiles/LikesProfiles';
 import './App.css';
 import store from './store';
 
@@ -22,7 +25,10 @@ class App extends Component {
           <Route exact path ="/" component = {Landing} />
           <Route exact path ="/register" component={Register} />
           <Route exact path ="/login" component={Login} />
+          <Route exact path='/dashboard' component={Dashboard}/>
           <Route exact path="/postForm" component={PostForm}></Route>
+          <Route exact path="/post/id/:id" component={Post}></Route>
+          {/* <Route exact path='/likesProfiles/:id' component={LikesProfiles}/> */}
           <Footer />
         </div>
         </Router>

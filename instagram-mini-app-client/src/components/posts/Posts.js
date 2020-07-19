@@ -33,6 +33,11 @@ class Posts extends Component {
     )
   }
 }
+Posts.propTypes = {
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  getPosts: PropTypes.func.isRequired
+}
 const mapStateToProps = (state) => ({
   auth: state.auth,
   errors: state.errors,
