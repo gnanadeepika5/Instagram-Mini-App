@@ -1,16 +1,6 @@
-//user (by whom post created)
-//name as post name
-//handle to point to post
-//avatar as thumbnail of post
-//post image or video
-//post text as description of post
-//likes
-//comments
-//share
-//save
+
 const mongoose = require('mongoose');
 const Schema= mongoose.Schema;
-
 //create Post Schema
 const PostSchema = new Schema({
   
@@ -34,10 +24,14 @@ user:{
     type:String,
     required:true
   },
-  imageOrVideo:{
-      type:String,
-      required:true
-    },
+  imageOrVideoLink: {
+    type: String,
+    required: true
+  },
+  isImageOrVideo: {
+    type: String,
+    required: true
+  },
     text:{
       type:String,
       required:true
@@ -69,6 +63,15 @@ user:{
     user:{
       type:Schema.Types.ObjectId,
       ref:'users'
+    },
+    name: {
+      type: String
+    },
+    handle: {
+      type: String
+    },
+    avatar: {
+      type: String
     }
 
   }],

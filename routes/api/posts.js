@@ -39,9 +39,10 @@ router.post('/', passport.authenticate('jwt', {session: false}), tokenValidator,
     avatar: req.user.avatar,//later it comes from token
     handle: req.user.handle,//later it comes from token
     text: req.body.text,
-    imageOrVideo: req.body.imageOrVideo
+    imageOrVideoLink: req.body.imageOrVideoLink,
+    isImageOrVideo: req.body.isImageOrVideo
   });
-  console.log(`NewPost created. Post details - ${newPost.id}, ${newPost.name}, ${newPost.avatar}, ${newPost.imageOrVideo} `);
+  // console.log(`NewPost created. Post details - ${newPost.id}, ${newPost.name}, ${newPost.avatar}, ${newPost.imageOrVideo} `);
   //save in DB
   newPost.save()
          .then(post => res.json(post))
@@ -80,7 +81,8 @@ router.patch('/:postId', passport.authenticate('jwt', {session: false}), tokenVa
         }
 
         post.text = req.body.text;
-        post.imageOrVideo = req.body.imageOrVideo;
+        post.imageOrVideoLink = req.body.imageOrVideoLink;
+        post.isImageOrVideo= req.body.isImageOrVideo;
 
         post.save()
         .then(() => res.status(200).json(post))
@@ -101,13 +103,28 @@ router.patch('/:postId', passport.authenticate('jwt', {session: false}), tokenVa
 // @route   GET /api/posts/all
 // @access  private
 // @desc    Get all posts
-router.get('/all', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
+router.get('/', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
   
   Post.find()
       .sort({date: -1}) // give the sorted data  by date in descending order
       .then(posts => res.json(posts))
-      .catch(err => { res.status(404).json({NoPostFound: 'No posts found'});});
+      .catch(err => { res.status(404).json({msg: 'No posts found'});});
 });
+
+// @route   GET /api/posts/likedUsers/post_id
+// @access  PRIVATE
+// @desc    Get all the likedUser profiles of a post
+router.get('/likedUsers/:post_id', passport.authenticate('jwt', {session: false}), (req, res) => {
+  Post.findById(req.params.post_id)
+      .then(post => {
+        
+        if(!isEmpty(post.likes)){
+          res.json(post.likes);
+          // console.log(post.likes.map(like => Profile.findOne({handle: like.handle})));
+        }
+      })
+      .catch(err => res.json({msg: 'No one has liked this post yet'}));
+})
 
 /**
  * Get post by the postId
@@ -118,11 +135,21 @@ router.get('/all', passport.authenticate('jwt', {session: false}), tokenValidato
  * @returns {Error}  default - 400 user profile not found
  */
 
-router.get('/id/:postId', passport.authenticate('jwt', {session: false}), tokenValidator,(req, res) => {
-   Post.findById(req.params.postId)
+router.get('/id/:postid', passport.authenticate('jwt', {session: false}), tokenValidator,(req, res) => {
+   Post.findById(req.params.postid)
       .then(post => res.json(post))
-      .catch(err => { res.status(400).json({NoPostFound: 'No post with that id found'});});
+      .catch(err => { res.status(400).json({msg: 'No post with that id found'});});
 });
+
+// @route   GET /api/posts/handle/:handle
+// @access  PRIVATE
+// @desc    Get posts made by a user(unique handle)
+router.get('/handle/:handle', passport.authenticate('jwt', {session: false}), (req, res) => {
+  Post.find({handle: req.params.handle})
+      .then(post => res.json(post))
+      .catch(err => res.status(400).json({msg: 'No post made by that user'}));
+})
+
 
 /**
  * Get posts by the userId
@@ -142,7 +169,7 @@ router.get('/userid/:userId', passport.authenticate('jwt', {session: false}), to
     res.status(200).json(post);
   })
   .catch(err => { 
-      return  res.status(400).json({NoPostMade: 'No post made by that user'});
+      return  res.status(400).json({msg: 'No post made by that user'});
     }
   );
 });
@@ -157,41 +184,61 @@ router.get('/', passport.authenticate('jwt', {session: false}), tokenValidator, 
 
     res.json(post)
   })
-  .catch(err => res.status(400).json({NoPostMade: 'No post made by that user'}));
+  .catch(err => res.status(400).json({msg: 'No post made by that user'}));
 });
 
-// @route   GET /api/posts/handle/:handle
-// @access  PRIVATE
-// @desc    Get posts made by a userhandle(unique handle)
-router.get('/handle/:handle', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
-    Post.find({handle: req.params.handle})
-      .then(post => { return res.status(200).json(post);})
-      .catch(err => { return  res.status(400).json({NoPostMade: 'No post made by that user'});
-      });
-});
 
 
 // @route   DELETE /api/posts/id/:postId
 // @access  private
 // @desc    Delete a post made by a user based on postId
-router.delete('/id/:postId', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
+router.delete('/id/:postid', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
 
-  Post.findOne({_id: req.params.postId})
+  Post.findOne({_id: req.params.postid})
       .then(post => {
         
         // check if the user is the author of the post
         if(post.user.toString() != req.user.id){
-          return res.status(400).json({unAuthorizedUser: 'Not authorized to delete post'});
+          return res.status(400).json({msg: 'Not authorized to delete post'});
         }
         else{
         post.deleteOne()
-            .then(() => res.json({PostDeleteSuccess: 'The requested post has been deleted successfully'}))
-            .catch(err => res.status(400).json({NoPostFound: 'Post not found'}));
+            .then(() => res.json({msg: 'The requested post has been deleted successfully'}))
+            .catch(err => res.status(400).json({msg: 'Post not found'}));
         }
       })
       .catch(err => console.log(err));
 });
 
+// @route   DELETE /api/posts/handle/:handle
+// @access  PRIVATE
+// @desc    Delete all posts made by the user(unique handle)
+router.delete('/handle/:handle', passport.authenticate('jwt', {session: false}), (req, res) => {
+  Post.findOne({handle: req.params.handle})
+      .then(post => {
+        for(i=0;i<post.length;i++)
+        {
+          postHandle = post[i].handle;
+          console.log(`post user  is ${postHandle}`);
+
+        if(post.handle != req.user.handle)
+        {
+          return res.status(400).json({msg: 'Not authorized to delete posts'})
+        }
+        else
+        {
+          postListItem = post[i];
+      
+           post[i].deleteOne()
+            .then(()=>console.log(postListItem))
+            .catch(err => console.log(err));
+        }
+      }
+      res.json({msg:'All the posts associated which you created got deleted successfully'})
+    })
+    .catch(err => console.log(err));
+        
+  });
 
 /**
  * DELETE all posts by userId
@@ -214,7 +261,7 @@ router.delete('/id/:userid', passport.authenticate('jwt', {session: false}), tok
 
       if(postUser != req.user.id)
       {
-       return res.status(400).json({UnAuthorizedUser:'UnAuthorized user to delete this post'});
+       return res.status(400).json({msg:'UnAuthorized user to delete this post'});
       }
       else{
       
@@ -225,7 +272,7 @@ router.delete('/id/:userid', passport.authenticate('jwt', {session: false}), tok
             .catch(err => console.log(err));
      }
     }
-    res.json({PostsDeleteSuccess:'All the posts associated which you created got deleted successfully'})
+    res.json({msg:'All the posts associated which you created got deleted successfully'})
   })
   .catch(err => console.log(err));
       
@@ -254,7 +301,7 @@ router.post('/comment/:id', passport.authenticate('jwt', {session: false}), toke
       .then(post =>{
 
         if(!post){
-          return res.status(400).json({NoPostFound: 'Post not found. Check the post id.'})
+          return res.status(400).json({errors: 'Post not found. Check the post id.'})
         }
 
         //create a new comment
@@ -362,7 +409,7 @@ router.post('/like/:id', passport.authenticate('jwt', {session: false}), tokenVa
             .then(post => res.json(post))
             .catch(err => console.log(err));
       })
-      .catch(err => res.status(400).json({UnableToLike: 'Could not like the post as post is not found with this id'}));
+      .catch(err => res.status(400).json({msg: 'Could not like the post as post is not found with this id'}));
 })
 
 
@@ -386,7 +433,7 @@ router.post('/unlike/:id',passport.authenticate('jwt', {session:false}), tokenVa
         console.log(`likes length is unlike ${likesLength}`);
         if(likesLength === 0){
           //user has not liked the post
-          return res.status(400).json({NotAbleToUnLike: 'you wont be able to unlike this post as, You have not yet liked this post'});
+          return res.status(400).json({NotLiked: 'you wont be able to unlike this post as, You have not yet liked this post'});
         }
         else{
           //user has liked it, so dislike the post
@@ -403,27 +450,27 @@ router.post('/unlike/:id',passport.authenticate('jwt', {session:false}), tokenVa
       .catch(err => res.status(400).json({postNotFound: 'Post Not Found'}));
 });
 
-/**
- * Get Posts liked by a users
- * @route Get api/posts/likedUsers/:postId
- * @group Posts
- * @param {string} id.required
- * @param {string} userHandle.body.required
- * @returns {object} 200 - Profile of user
- * @returns {Error}  default - 400 user profile not found
- */
-// @desc    Get all the likedUser profiles of a post
+// /**
+//  * Get Posts liked by a users
+//  * @route Get api/posts/likedUsers/:postid
+//  * @group Posts
+//  * @param {string} id.required
+//  * @param {string} userHandle.body.required
+//  * @returns {object} 200 - Profile of user
+//  * @returns {Error}  default - 400 user profile not found
+//  */
+// // @desc    Get all the likedUser profiles of a post
 
-router.get('/likedUsers/:post_id', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
-  Post.findById(req.params.post_id)
-      .then(post => {
+// router.get('/likedUsers/:post_id', passport.authenticate('jwt', {session: false}), tokenValidator, (req, res) => {
+//   Post.findById(req.params.post_id)
+//       .then(post => {
         
-        if(!isEmpty(post.likes)){
-          res.json(post.likes);
-          // console.log(post.likes.map(like => Profile.findOne({handle: like.handle})));
-        }
-      })
-      .catch(err => res.json({NoLikes: 'No one has liked this post yet'}));
-});
+//         if(!isEmpty(post.likes)){
+//           res.json(post.likes);
+//           // console.log(post.likes.map(like => Profile.findOne({handle: like.handle})));
+//         }
+//       })
+//       .catch(err => res.json({NoLikes: 'No one has liked this post yet'}));
+// });
 
 module.exports = router;

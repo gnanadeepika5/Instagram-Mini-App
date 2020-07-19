@@ -15,6 +15,9 @@ const UserSchema = new Schema({
   type: String,
   required : true
   },
+  password2: {
+    type: String,
+  },
   handle: {
     type: String,
     required: true
