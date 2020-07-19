@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+//import logo from '../../img/instagram-logo.svg';
 
 class Navbar extends Component {
   render() {
     return (
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
         <div className="container">
-        <Link className="navbar-brand" to="/">Instagram</Link>
+        <Link className="navbar-brand" to="/">
+        <img src="" width="30" height="30" class="d-inline-block align-top" alt=""/>
+          Instagram
+          </Link>
          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
             <span className="navbar-toggler-icon"></span>
           </button>

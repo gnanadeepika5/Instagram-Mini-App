@@ -39,7 +39,8 @@ router.post('/', passport.authenticate('jwt', {session: false}), tokenValidator,
     avatar: req.user.avatar,//later it comes from token
     handle: req.user.handle,//later it comes from token
     text: req.body.text,
-    imageOrVideo: req.body.imageOrVideo
+    imageOrVideoLink: req.body.imageOrVideoLink,
+    isImageOrVideo: req.body.isImageOrVideo
   });
   console.log(`NewPost created. Post details - ${newPost.id}, ${newPost.name}, ${newPost.avatar}, ${newPost.imageOrVideo} `);
   //save in DB
@@ -80,7 +81,8 @@ router.patch('/:postId', passport.authenticate('jwt', {session: false}), tokenVa
         }
 
         post.text = req.body.text;
-        post.imageOrVideo = req.body.imageOrVideo;
+        post.imageOrVideoLink = req.body.imageOrVideoLink;
+        post.isImageOrVideo= req.body.isImageOrVideo;
 
         post.save()
         .then(() => res.status(200).json(post))

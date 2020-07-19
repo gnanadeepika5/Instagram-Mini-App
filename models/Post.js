@@ -34,10 +34,14 @@ user:{
     type:String,
     required:true
   },
-  imageOrVideo:{
-      type:String,
-      required:true
-    },
+  imageOrVideoLink: {
+    type: String,
+    required: true
+  },
+  isImageOrVideo: {
+    type: String,
+    required: true
+  },
     text:{
       type:String,
       required:true
