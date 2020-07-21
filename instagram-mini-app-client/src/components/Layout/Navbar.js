@@ -8,7 +8,7 @@ class Navbar extends Component {
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
         <div className="container">
         <Link className="navbar-brand" to="/">
-        <img src="" width="30" height="30" class="d-inline-block align-top" alt=""/>
+        <img src="" width="30" height="30" className="d-inline-block align-top" alt=""/>
           Instagram
           </Link>
          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
