@@ -4,23 +4,25 @@ import PostItem from './PostItem';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Spinner from '../common/LodingGif';
-import CommentForm from './CommentForm';
-import CommentFeed from './CommentFeed';
 import { getPost } from '../../action/postActions';
 import isEmpty from '../../utils/isEmpty';
+import CommentForm from './CommentForm';
+import CommentFeed from './CommentFeed';
 
-class Post extends Component {  
+class Post extends Component {
+
   componentDidMount() {
     this.props.getPost(this.props.match.params.id);
   }
+
   render(){
     const { post, loading } = this.props.post;
     //console.log(post._id);
     let postContent;
+
     if(post === null || loading || isEmpty(post)){
       postContent = <Spinner/>
-    }
-    else{
+    }else{
       postContent = (
         <div>
           <PostItem post={post} showActions={false}></PostItem>
@@ -29,6 +31,7 @@ class Post extends Component {
         </div>
       );      
     }
+
     return(
       <div className="page-content">
         <div className="container">
@@ -45,13 +48,16 @@ class Post extends Component {
     )
   }
 }
+
 Post.propTypes = {
   auth: PropTypes.object.isRequired,
   post: PropTypes.object.isRequired,
   getPost: PropTypes.func.isRequired
 }
+
 const mapStateToProps = (state) => ({
   auth: state.auth,
   post: state.post
 })
+
 export default connect(mapStateToProps, { getPost })(Post);
