@@ -8,24 +8,24 @@ const initialState = {
 }
 
 export default function(state = initialState, action){
-  switch(action.type){
+  switch(action.type) {
     case POST_LOADING:
-      return{
+      return {
         ...state,
-        loading:true
+        loading: true
       }
     case ADD_POST:
-      return{
-          ...state,
-          posts:[action.payload, ...state.posts],
-          loading:false
-        }
+      return {
+        ...state,
+        posts: [action.payload, ...state.posts],
+        loading: false
+      };
     case GET_POST:
-      return{
-          ...state,
-          post:action.payload,
-          loading:false
-        }
+      return {
+        ...state,
+        post: action.payload,
+        loading: false
+      }
     case GET_POSTS:
       return {
         ...state,

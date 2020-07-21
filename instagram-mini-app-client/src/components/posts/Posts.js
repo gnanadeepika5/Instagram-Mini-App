@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { getPosts } from '../../action/postActions';
 import Spinner from '../common/LodingGif';
 import PostItem from './PostItem';
-import { getPosts } from '../../action/postActions';
 
 class Posts extends Component {
   componentDidMount(){
@@ -14,14 +14,13 @@ class Posts extends Component {
 
     const {posts, loading } = this.props.post;
     let postContent;
-
+    
     if(posts === null || loading){
       postContent = <Spinner/>
-    }
-    else if(posts.length > 0){
+    } else if(posts.length > 0){
       postContent = posts.map(post => <PostItem key={post._id} post={post}/>);
-    }
-    
+    } 
+
     return (
       <div className="feed">
         <div className="container">
@@ -33,11 +32,13 @@ class Posts extends Component {
     )
   }
 }
+
 Posts.propTypes = {
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   getPosts: PropTypes.func.isRequired
 }
+
 const mapStateToProps = (state) => ({
   auth: state.auth,
   errors: state.errors,
