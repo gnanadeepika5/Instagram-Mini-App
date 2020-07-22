@@ -13,11 +13,13 @@ class LikesProfiles extends Component{
   componentDidMount(){
     this.props.getPost(this.props.match.params.id);
   }
+   
   render(){
 
     const { postLikes } = this.props;
     const { loading } = this.props.post;
     let profileItems;
+
     if(postLikes === null || loading){
       profileItems = <Spinner/>
     }
@@ -29,6 +31,7 @@ class LikesProfiles extends Component{
     else{
       profileItems = 'No one has liked this post yet...';
     }
+    
     return(
       <div className="page-content">
         <div className="container">
@@ -50,6 +53,7 @@ class LikesProfiles extends Component{
     )
   }
 }
+
 LikesProfiles.propTypes = {
   errors: PropTypes.object.isRequired,
   getPost: PropTypes.func.isRequired
@@ -63,4 +67,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { getPost })(LikesProfiles);
-   
