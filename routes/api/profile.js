@@ -142,6 +142,22 @@ router.get(
     }
 );
 
+// // @router api/profiles/handle: userhandle
+// // @access PRIVATE
+// // @desc   get the profile details based on handle name
+// router.get('/handle/:userhandle', passport.authenticate('jwt', {session: false}), (req, res) => {
+//     const errors = {};
+//     Profile.findOne({handle: req.params.userhandle}) 
+//           .then(profile => {
+//             if(!profile){
+//               errors.noProfile = 'There is no profile with that handle.';
+//               return res.status(400).json(errors);
+//             }
+//             return res.json(profile);
+//           })
+//           .catch(err => console.log(err));
+//   })
+
 /**
  * Get profile of all user
  * @route Get api/profile/all

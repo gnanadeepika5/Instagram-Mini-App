@@ -10,13 +10,17 @@ import Login from './components/auth/Login';
 import PostForm from './components/posts/PostForm';
 import Dashboard from './components/dashboard/dashboard';
 import Post from './components/posts/Post';
-//import LikesProfiles from './components/profiles/LikesProfiles';
+import Profile from './components/profile/Profile';
+import Profiles from './components/profiles/Profiles';
+import LikesProfiles from './components/profiles/LikesProfiles';
 import './App.css';
 import store from './store';
 import setAuthToken from './utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
 import { SET_CURRENT_USER } from './action/dispatchTypes';
 import { logoutUser } from './action/authActions';
+//import messageForm from './components/communications/MessageForm';
+
 
 //Check for token
 if (localStorage.jwtToken){
@@ -52,7 +56,11 @@ class App extends Component {
           <Route exact path='/dashboard' component={Dashboard}/>
           <Route exact path="/postForm" component={PostForm}></Route>
           <Route exact path="/post/id/:id" component={Post}></Route>
-          {/* <Route exact path='/likesProfiles/:id' component={LikesProfiles}/> */}
+          <Route exact path='/profiles' component={Profiles}></Route>
+          <Route exact path='/profiles/:handle' component={Profile}></Route>
+          {/* <Route exact path="/messageForm" component={MessageForm}></Route> */}
+
+          <Route exact path='/likesProfiles/:id' component={LikesProfiles}/>
           <Footer />
         </div>
         </Router>
