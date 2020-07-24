@@ -13,6 +13,11 @@ import Post from './components/posts/Post';
 //import LikesProfiles from './components/profiles/LikesProfiles';
 import './App.css';
 import store from './store';
+import Profile from './profile/Profile';
+import editProfile from './components/EditProfile/editProfile';
+import profileFollowing from './profile/profileFollowing';
+import profileFollowers from './profile/profileFollowers';
+import NotFound from './profile/notFound';
 import setAuthToken from './utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
 import { SET_CURRENT_USER } from './action/dispatchTypes';
@@ -52,6 +57,12 @@ class App extends Component {
           <Route exact path='/dashboard' component={Dashboard}/>
           <Route exact path="/postForm" component={PostForm}></Route>
           <Route exact path="/post/id/:id" component={Post}></Route>
+          <Route exact path='/profile' component={Profile}></Route>
+          <Route exact path='/profile/:handle' component={Profile}></Route>
+          <Route exact path='/editProfile' component={editProfile}></Route>
+          <Route exact path='/profile/following/:handle' component={profileFollowing}></Route>
+          <Route exact path='/profile/followers/:handle' component={profileFollowers}></Route>
+          <Route exact path='/notFound' component={NotFound}></Route>
           {/* <Route exact path='/likesProfiles/:id' component={LikesProfiles}/> */}
           <Footer />
         </div>

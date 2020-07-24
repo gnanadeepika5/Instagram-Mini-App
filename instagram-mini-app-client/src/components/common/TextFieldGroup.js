@@ -34,4 +34,3 @@ export default function TextFieldGroup({name, placeholder, value, type, label, e
   TextFieldGroup.defaultProps = {
     type: text
   }
-  
