@@ -8,6 +8,7 @@ import ProfileHeader from './ProfileHeader';
 import ProfileAbout from './profileAbout';
 import ProfilePosts from './ProfilePosts';
 import isEmpty from '../../validation/isEmpty';
+import messageForm from '../components/communications/messageForm';
 
 
 class Profile extends Component {
@@ -51,6 +52,16 @@ class Profile extends Component {
                 </Link>
               ) : (null)}
             </div>
+          </div>
+          <div className="row">
+           <div className="col-md-12">
+           {/* {profile.user != auth.user.id ? ( */}
+             <Link to={`/messageForm/${profile.user._id}`} className="btn btn-light float-right">
+                  <i className="far fa-comment" /> Send a Message
+             </Link>
+             
+          </div>
+
           </div>
           <ProfileAbout profile={profile} />
           <ProfilePosts profile={profile}/>

@@ -68,7 +68,8 @@ router.post('/conversation/:toId',passport.authenticate('jwt', {session: false})
                              const newMessage = {
                               fromUserId: req.user.id,
                               toUserId:req.params.toId,
-                              msg:req.body.msg//later it comes from token
+                              msg:req.body.msg,//later it comes from token
+                              handle:req.user.handle
                             }
                             newConversation.messages = [newMessage];
                             // messages.unshift(newMessage);

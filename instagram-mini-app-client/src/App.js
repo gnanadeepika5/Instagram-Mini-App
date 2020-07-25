@@ -15,7 +15,6 @@ import Landing from './components/Layout/Landing';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import PostForm from './components/posts/PostForm';
-import Dashboard from './components/dashboard/dashboard';
 import Post from './components/posts/Post';
 import './App.css';
 import CreateProfile from './components/createProfile/CreateProfile';
@@ -32,6 +31,8 @@ import jwt_decode from 'jwt-decode';
 import { SET_CURRENT_USER } from './action/dispatchTypes';
 import { logoutUser } from './action/authActions';
 import dashboard from './components/dashboard/dashboard';
+import messageForm from './components/communications/messageForm';
+import MessageFeed from './components/communications/MessageFeed';
 
 //Check for token
 if (localStorage.jwtToken){
@@ -97,7 +98,9 @@ class App extends Component {
             </Switch>
             <Route exact path='/notFound' component={NotFound} />
             {/* <Route exact path='/likesProfiles/:id' component={LikesProfiles}/> */}
-          </div>
+            <Route exact path='/messageForm/:id' component={messageForm}></Route>
+            <Route exact path='/MessageFeed/:id' component={MessageFeed}></Route>
+            </div>
           <Footer />
         </div>
         </Router>
