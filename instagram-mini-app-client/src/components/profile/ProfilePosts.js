@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getPostsByHandle } from '../action/postActions';
-import Spinner from '../components/common/LodingGif';
+import { getPostsByHandle } from '../../action/postActions';
+import Spinner from '../common/LodingGif';
 import ProfilePostItem from './ProfilePostItem';
 
 class ProfilePosts extends Component{

@@ -3,22 +3,68 @@ import Posts from '../posts/Posts';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Spinner from '../common/LodingGif';
-import { getUserProfileByHandle } from '../../action/profileActions';
+import { getUserProfileByHandle, getCurrentProfile, deleteAccount } from '../../action/profileActions';
+import {
+  Link
+} from 'react-router-dom';
+import ProfileActions from './ProfileActions';
+import Experience from './Experience';
+import Education from './Education';
 
 class Dashboard extends Component{
 
   componentDidMount(){
     this.props.getUserProfileByHandle(this.props.auth.user.handle);
+    this.props.getCurrentProfile();
+  }
+
+  onDeleteClick(e) {
+    this.props.deleteAccount();
   }
 
   render(){
+    const { user } = this.props.auth;
+    const { profile } = this.props.profile;
     const { loading } = this.props;
+
     let dashboardContent;
 
-    if(loading){
+    if(profile === null || loading){
       dashboardContent = <Spinner/>
-    }else{
+    } else {
       dashboardContent= <Posts/>
+
+      // Check if logged in user has profile data
+      if (Object.keys(profile).length > 0) {
+        dashboardContent = (
+          <div>
+            <p className="lead text-muted">
+              Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
+            </p>
+            <ProfileActions />
+            <Experience experience={profile.experience} />
+            <Education education={profile.education} />
+            <div style={{ marginBottom: '60px' }} />
+            <button
+              onClick={this.onDeleteClick.bind(this)}
+              className="btn btn-danger"
+            >
+              Delete My Account
+            </button>
+          </div>
+        );
+      } else {
+        // User is logged in but has no profile
+        dashboardContent = (
+          <div>
+            <p className="lead text-muted">Welcome {user.name}</p>
+            <p>You have not yet setup a profile, please add some info</p>
+            <Link to="/create-profile" className="btn btn-lg btn-info">
+              Create Profile
+            </Link>
+          </div>
+        );
+      }
     }
     return(
       <div className="page-content">
@@ -30,18 +76,22 @@ class Dashboard extends Component{
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
 Dashboard.propTypes = {
   loading: PropTypes.bool.isRequired,
-  auth: PropTypes.object.isRequired
-}
+  auth: PropTypes.object.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
+  deleteAccount: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired
+};
 
 const mapStateToProps = state => ({
   loading: state.post.loading,
-  auth: state.auth
+  auth: state.auth,
+  profile: state.profile
 })
 
-export default connect(mapStateToProps, { getUserProfileByHandle }) (Dashboard);
+export default connect(mapStateToProps, { getUserProfileByHandle, getCurrentProfile, deleteAccount }) (Dashboard);

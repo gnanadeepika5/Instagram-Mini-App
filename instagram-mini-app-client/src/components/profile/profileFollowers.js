@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Spinner from '../components/common/LodingGif';
+import Spinner from '../common/LodingGif';
 import ProfileFollowersItem from './profileFollowersItem';
-import isEmpty from '../utils/isEmpty';
+import isEmpty from '../../validation/isEmpty';
 
 class ProfileFollowers extends Component{
   render(){

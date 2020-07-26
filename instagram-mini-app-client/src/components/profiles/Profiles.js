@@ -4,7 +4,7 @@ import {
 } from "react-redux";
 import PropTypes from 'prop-types';
 import Spinner from '../common/LodingGif';
-import ProfileItem from './profileItems';
+import ProfileItem from './ProfileItems';
 import {
     getProfiles
 } from '../../action/profileActions';

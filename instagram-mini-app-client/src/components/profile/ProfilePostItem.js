@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactPlayer from 'react-player';
 import { Link } from 'react-router-dom';
-import { getPost } from '../action/postActions';
+import { getPost } from '../../action/postActions';
 
 class ProfilePostItem extends Component{
 

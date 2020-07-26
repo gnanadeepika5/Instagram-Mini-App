@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Spinner from '../components/common/LodingGif';
-import { getProfileByHandle } from '../action/profileActions';
+import Spinner from '../common/LodingGif';
+import { getProfileByHandle } from '../../action/profileActions';
 import ProfileHeader from './ProfileHeader';
 import ProfileAbout from './profileAbout';
 import ProfilePosts from './ProfilePosts';
-import isEmpty from '../utils/isEmpty';
+import isEmpty from '../../validation/isEmpty';
 
 
 class Profile extends Component {
@@ -27,8 +27,8 @@ class Profile extends Component {
   render() {
     const { profile, loading } = this.props.profile;  
     const { auth } = this.props;
-
     let profileContent;
+
     if (profile === null || loading) {
       profileContent = <Spinner />;
     } else {

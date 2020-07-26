@@ -39,14 +39,14 @@ render() {
         <div className="card card-body mb-3">
             <div className="row">
                 <div className="col-xs-6 col-sm-5 col-md-2 col-lg-2 col-xl-2">
-                    <img src={profile.avatar} className="rounded-circle avatar-150" />
+                    <img src={profile.avatar} className="rounded-circle" />
                 </div>
                 <div className="col-xs-6 col-sm-7 col-md-8 col-lg-10 col-xl-10">
                     <h3>{profile.handle}</h3>
                     <p>
                         {isEmpty(profile.bio) ? (<span></span>) : (<span>{profile.bio}</span>)}
                     </p>
-                    <p>{profile.user.name}</p>
+                    {/* <p>{profile.user.name}</p> */}
                     <Link to={`/profile/${profile.handle}`} className="btn btn-info">
                         View Profile. Get to know about the world..!
                     </Link>

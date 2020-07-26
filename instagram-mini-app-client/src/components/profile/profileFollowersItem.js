@@ -18,11 +18,7 @@ class ProfileFollowersItem extends Component{
             <h3>{eachFollower.handle}</h3>
             <Link to={`/profiles/${eachFollower.handle}`} className="btn btn-info">
               View Profile
-            </Link>          
-            {/* <p>
-            <span> <button className="btn btn-light mr-3" onClick={this.onFollowClick.bind(this)}><i className="fas fa-user-plus"></i></button></span>  
-            <span><button className="btn btn-light mr-1" onClick={this.onUnFollowClick.bind(this)}><i className="fas fa-user-minus"></i></button></span>      
-            </p> */}
+            </Link>
           </div>         
         </div>
       </div>

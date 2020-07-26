@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 //import logo from '../../img/instagram-logo.svg';
 import {connect} from 'react-redux';
 import {logoutUser} from '../../action/authActions';
+import PropTypes from 'prop-types';
 
 class Navbar extends Component {
   onLogoutClick(e){
@@ -105,6 +106,11 @@ class Navbar extends Component {
       </nav>
     );
   }
+}
+
+Navbar.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => ({

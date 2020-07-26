@@ -1,7 +1,14 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+
 import {Provider} from 'react-redux';
+import store from './store';
+
+import PrivateRoute from './components/common/PrivateRoute';
+
 //import BackgroundVideo from './components/BackgroundVideo/BackgroundVideo';
+//import LikesProfiles from './components/profiles/LikesProfiles';
+
 import Navbar from './components/Layout/Navbar';
 import Footer from './components/Layout/Footer';
 import Landing from './components/Layout/Landing';
@@ -10,18 +17,21 @@ import Login from './components/auth/Login';
 import PostForm from './components/posts/PostForm';
 import Dashboard from './components/dashboard/dashboard';
 import Post from './components/posts/Post';
-//import LikesProfiles from './components/profiles/LikesProfiles';
 import './App.css';
-import store from './store';
-import Profile from './profile/Profile';
+import CreateProfile from './components/createProfile/CreateProfile';
+import Profile from './components/profile/Profile';
+import Profiles from './components/profiles/Profiles';
 import editProfile from './components/EditProfile/editProfile';
-import profileFollowing from './profile/profileFollowing';
-import profileFollowers from './profile/profileFollowers';
-import NotFound from './profile/notFound';
+import profileFollowing from './components/profile/profileFollowing';
+import profileFollowers from './components/profile/profileFollowers';
+import AddExperience from './components/addCredentials/AddExperience';
+import AddEducation from './components/addCredentials/AddEducation';
+import NotFound from './components/profile/notFound';
 import setAuthToken from './utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
 import { SET_CURRENT_USER } from './action/dispatchTypes';
 import { logoutUser } from './action/authActions';
+import dashboard from './components/dashboard/dashboard';
 
 //Check for token
 if (localStorage.jwtToken){
@@ -52,18 +62,42 @@ class App extends Component {
           {/* <BackgroundVideo /> */}
           <Navbar />
           <Route exact path ="/" component = {Landing} />
-          <Route exact path ="/register" component={Register} />
-          <Route exact path ="/login" component={Login} />
-          <Route exact path='/dashboard' component={Dashboard}/>
-          <Route exact path="/postForm" component={PostForm}></Route>
-          <Route exact path="/post/id/:id" component={Post}></Route>
-          <Route exact path='/profile' component={Profile}></Route>
-          <Route exact path='/profile/:handle' component={Profile}></Route>
-          <Route exact path='/editProfile' component={editProfile}></Route>
-          <Route exact path='/profile/following/:handle' component={profileFollowing}></Route>
-          <Route exact path='/profile/followers/:handle' component={profileFollowers}></Route>
-          <Route exact path='/notFound' component={NotFound}></Route>
-          {/* <Route exact path='/likesProfiles/:id' component={LikesProfiles}/> */}
+          <div className="container">
+            <Route exact path ="/register" component={Register} />
+            <Route exact path ="/login" component={Login} />
+            {/* <Route exact path='/dashboard' component={Dashboard}/> */}
+            <Route exact path="/profiles" component={Profiles} />
+            <Route exact path='/profile/:handle' component={Profile} />
+            <Switch>
+              <PrivateRoute exact path="/dashboard" component={dashboard} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/createProfile" component={CreateProfile} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/EditProfile" component={editProfile} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/add-experience" component={AddExperience} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/add-education" component={AddEducation} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/postForm" component={PostForm} />
+            </Switch>
+            <Switch>
+              <Route exact path="/post/id/:id" component={Post} />
+            </Switch>
+            <Switch>
+              <Route exact path='/profile/following/:handle' component={profileFollowing} />
+            </Switch>
+            <Switch>
+              <Route exact path='/profile/followers/:handle' component={profileFollowers} />
+            </Switch>
+            <Route exact path='/notFound' component={NotFound} />
+            {/* <Route exact path='/likesProfiles/:id' component={LikesProfiles}/> */}
+          </div>
           <Footer />
         </div>
         </Router>
