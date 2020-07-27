@@ -46,7 +46,7 @@ class Profile extends Component {
           <ProfileHeader profile={profile} />
           <div  className="row">  
             <div className="col-md-12">
-              {profile.user === auth.user.id ? (
+              {profile.user._id === auth.user.id ? (
                 <Link to="/edit-profile" className="btn btn-light float-right">
                   <i className="fas fa-user-edit mr-1" /> Edit Profile
                 </Link>
