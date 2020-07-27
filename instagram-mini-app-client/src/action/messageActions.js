@@ -21,7 +21,7 @@ export const getMessages = toUserId => dispatch => {
 
 
 // Add message
-export const addMessage = (toUserId, messageData) => dispatch => {
+export const addMessage = (toUserId, messageData, history) => dispatch => {
   dispatch(clearErrors());
   axios.post(`/api/communications/conversation/${toUserId}`, messageData)
       .then(res => {
@@ -30,12 +30,16 @@ export const addMessage = (toUserId, messageData) => dispatch => {
             type: ADD_MESSAGE,
             payload: res.data
           })
+          window.history.go(0);
+          
       })
       .catch(err => {
         dispatch({
           type: GET_ERRORS,
           payload: null
         })
+        window.history.go(0);
+        
       });
 }
 

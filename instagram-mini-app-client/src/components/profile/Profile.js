@@ -33,6 +33,7 @@ class Profile extends Component {
       profileContent = <Spinner />;
     } else {
       profileContent = (
+        
         <div className="page-content">
           <div className="row">
             <div className="col-md-6">
@@ -54,11 +55,11 @@ class Profile extends Component {
           </div>
           <div className="row">
            <div className="col-md-12">
-           {/* {profile.user != auth.user.id ? ( */}
-             <Link to={`/messageForm/${profile.user._id}`} className="btn btn-light float-right">
-                  <i className="far fa-comment" /> Send a Message
-             </Link>
-             
+           {profile.user._id === auth.user.id ? (null) : (
+           <Link to={`/messageForm/${profile.user._id}`} className="btn btn-light float-right">
+             <i className="far fa-comment" /> Send a Message
+            </Link>
+           )}
           </div>
 
           </div>
@@ -66,7 +67,7 @@ class Profile extends Component {
           <ProfilePosts profile={profile}/>
           <div  className="row">  
             <div className="col-md-12">
-              {profile.user === auth.user.id ? (
+              {profile.user._id === auth.user.id ? (
                 <Link to='/delete-account' className="btn btn-light float-right">
                   <i className="fas fa-trash-alt"/> Delete Account
                 </Link>

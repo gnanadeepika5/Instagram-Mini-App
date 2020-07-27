@@ -39,12 +39,8 @@ class messageForm extends Component {
       handle: user.handle,
       avatar:user.avatar
     };
-    // axios
-    //   .post('api/communication/conversation/:toId', newMessage)
-    //   .then(res => console.log(res.data))
-    //   .catch(err => this.setState({errors: err.response.data}));
 
-    this.props.addMessage(toUserId, newMessage);
+    this.props.addMessage(toUserId, newMessage, this.props.history);
     this.setState({msg: ''});
   
   }
