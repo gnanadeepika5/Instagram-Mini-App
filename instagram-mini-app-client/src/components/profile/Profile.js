@@ -8,8 +8,7 @@ import ProfileHeader from './ProfileHeader';
 import ProfileAbout from './profileAbout';
 import ProfilePosts from './ProfilePosts';
 import isEmpty from '../../validation/isEmpty';
-import messageForm from '../components/communications/messageForm';
-
+import messageForm from '../communications/messageForm';
 
 class Profile extends Component {
   componentDidMount() {

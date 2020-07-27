@@ -32,11 +32,12 @@ class Dashboard extends Component{
     if(profile === null || loading){
       dashboardContent = <Spinner/>
     } else {
-      dashboardContent= <Posts/>
+      // dashboardContent= <Posts/>
 
       // Check if logged in user has profile data
       if (Object.keys(profile).length > 0) {
         dashboardContent = (
+          <div>
           <div>
             <p className="lead text-muted">
               Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
@@ -52,16 +53,26 @@ class Dashboard extends Component{
               Delete My Account
             </button>
           </div>
+          <div>
+            <br></br>
+            <Posts/>
+          </div>
+          </div>
         );
       } else {
         // User is logged in but has no profile
         dashboardContent = (
+          <div>
           <div>
             <p className="lead text-muted">Welcome {user.name}</p>
             <p>You have not yet setup a profile, please add some info</p>
             <Link to="/create-profile" className="btn btn-lg btn-info">
               Create Profile
             </Link>
+          </div>
+          <div>
+            <Posts/>
+          </div>
           </div>
         );
       }

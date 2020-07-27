@@ -59,7 +59,7 @@ class PostItem extends Component{
       <div className="card card-body mb-3">
           <div className="row">
             <div className="col-md-3">
-              <Link className="handle-link" to={`/profiles/${post.handle}`}>
+              <Link className="handle-link" to={`/profile/${post.handle}`}>
                   <img className="rounded-circle d-none d-md-inline avatar-80"
                     src={post.avatar}
                     alt=""
