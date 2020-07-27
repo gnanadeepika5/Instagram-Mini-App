@@ -48,7 +48,9 @@ router.post('/conversation/:toId',passport.authenticate('jwt', {session: false})
                         fromUserId: req.user.id,
                         toUserId,
                         //toUserId:req.params.toId,
-                        msg:req.body.msg//later it comes from token
+                        msg:req.body.msg,//later it comes from token
+                        handle:req.user.handle,
+                        avatar:req.user.avatar
                       }
                       console.log(`to user id just after creating message is ${toUserId}`);
                       conversation.messages.unshift(newMessage);
@@ -69,7 +71,9 @@ router.post('/conversation/:toId',passport.authenticate('jwt', {session: false})
                               fromUserId: req.user.id,
                               toUserId:req.params.toId,
                               msg:req.body.msg,//later it comes from token
-                              handle:req.user.handle
+                              handle:req.user.handle,
+                              avatar:req.user.avatar
+
                             }
                             newConversation.messages = [newMessage];
                             // messages.unshift(newMessage);

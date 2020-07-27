@@ -57,7 +57,7 @@ class Profile extends Component {
            <div className="col-md-12">
            {profile.user._id === auth.user.id ? (null) : (
            <Link to={`/messageForm/${profile.user._id}`} className="btn btn-light float-right">
-             <i className="far fa-comment" /> Send a Message
+             <i className="far fa-comment" /> Chat
             </Link>
            )}
           </div>

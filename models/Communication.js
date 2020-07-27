@@ -27,6 +27,13 @@ const CommunicationSchema = new Schema({
     type:Schema.Types.ObjectId,
       ref:'users'
   },
+  handle: {
+    type: String
+  },
+  avatar: {
+    type: String
+  },
+
   msg:{
     type:String,
     required:true

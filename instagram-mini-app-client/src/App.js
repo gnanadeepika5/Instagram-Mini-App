@@ -7,7 +7,7 @@ import store from './store';
 import PrivateRoute from './components/common/PrivateRoute';
 
 //import BackgroundVideo from './components/BackgroundVideo/BackgroundVideo';
-//import LikesProfiles from './components/profiles/LikesProfiles';
+import LikesProfiles from './components/profiles/LikesProfiles';
 
 import Navbar from './components/Layout/Navbar';
 import Footer from './components/Layout/Footer';
@@ -66,9 +66,12 @@ class App extends Component {
           <div className="container">
             <Route exact path ="/register" component={Register} />
             <Route exact path ="/login" component={Login} />
-            {/* <Route exact path='/dashboard' component={Dashboard}/> */}
+            <Switch>
             <Route exact path="/profiles" component={Profiles} />
+            </Switch>
+            <Switch>
             <Route exact path='/profile/:handle' component={Profile} />
+            </Switch>
             <Switch>
               <PrivateRoute exact path="/dashboard" component={dashboard} />
             </Switch>
@@ -87,19 +90,24 @@ class App extends Component {
             <Switch>
               <PrivateRoute exact path="/postForm" component={PostForm} />
             </Switch>
-            <Switch>
-              <Route exact path="/post/id/:id" component={Post} />
-            </Switch>
+            
+              <Route exact path="/post/id/:id" component={Post}></Route>
             <Switch>
               <Route exact path='/profile/following/:handle' component={profileFollowing} />
             </Switch>
             <Switch>
               <Route exact path='/profile/followers/:handle' component={profileFollowers} />
             </Switch>
-            <Route exact path='/notFound' component={NotFound} />
-            {/* <Route exact path='/likesProfiles/:id' component={LikesProfiles}/> */}
-            <Route exact path='/messageForm/:id' component={messageForm}></Route>
+            <PrivateRoute exact path='/notFound' component={NotFound} />
+            <Switch>
+              <PrivateRoute exact path='/likesProfiles/:id' component={LikesProfiles}/>
+            </Switch>
+            <Switch>
+            <PrivateRoute exact path='/messageForm/:id' component={messageForm}/>
+            </Switch>
+            <Switch>
             <Route exact path='/MessageFeed/:id' component={MessageFeed}></Route>
+            </Switch>
             </div>
           <Footer />
         </div>

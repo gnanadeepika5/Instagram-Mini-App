@@ -40,6 +40,7 @@ class Profiles extends Component {
                             <p className="lead text-center">
                                 Suggestions for you:
                             </p>
+                            <h4 className="display-5 text-center">Select onto a Profile below <i class="fa fa-hand-o-down" aria-hidden="true"></i> to have chat...</h4>
                             {profileItems}
                         </div>
                     </div>

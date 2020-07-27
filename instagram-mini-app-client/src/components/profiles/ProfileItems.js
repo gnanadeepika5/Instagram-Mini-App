@@ -16,6 +16,7 @@ import {
   unFollowUserByHandle
 } from '../../action/profileActions';
 
+
 class ProfileItems extends Component {
 
   onFollowCLick(e) {
@@ -29,6 +30,7 @@ onUnFollowClick(e) {
     console.log(this.props.profile.handle);
     this.props.unFollowUserByHandle(this.props.profile.handle);
 }
+
 
 render() {
     const {
@@ -57,7 +59,8 @@ render() {
                         <span>
                             <button className="btn btn-light mr-2" onClick={this.onUnFollowClick.bind(this)}><i className="fas fa-user-minus"></i></button>
                         </span>
-                        </p>
+                        
+                    </p>
                     </div>
                 </div>
             </div>

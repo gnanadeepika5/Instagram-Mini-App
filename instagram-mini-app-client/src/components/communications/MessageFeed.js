@@ -20,24 +20,15 @@ class MessageFeed extends Component {
     //const user = this.state.auth.user.id;
     const {messages, loading } = this.props.message;
     var finalmessages = {messages}.messages;
-    console.log("printing here " + finalmessages);
-    console.dir(finalmessages.messages);
+    // console.log("printing here " + finalmessages);
+    // console.dir(finalmessages.messages);
     finalmessages = finalmessages.messages;
     //console.log("printing here2 " + {messages});
     let messageContent;
     if(finalmessages === null || loading || !finalmessages){
       messageContent = <spinner/>
     } else if(finalmessages.length > 0){
-      // for(i=0;i<finalmessages.length;i++)
-      // {
-      //   messageItem=finalmessages[i];
-      //   if(messageItem.fromUserId === user)
-      // {
-
-      // }
-      // }
-
-
+      
       messageContent = finalmessages.map(message => <MessageItem key={message._id} message={message}/>);
     }
 

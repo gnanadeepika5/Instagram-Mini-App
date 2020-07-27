@@ -11,7 +11,7 @@ class MessageItem extends Component{
       <div className="card card-body mb-3">
         <div className="row">
           <div className="col-md-2">
-          <Link to={`/profiles/${message.handle}`}>
+          <Link to={`/profile/${message.handle}`}>
               <img className="rounded-circle d-none d-md-inline comment-avatar"
                     src={message.avatar}
                     alt="">

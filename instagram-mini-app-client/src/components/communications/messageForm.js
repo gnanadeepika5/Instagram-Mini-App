@@ -59,7 +59,7 @@ class messageForm extends Component {
             <div className="card-body">
               <form onSubmit={this.onSubmit}>
                 <div className="form-group">
-                  <input type="text" 
+                  <TextAreaFieldGroup type="text" 
                        name="msg" 
                        className={classnames("form-control form-control-lg", {
                         "is-invalid": errors.name,
@@ -71,8 +71,8 @@ class messageForm extends Component {
                   
                   
                 </div>
-                <button type="submit" className="btn btn-info">
-                  Message
+                <button type="submit" className="btn btn-info" ><i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i>
+                  Send
                 </button>
               </form>
             </div>

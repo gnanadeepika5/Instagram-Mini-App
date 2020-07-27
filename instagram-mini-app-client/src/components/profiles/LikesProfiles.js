@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Spinner from '../common/LodingGif';
-import ProfileItem from '../profiles/ProfileItem';
+import ProfileItem from '../profiles/ProfileItems';
 import { getPost } from '../../action/postActions';
 import isEmpty from '../../utils/isEmpty';
 import LikeProfileItem from './LikeProfileItem';
@@ -38,7 +38,7 @@ class LikesProfiles extends Component{
           <div className="row">
             <div className=".col-12 .col-sm-12 col-md-12 .col-lg-8 .col-xl-6">
               <h3 className="text-center">
-                {!isEmpty(postLikes) && (<div>Wanderers who have liked this post...</div>)}
+                {!isEmpty(postLikes) && (<div>Instagrammers who have liked this post...</div>)}
               </h3>
               <div className="col-md-12">
                 <Link to="/dashboard" className="btn btn-light mb-3">
