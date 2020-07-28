@@ -2,7 +2,6 @@ import { CLEAR_ERRORS, GET_ERRORS, SEARCH_POSTS} from './dispatchTypes';
 import axios from 'axios';
 import store from '../store';
 import isEmpty from '../utils/isEmpty';
-import searchPost from '../components/search/SearchPost';
 
 
 // Search posts by search text
