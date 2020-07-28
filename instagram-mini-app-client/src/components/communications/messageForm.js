@@ -18,10 +18,7 @@ class messageForm extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
-   componentDidMount() {
-     
-     
-   }
+  
   componentWillReceiveProps(nextProps){
     if(nextProps.errors){
       this.setState({errors: nextProps.errors});

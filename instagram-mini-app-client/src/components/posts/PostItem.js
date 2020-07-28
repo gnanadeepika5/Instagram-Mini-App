@@ -39,6 +39,9 @@ class PostItem extends Component{
   render(){
 
     const { post, auth, showActions, errors } = this.props;
+    console.log("post in postitem is"+post.likes);
+    console.dir(post);
+    
     let postContent;
 
     if(post.isImageOrVideo === 'Image'){
@@ -85,6 +88,7 @@ class PostItem extends Component{
                     onClick={this.onLikeClick.bind(this, post._id)}>
               <i className={classnames('far fa-heart', 
                                         {'fas text-danger': this.findUserLike(post.likes)})}
+
                                         
               />
             </button>

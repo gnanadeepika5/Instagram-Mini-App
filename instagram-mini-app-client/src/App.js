@@ -10,6 +10,7 @@ import PrivateRoute from './components/common/PrivateRoute';
 import LikesProfiles from './components/profiles/LikesProfiles';
 
 import Navbar from './components/Layout/Navbar';
+
 import Footer from './components/Layout/Footer';
 import Landing from './components/Layout/Landing';
 import Register from './components/auth/Register';
@@ -33,6 +34,8 @@ import { logoutUser } from './action/authActions';
 import dashboard from './components/dashboard/dashboard';
 import messageForm from './components/communications/messageForm';
 import MessageFeed from './components/communications/MessageFeed';
+import searchForm from './components/search/SearchForm';
+import searchPost from './components/search/SearchPost';
 
 //Check for token
 if (localStorage.jwtToken){
@@ -57,11 +60,13 @@ if (decoded.exp < currentTime) {
 class App extends Component {
   render() {
     return (
+      
       <Provider store={store}>
       <Router>
         <div className="App">
-          {/* <BackgroundVideo /> */}
-          <Navbar />
+        
+             <Navbar/>
+         
           <Route exact path ="/" component = {Landing} />
           <div className="container">
             <Route exact path ="/register" component={Register} />
@@ -74,6 +79,12 @@ class App extends Component {
             </Switch>
             <Switch>
               <PrivateRoute exact path="/dashboard" component={dashboard} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/searchForm" component={searchForm} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/searchPost" component={searchPost} />
             </Switch>
             <Switch>
               <PrivateRoute exact path="/createProfile" component={CreateProfile} />

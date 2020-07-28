@@ -10,6 +10,7 @@ import {
 import ProfileActions from './ProfileActions';
 import Experience from './Experience';
 import Education from './Education';
+import bgImage from '../common/BackgroundImagePage';
 
 class Dashboard extends Component{
 
@@ -80,6 +81,8 @@ class Dashboard extends Component{
     return(
       <div className="page-content">
         <div className="container">
+          <img src={bgImage} 
+          />
           <div className="row">
             <div className=".col-12 .col-sm-12 col-md-12 .col-lg-8 .col-xl-6">
               {dashboardContent}

@@ -28,6 +28,12 @@ class MessageFeed extends Component {
     if(finalmessages === null || loading || !finalmessages){
       messageContent = <spinner/>
     } else if(finalmessages.length > 0){
+      // for(i=0;i<finalmessages.length;i++)
+      // {
+      //   message = finalmessages[i];
+        
+
+      // }
       
       messageContent = finalmessages.map(message => <MessageItem key={message._id} message={message}/>);
     }

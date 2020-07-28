@@ -20,3 +20,4 @@ export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const GET_MESSAGE = 'GET_MESSAGE';
 export const GET_MESSAGES = 'GET_MESSAGES';
 export const MESSAGE_LOADING= 'MESSAGE_LOADING';
+export const SEARCH_POSTS= 'SEARCH_POSTS';
