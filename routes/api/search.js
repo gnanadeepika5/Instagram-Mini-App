@@ -53,7 +53,9 @@ router.get('/captionOrText/:searchText', passport.authenticate('jwt', {session:f
         }
         if(postArray.length === 0)
         {
-          return res.json({NoPostFound:'No post found for the required search as Caption'});
+          postArray=[];
+          return res.json(postArray);
+          // return res.json({NoPostFound:'No post found for the required search as Caption'});
         }
         else{
             return res.json(postArray);

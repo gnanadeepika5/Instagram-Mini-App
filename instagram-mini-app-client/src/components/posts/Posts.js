@@ -26,8 +26,9 @@ class Posts extends Component {
     return (
       <div className="feed">
         <div className="container">
-        <h4>Click on the <i className="fas fa-plus fa-fw"></i> on the navbar to add a post!
-        </h4>
+        <h4>Click on the <i className="fas fa-plus fa-fw"></i> on the navbar to add a post!</h4>
+        <br></br>
+        <h6> Please click on the search icon <i className="fas fw fa-search"></i> on the navbar to search for posts</h6>
           {postContent}
         </div>
       </div>

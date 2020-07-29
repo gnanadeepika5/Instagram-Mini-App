@@ -4,8 +4,23 @@ import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {logoutUser} from '../../action/authActions';
 import PropTypes from 'prop-types';
-
+import profileReducer from '../../reducers/profileReducer';
+import { getProfileByHandle } from '../../action/profileActions';
+import NavbarCss from './Navbar.css';
 class Navbar extends Component {
+  constructor(){
+    super();
+    this.state={
+      handle: '',
+      errors: {}
+    }
+  }
+  onChange(e){
+    this.setState({[e.target.name]: e.target.value});
+  }
+  onSearchClick(handle){
+    this.props.getProfileByHandle(handle);
+  }
   onLogoutClick(e){
     e.preventDefault();
     this.props.logoutUser();
@@ -31,6 +46,24 @@ class Navbar extends Component {
 
     const authLinks = (
       <ul className="navbar-nav ml-auto">
+       <li className="nav-item">
+         
+         <div class="search">
+        <input className="search-bar"
+              name="handle"
+               type="text" 
+               placeholder="Search by user handle"
+               value={this.state.handle}
+               onChange={this.onChange.bind(this)}
+        />
+        {console.log(this.state.handle)}
+          <Link className="nav-link search-icon" to={`/profile/${this.state.handle}`} onClick={this.onSearchClick.bind(this, this.state.handle)}>
+          <button type="submit" class="searchButton">Go
+            </button>
+          </Link>
+          </div>
+     
+        </li>
         <li className="nav-item">
         <Link className="nav-link" to="/searchForm">
         <i class="fa fa-search" aria-hidden="true"></i> 
@@ -98,11 +131,12 @@ class Navbar extends Component {
 
 Navbar.propTypes = {
   logoutUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  getProfileByHandle: PropTypes.func.isRequired 
 }
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, {logoutUser})(Navbar);
+export default connect(mapStateToProps, {logoutUser, getProfileByHandle})(Navbar);

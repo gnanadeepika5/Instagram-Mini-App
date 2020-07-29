@@ -26,7 +26,7 @@ export const searchPosts = (searchText, history) => dispatch => {
       .catch(err => 
         dispatch({
           type: GET_ERRORS,
-          payload: err
+          payload: null
         }));
 
 }

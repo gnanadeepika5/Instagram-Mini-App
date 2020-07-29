@@ -12,26 +12,23 @@ class SearchFeed extends Component{
     console.dir(this.props);
     let searchPostContent;
     searchPostContent = <spinner/>;
-   // console.log("came here +searchPostContent");
-   console.log("came here "+posts);
-    if(posts) {
-      console.log("came here searchpostcontent "+searchPostContent);
-    }
+
     if(loading){
       searchPostContent = <spinner/>;
-    } else if(posts && posts.length > 0){
-      console.log("came here2 "+ posts[0]);
-      console.dir(posts[0]);
+    } else if(posts && posts.length > 0 && posts[0]){
       var posts2 = posts[0];
       searchPostContent = 
         posts2.map(post => <PostItem key={post._id} post={post}/>);
-        //console.log("came here "+searchPostContent");
-      
+
       
     }
+    // else{
+    //   searchPostContent = "<p>Please enter valid word to search</p>";
+    // }
         return (
         <div className="feed">
         <div className="container">
+          {/* <h4>please enter valid word to search else, no results will show up.Thank you!!!</h4>  */}
           {searchPostContent}
         
         </div>
