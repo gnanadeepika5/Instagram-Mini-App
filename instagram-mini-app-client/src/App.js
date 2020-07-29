@@ -38,22 +38,26 @@ import searchForm from './components/search/SearchForm';
 
 //Check for token
 if (localStorage.jwtToken){
-//Set auth header with token
-setAuthToken(localStorage.jwtToken);
-//decode token
+//Decode token
 const decoded = jwt_decode(localStorage.jwtToken);
-//write user data to redux store
-store.dispatch({
-  type: SET_CURRENT_USER,
-  payload: decoded
-  });
-//check for expired token
+
+//Check for expired token
 const currentTime = Date.now() / 1000;
 if (decoded.exp < currentTime) {
+  //Logout user
   store.dispatch(logoutUser());
-
+  //Redirect user login
   window.location.href='/login';
 }
+
+//Set auth header
+setAuthToken(localStorage.jwtToken);
+
+//Dispatch call
+store.dispatch({
+  type: SET_CURRENT_USER,
+  payload: decoded,
+});
 }
 
 class App extends Component {
