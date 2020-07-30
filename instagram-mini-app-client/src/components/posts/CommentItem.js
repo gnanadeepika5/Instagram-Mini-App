@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { deleteComment } from '../../action/postActions';
+//import {Jumbotron} from 'reactstrap';
 
 class CommentItem extends Component{
 
@@ -13,6 +14,7 @@ class CommentItem extends Component{
   render(){
     const { postId, comment, auth } = this.props;
     return(
+    <div class="jumbotron"> 
       <div className="card card-body mb-3">
         <div className="row">
           <div className="col-md-2">
@@ -38,6 +40,7 @@ class CommentItem extends Component{
           </div>
         </div>
       </div>
+    </div>
     );
   }
 }

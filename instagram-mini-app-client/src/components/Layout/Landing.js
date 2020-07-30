@@ -15,8 +15,8 @@ class Landing extends Component {
               left: "50%", 
               top : "50%", 
               objectFit:"cover", 
-              transform:"translate(-50%, -50%)", zIndex:"-1"
-            }}
+              transform:"translate(-50%, -50%)", zIndex:"-1" 
+            }} 
             >
               <source src={video} type="video/mp4" />
             </video>

@@ -1,19 +1,34 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  }
+
+body{
+  background-image: url("../src/img/LightLeaves.jpg") !important;
+  width: 100%;
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed !important;
+}
+
 body {
+  
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-body, html {
-  height: 100%;
-  }
+
 .bg {
   background-image: url("https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(20).jpg");
   height: 100vh;
@@ -21,4 +36,5 @@ body, html {
   background-repeat: no-repeat;
   background-size: cover;
   }
+  
   
