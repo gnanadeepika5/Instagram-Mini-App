@@ -17,8 +17,8 @@ export default function TextFieldGroup({name, placeholder, value, type, label, e
       {info && <small className="form-text text-muted">{info}</small>}
       {error && (<div className="invalid-feedback">{error}</div>)}
     </div>
-    )
-  }
+    );
+  };
 
   TextFieldGroup.propTypes = {
     name: PropTypes.string.isRequired,
@@ -29,9 +29,8 @@ export default function TextFieldGroup({name, placeholder, value, type, label, e
     info: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     disabled: PropTypes.string
-  }
+  };
 
   TextFieldGroup.defaultProps = {
-    type: text
-  }
-  
+    type: 'text'
+  };

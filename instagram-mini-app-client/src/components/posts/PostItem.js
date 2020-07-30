@@ -39,6 +39,9 @@ class PostItem extends Component{
   render(){
 
     const { post, auth, showActions, errors } = this.props;
+    console.log("post in postitem is"+post.likes);
+    console.dir(post);
+    
     let postContent;
 
     if(post.isImageOrVideo === 'Image'){
@@ -59,7 +62,7 @@ class PostItem extends Component{
       <div className="card card-body mb-3">
           <div className="row">
             <div className="col-md-3">
-              <Link className="handle-link" to={`/profiles/${post.handle}`}>
+              <Link className="handle-link" to={`/profile/${post.handle}`}>
                   <img className="rounded-circle d-none d-md-inline avatar-80"
                     src={post.avatar}
                     alt=""
@@ -85,6 +88,7 @@ class PostItem extends Component{
                     onClick={this.onLikeClick.bind(this, post._id)}>
               <i className={classnames('far fa-heart', 
                                         {'fas text-danger': this.findUserLike(post.likes)})}
+
                                         
               />
             </button>

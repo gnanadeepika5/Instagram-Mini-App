@@ -26,9 +26,9 @@ const router = express.Router();
 // @route   get /api/search/captionOrText
 // @access  private
 // @desc    get all posts in db/app by searching for caption text by giving some random matching word
-router.get('/captionOrText', passport.authenticate('jwt', {session:false}), tokenValidator, (req,res) =>{
+router.get('/captionOrText/:searchText', passport.authenticate('jwt', {session:false}), tokenValidator, (req,res) =>{
   // Validation
-  const {errors, isValid} = validateSearch(req.body);
+  const {errors, isValid} = validateSearch(req.params);
   console.log('In the post route of posts');
   if(!isValid)
   {
@@ -44,7 +44,7 @@ router.get('/captionOrText', passport.authenticate('jwt', {session:false}), toke
         {
           var Caption = postList[i].text;
           console.log(`captionText is ${Caption}`);
-          if(Caption.includes(req.body.searchText) === true)
+          if(Caption.includes(req.params.searchText) === true)
           {
             //push post objects into Array
              postArray.push(postList[i]);
@@ -53,7 +53,9 @@ router.get('/captionOrText', passport.authenticate('jwt', {session:false}), toke
         }
         if(postArray.length === 0)
         {
-          return res.json({NoPostFound:'No post found for the required search as Caption'});
+          postArray=[];
+          return res.json(postArray);
+          // return res.json({NoPostFound:'No post found for the required search as Caption'});
         }
         else{
             return res.json(postArray);

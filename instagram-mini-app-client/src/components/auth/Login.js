@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { loginUser} from '../../action/authActions';
+import PropTypes from 'prop-types';
+import TextFieldGroup from '../common/TextFieldGroup';
 
  class Login extends Component {
   constructor(){
@@ -47,7 +49,7 @@ import { loginUser} from '../../action/authActions';
 
 
   render() {
-    const {errors} = this.state;
+    const { errors } = this.state;
     return (
       <div className="login">
     <div className="container">
@@ -59,34 +61,24 @@ import { loginUser} from '../../action/authActions';
           </p>
           <form onSubmit={this.onSubmit}>
             <div className="form-group">
-              <input 
-              type="email" 
-              className={classnames("form-control form-control-lg", {
-                'is-invalid': errors.email,
-              })}
-              placeholder="Email Address" 
-              name="email" 
+              <TextFieldGroup
+              placeholder='Email Address'
+              name='email' 
+              type='email'
               value={this.state.email}
               onChange={this.onChange}
+              error={errors.email}
               />
-              {errors.email && (
-                <div className='invalid-feedback'>{errors.email}</div>
-              )}
-            </div>
-            <div className="form-group">
-              <input 
-              type="password" 
-              className={classnames("form-control form-control-lg", {
-                'is-invalid': errors.password,
-              })}
-              placeholder="Password" 
-              name="password" 
+              </div>
+              <div className="form-group">
+              <TextFieldGroup
+              placeholder='Password'
+              name='password' 
+              type='password'
+              error={errors.password}
               value={this.state.password}
-              onChange={this.onChange}
+              onChange={this.onChange}             
               />
-              {errors.password && (
-                <div className='invalid-feedback'>{errors.password}</div>
-              )}
             </div>
             <input type="submit" className="btn btn-info btn-block mt-4" />
           </form>
@@ -97,6 +89,12 @@ import { loginUser} from '../../action/authActions';
     );
   }
 }
+
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   auth: state.auth,

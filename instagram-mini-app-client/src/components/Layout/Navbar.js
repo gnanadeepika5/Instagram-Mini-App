@@ -3,8 +3,24 @@ import {Link} from 'react-router-dom';
 //import logo from '../../img/instagram-logo.svg';
 import {connect} from 'react-redux';
 import {logoutUser} from '../../action/authActions';
-
+import PropTypes from 'prop-types';
+import profileReducer from '../../reducers/profileReducer';
+import { getProfileByHandle } from '../../action/profileActions';
+import NavbarCss from './Navbar.css';
 class Navbar extends Component {
+  constructor(){
+    super();
+    this.state={
+      handle: '',
+      errors: {}
+    }
+  }
+  onChange(e){
+    this.setState({[e.target.name]: e.target.value});
+  }
+  onSearchClick(handle){
+    this.props.getProfileByHandle(handle);
+  }
   onLogoutClick(e){
     e.preventDefault();
     this.props.logoutUser();
@@ -30,17 +46,47 @@ class Navbar extends Component {
 
     const authLinks = (
       <ul className="navbar-nav ml-auto">
+       <li className="nav-item">
+         
+         <div class="search">
+        <input className="search-bar"
+              name="handle"
+               type="text" 
+               placeholder="Search by user handle"
+               value={this.state.handle}
+               onChange={this.onChange.bind(this)}
+        />
+        {console.log(this.state.handle)}
+          <Link className="nav-link search-icon" to={`/profile/${this.state.handle}`} onClick={this.onSearchClick.bind(this, this.state.handle)}>
+          <button type="submit" class="searchButton">Go
+            </button>
+          </Link>
+          </div>
+     
+        </li>
+        <li className="nav-item">
+        <Link className="nav-link" to="/searchForm">
+        <i class="fa fa-search" aria-hidden="true"></i> 
+        </Link>
+        </li>
         <li className="nav-item">
           <Link className="nav-link" to="/postForm"><i className="fas fa-plus"></i></Link>              
         </li>
         <li className="nav-item">
           <Link className="nav-link" to="/dashboard"><i className="fas fa-home"></i></Link>              
         </li>
-        {/* <li className="nav-item">
-          <Link className="nav-link" to="/feed">
-            Post Feed
+        <li className="nav-item">
+          <Link className="nav-link" to="/profiles"><i class="fa fa-users" aria-hidden="true"></i>
+                {" "}
+                Profiles
           </Link>
-        </li> */}
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/profiles"><i class="fa fa-comments" aria-hidden="true"></i>
+                {" "}
+                Messages
+          </Link>
+        </li>
         <li className="nav-item">
           <a
             href=""
@@ -62,7 +108,7 @@ class Navbar extends Component {
       
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
       <div className="container">
-        <Link className="navbar-brand" to="/">
+        <Link className="navbar-brand" to="/"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i>
           Instagram
         </Link>
         <button
@@ -75,40 +121,22 @@ class Navbar extends Component {
         </button>
 
         <div className="collapse navbar-collapse" id="mobile-nav">
-          <ul className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="/profiles">
-                {" "}
-                Profiles
-              </Link>
-            </li>
-          </ul>
-
-         
-          <div className="collapse navbar-collapse" id="mobile-nav"></div>
-            {/* <ul className="navbar-nav mr-auto">
-              <li className="nav-item">
-                <a className="nav-link" href="profiles.html"> 
-            </a>
-              </li>
-            </ul> */}
-            
-            {/* <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-               <Link className="nav-link" to="/postForm"><i className="fas fa-plus"></i></Link>              
-              </li>
-            </ul> 
-           */}
           {isAuthenticated ? authLinks : guestLinks}
-          </div>
         </div>
-      </nav>
+      </div>
+    </nav>
     );
   }
+}
+
+Navbar.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  getProfileByHandle: PropTypes.func.isRequired 
 }
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, {logoutUser})(Navbar);
+export default connect(mapStateToProps, {logoutUser, getProfileByHandle})(Navbar);
