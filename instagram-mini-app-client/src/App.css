@@ -1,17 +1,11 @@
 .App {
   text-align: center;
 }
-.basic-root-page {
-  background-image: url("../src/img/insta-bg-image.jpg");
-  background-color: #cccccc;
-  height: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-  background-attachment: fixed;
-}
 
+.login{
+  
+
+}
 .videoTag{
   height: 100%;
 width: 100%;
@@ -22,6 +16,8 @@ padding: none;
 img {
   width: 100%;
 }
+
+
 
 .landing {
   position: relative;
