@@ -8,6 +8,8 @@ import ReactPlayer from 'react-player';
 import { getPost, deletePost } from '../../action/postActions';
 import classnames from 'classnames';
 import { addLike, removeLike } from '../../action/postActions';
+import {Jumbotron, Container} from 'reactstrap';
+
 
 class PostItem extends Component{
   onClick(){
@@ -41,7 +43,7 @@ class PostItem extends Component{
     const { post, auth, showActions, errors } = this.props;
     console.log("post in postitem is"+post.likes);
     console.dir(post);
-    
+
     let postContent;
 
     if(post.isImageOrVideo === 'Image'){
@@ -59,6 +61,8 @@ class PostItem extends Component{
     }
 
     return(
+      
+        
       <div className="card card-body mb-3">
           <div className="row">
             <div className="col-md-3">
@@ -123,6 +127,7 @@ class PostItem extends Component{
           </span>
           ) : null}
         </div>
+        
     )
   }
 }
@@ -130,6 +135,12 @@ class PostItem extends Component{
 PostItem.defaultProps = {
   showActions: true
 }
+Jumbotron.propTypes = {
+  // Pass in a Component to override default element
+  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+  fluid: PropTypes.bool,
+  className: PropTypes.string
+};
 
 PostItem.propTypes = {
   auth: PropTypes.object.isRequired,

@@ -4,14 +4,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Spinner from '../common/LodingGif';
 import { getUserProfileByHandle, getCurrentProfile, deleteAccount } from '../../action/profileActions';
-import {
-  Link
-} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ProfileActions from './ProfileActions';
 import Experience from './Experience';
 import Education from './Education';
-import bgImage from '../common/BackgroundImagePage';
+import bgImage from '../../img/insta-bg-image.jpg';
 
+var sectionStyle = {
+  backgroundImage: `url(${bgImage})`
+}
 class Dashboard extends Component{
 
   componentDidMount(){
@@ -79,10 +80,10 @@ class Dashboard extends Component{
       }
     }
     return(
+      
       <div className="page-content">
         <div className="container">
-          <img src={bgImage} 
-          />
+      
           <div className="row">
             <div className=".col-12 .col-sm-12 col-md-12 .col-lg-8 .col-xl-6">
               {dashboardContent}
@@ -90,9 +91,12 @@ class Dashboard extends Component{
           </div>
         </div>
       </div>
+      
+      
     );
   }
 }
+
 
 Dashboard.propTypes = {
   loading: PropTypes.bool.isRequired,

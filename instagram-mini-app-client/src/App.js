@@ -66,6 +66,7 @@ class App extends Component {
       
       <Provider store={store}>
       <Router>
+      {/* <div class="basic-root-page"> */}
         <div className="App">
         
              <Navbar/>
@@ -122,6 +123,7 @@ class App extends Component {
             </div>
           <Footer />
         </div>
+        {/* </div> */}
         </Router>
         </Provider>
     );
