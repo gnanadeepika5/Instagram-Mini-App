@@ -8,7 +8,8 @@
     "start": " node server.js",
     "serverside": "nodemon server.js",
     "instagram-mini-app-client": "npm start --prefix instagram-mini-app-client",
-    "devside": "concurrently \"npm run serverside\" \"npm run instagram-mini-app-client\" "
+    "devside": "concurrently \"npm run serverside\" \"npm run instagram-mini-app-client\" ", 
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix instagram-mini-app-client && npm run build --prefix instagram-mini-app-client"
   },
   "author": "MIGS",
   "license": "ISC",
