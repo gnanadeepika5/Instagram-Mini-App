@@ -10,10 +10,6 @@ module.exports = function validateProfileInput(data) {
         }
     }
 
-    if (isEmpty(data.handle)) {
-        errors.handle = "Handle field is required";
-    }
-
     return {
         errors,
         isValid: isEmpty(errors)

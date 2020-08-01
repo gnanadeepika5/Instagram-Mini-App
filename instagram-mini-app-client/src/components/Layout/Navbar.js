@@ -78,13 +78,11 @@ class Navbar extends Component {
         <li className="nav-item">
           <Link className="nav-link" to="/profiles"><i class="fa fa-users" aria-hidden="true"></i>
                 {" "}
-                Profiles
           </Link>
         </li>
         <li className="nav-item">
           <Link className="nav-link" to="/profiles"><i class="fa fa-comments" aria-hidden="true"></i>
                 {" "}
-                Messages
           </Link>
         </li>
         <li className="nav-item">

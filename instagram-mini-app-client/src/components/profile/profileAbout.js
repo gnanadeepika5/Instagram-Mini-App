@@ -45,8 +45,6 @@ class ProfileAbout extends Component {
 
                 {!isEmpty(profile.location) ? (<p><span className="profile-icon"><i className="fas fa-map-marker-alt fa-fw"></i></span> {profile.location}</p>) : (<p className="hide"></p>)}
 
-                {!isEmpty(profile.phone) ? (<p><span className="profile-icon"><i className="fas fa-mobile-alt fa-fw"></i></span> {profile.phone}</p>) : (<p className="hide"></p>)}
-
                 {!isEmpty(profile.website) ? (<p><span className="profile-icon"><i className="fas fa-globe fa-fw"></i></span> <a target="_blank" href={`${profile.website}`}>{profile.website}</a></p>) : (<p className="hide"></p>)}
 
                 {(profile.hobbies[0] !== "") && (profile.hobbies[0] !== undefined) && (profile.hobbies[0] !== 'null') ? (<div><span className="profile-icon"><i className="fas fa-heart fa-fw"></i></span> {hobbies}</div>) : (<div className="hide"></div>)}
