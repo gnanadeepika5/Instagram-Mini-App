@@ -5,9 +5,6 @@ import PropTypes from 'prop-types';
 import Spinner from '../common/LodingGif';
 import { getUserProfileByHandle, getCurrentProfile, deleteAccount } from '../../action/profileActions';
 import { Link } from 'react-router-dom';
-import ProfileActions from './ProfileActions';
-import Experience from './Experience';
-import Education from './Education';
 import bgImage from '../../img/insta-bg-image.jpg';
 
 var sectionStyle = {
@@ -44,16 +41,7 @@ class Dashboard extends Component{
             <p className="lead text-muted">
               Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
             </p>
-            <ProfileActions />
-            <Experience experience={profile.experience} />
-            <Education education={profile.education} />
             <div style={{ marginBottom: '60px' }} />
-            <button
-              onClick={this.onDeleteClick.bind(this)}
-              className="btn btn-danger"
-            >
-              Delete My Account
-            </button>
           </div>
           <div>
             <br></br>
@@ -68,8 +56,8 @@ class Dashboard extends Component{
           <div>
             <p className="lead text-muted">Welcome {user.name}</p>
             <p>You have not yet setup a profile, please add some info</p>
-            <Link to="/create-profile" className="btn btn-lg btn-info">
-              Create Profile
+            <Link to="/editProfile" className="btn btn-lg btn-info">
+              Create or Edit Profile
             </Link>
           </div>
           <div>

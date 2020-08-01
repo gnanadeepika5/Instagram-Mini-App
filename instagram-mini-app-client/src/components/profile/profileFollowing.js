@@ -9,6 +9,8 @@ class ProfileFollowing extends Component{
   render(){
     const { following, loading } = this.props.profile;
     const { user } = this.props.auth;
+    const handle = this.props.match.params.handle;
+
 
     let profileFollowingItems;
 
@@ -17,7 +19,7 @@ class ProfileFollowing extends Component{
     } else if(following.length > 0){
         profileFollowingItems = following.map(eachFollowing => <ProfileFollowingItem key={eachFollowing._id} eachFollowing={eachFollowing}/>)
     } else{
-        profileFollowingItems = <h3> {user.handle}, you are not following anyone yet...</h3>
+        profileFollowingItems = <h3> {handle}, you are not following anyone yet...</h3>
     }
 
     return(
@@ -26,7 +28,7 @@ class ProfileFollowing extends Component{
           <div className="row">
             <div className=".col-12 .col-sm-12 col-md-12 .col-lg-8 .col-xl-6">
             <h3 className="text-center">
-                {!isEmpty(following) && (<div>{user.handle}, wanderers you are following...</div>)}
+                {!isEmpty(following) && (<div>{handle}, Instagrammers you are following...</div>)}
               </h3>
               {profileFollowingItems}
             </div>

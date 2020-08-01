@@ -40,6 +40,11 @@ class Profile extends Component {
               <Link to="/profiles" className="btn btn-info mb-3 float-left">
                 Back To Profiles
               </Link>
+            </div>
+            <div className="col-md-6">
+              <Link to="/editProfile" className="btn btn-info mb-3 float-right">
+                Edit Profile
+              </Link>
               </div>
             <div className="col-md-6" />
           </div>  
@@ -47,7 +52,7 @@ class Profile extends Component {
           <div  className="row">  
             <div className="col-md-12">
               {profile.user._id === auth.user.id ? (
-                <Link to="/edit-profile" className="btn btn-light float-right">
+                <Link to="/editProfile" className="btn btn-light float-right">
                   <i className="fas fa-user-edit mr-1" /> Edit Profile
                 </Link>
               ) : (null)}
@@ -68,7 +73,7 @@ class Profile extends Component {
           <div  className="row">  
             <div className="col-md-12">
               {profile.user._id === auth.user.id ? (
-                <Link to='/delete-account' className="btn btn-light float-right">
+                <Link to='/DeleteAccount' className="btn btn-light float-right">
                   <i className="fas fa-trash-alt"/> Delete Account
                 </Link>
               ) : (null)}

@@ -16,7 +16,7 @@ class ProfileFollowersItem extends Component{
           </div>
           <div className="col-xs-6 col-sm-7 col-md-8 col-lg-10 col-xl-10">
             <h3>{eachFollower.handle}</h3>
-            <Link to={`/profiles/${eachFollower.handle}`} className="btn btn-info">
+            <Link to={`/profile/${eachFollower.handle}`} className="btn btn-info">
               View Profile
             </Link>
           </div>         

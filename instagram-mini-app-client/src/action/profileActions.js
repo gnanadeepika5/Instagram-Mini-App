@@ -105,6 +105,22 @@ export const getFollowers = handle => dispatch => {
   }));
 };
 
+// Delete account & Profile
+export const deleteAccount = () => dispatch => {
+  if (window.confirm('Are you sure? This can NOT be UNDONE!!')) {
+    axios
+      .delete('/api/profile')
+      .then(res => dispatch({
+        type: SET_CURRENT_USER,
+        payload: {}
+      }))
+      .catch(err => dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      }));
+  }
+};
+
 // Clear Errors
 export const clearErrors = () => {
   return {
@@ -128,7 +144,10 @@ export const cleearCurrentProfile = () => {
 
 // Follow user by userHandle
 export const followUserByHandle = (handle, avatar) => dispatch => {
-  axios.post(`/api/profile/follow/handle/${handle}${avatar}`).then(res => dispatch({
+  const body = {
+    avatarUrl: avatar
+  };
+  axios.post(`/api/profile/follow/handle/${handle}`, body).then(res => dispatch({
     type: FOLLOW_USER,
     payload: res.data
   }))
@@ -151,70 +170,4 @@ export const createProfile = (profileData, history) => dispatch => {
       type: GET_ERRORS,
       payload: err.response.data
     }));
-};
-
-// Add Experience
-export const addExperience = (expData, history) => dispatch => {
-  axios
-    .post('/api/profile/experience', expData)
-    .then(res => history.push('/dashboard'))
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err.response.data
-    }));
-};
-
-// Add Education
-export const addEducation = (eduData, history) => dispatch => {
-  axios
-    .post('/api/profile/education', eduData)
-    .then(res => history.push('/dashboard'))
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err.response.data
-    }));
-};
-
-// Delete Experience
-export const deleteExperience = id => dispatch => {
-  axios
-    .delete(`/api/profile/experience/${id}`)
-    .then(res => dispatch({
-      type: GET_PROFILE,
-      payload: res.data
-    }))
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err.response.data
-    }));
-};
-
-// Delete Education
-export const deleteEducation = id => dispatch => {
-  axios
-    .delete(`/api/profile/education/${id}`)
-    .then(res => dispatch({
-      type: GET_PROFILE,
-      payload: res.data
-    }))
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err.response.data
-    }));
-};
-
-// Delete account & Profile
-export const deleteAccount = () => dispatch => {
-  if (window.confirm('Are you sure? This can NOT be UNDONE!!')) {
-    axios
-      .delete('/api/profile')
-      .then(res => dispatch({
-        type: SET_CURRENT_USER,
-        payload: {}
-      }))
-      .catch(err => dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      }));
-  }
 };

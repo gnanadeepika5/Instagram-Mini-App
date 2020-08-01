@@ -22,12 +22,14 @@ class ProfileItems extends Component {
   onFollowCLick(e) {
     console.log('follow......');
     console.log(this.props.profile.handle);
-    this.props.followUserByHandle(this.props.profile.handle);
+    console.log(this.props.profile.avatar);
+    this.props.followUserByHandle(this.props.profile.handle, this.props.profile.avatar);
 }
 
 onUnFollowClick(e) {
     console.log('Unfollow......')
     console.log(this.props.profile.handle);
+    console.log(this.props.profile.avatar);
     this.props.unFollowUserByHandle(this.props.profile.handle);
 }
 
@@ -36,6 +38,7 @@ render() {
     const {
         profile
     } = this.props;
+    
 
     return (
         <div className="card card-body mb-3">
