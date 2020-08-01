@@ -34,9 +34,9 @@ class ProfileHeader extends Component {
                 <h2>{profile.name}</h2>
                 <p>{profile.email}</p>
                 <p className="display-5">
-                  <Link to={`/profiles/following/${profile.handle}`} onClick={this.onFollowingClick.bind(this, profile.handle)} className="follow-link"><span>Following : {profile.following.length}</span></Link> 
+                  <Link to={`/profile/following/${profile.handle}`} onClick={this.onFollowingClick.bind(this, profile.handle)} className="follow-link"><span>Following : {profile.following.length}</span></Link> 
                   <span className="divider">|</span> 
-                  <Link to={`/profiles/followers/${profile.handle}`} onClick={this.onFollowersClick.bind(this, profile.handle)} className="follow-link"><span> Followers : {profile.followers.length}</span></Link>
+                  <Link to={`/profile/followers/${profile.handle}`} onClick={this.onFollowersClick.bind(this, profile.handle)} className="follow-link"><span> Followers : {profile.followers.length}</span></Link>
                 </p>            
               </div>
             </div>

@@ -144,7 +144,10 @@ export const cleearCurrentProfile = () => {
 
 // Follow user by userHandle
 export const followUserByHandle = (handle, avatar) => dispatch => {
-  axios.post(`/api/profile/follow/handle/${handle}${avatar}`).then(res => dispatch({
+  const body = {
+    avatarUrl: avatar
+  };
+  axios.post(`/api/profile/follow/handle/${handle}`, body).then(res => dispatch({
     type: FOLLOW_USER,
     payload: res.data
   }))

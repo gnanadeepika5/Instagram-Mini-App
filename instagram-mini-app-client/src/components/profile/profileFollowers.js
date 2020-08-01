@@ -9,6 +9,7 @@ class ProfileFollowers extends Component{
   render(){
     const { followers, loading } = this.props.profile;
     const { user } = this.props.auth;
+    const handle = this.props.match.params.handle;
     let profileFollowersItems;
 
     if(loading || followers === null){
@@ -16,7 +17,7 @@ class ProfileFollowers extends Component{
     } else if(followers.length > 0){
         profileFollowersItems = followers.map(eachFollower => <ProfileFollowersItem key={eachFollower._id} eachFollower={eachFollower}/>)
     } else{
-        profileFollowersItems = <h3>{user.handle}, you do not have any followers yet...</h3>
+        profileFollowersItems = <h3>{handle}, you do not have any followers yet...</h3>
     }
 
     return(
@@ -25,7 +26,7 @@ class ProfileFollowers extends Component{
           <div className="row">
             <div className=".col-12 .col-sm-12 col-md-12 .col-lg-8 .col-xl-6">
             <h3 className="text-center">
-                {!isEmpty(followers) && (<div>{user.handle}'s followers...</div>)}
+                {!isEmpty(followers) && (<div>{handle}'s followers...</div>)}
               </h3>
               {profileFollowersItems}
             </div>
