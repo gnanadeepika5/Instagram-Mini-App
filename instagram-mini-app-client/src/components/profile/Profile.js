@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Spinner from '../common/LodingGif';
-import { getProfileByHandle } from '../../action/profileActions';
+import { getProfileByHandle, deleteAccount } from '../../action/profileActions';
 import ProfileHeader from './ProfileHeader';
 import ProfileAbout from './profileAbout';
 import ProfilePosts from './ProfilePosts';
@@ -22,6 +22,10 @@ class Profile extends Component {
     if(isEmpty(nextProps.profile.profile) && this.props.profile.loading){
       this.props.history.push('/not-found');
     }
+  }
+
+  onDeleteClick(e) {
+    this.props.deleteAccount();
   }
 
   render() {
@@ -77,10 +81,18 @@ class Profile extends Component {
                   <i className="fas fa-trash-alt"/> Delete Account
                 </Link>
               ) : (null)}
+              <div style={{ marginBottom: '60px' }} />
+                <button
+                  onClick={this.onDeleteClick.bind(this)}
+                  className="btn btn-danger"
+                >
+                Delete My Account
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      );
+        );
+      
     }
 
     return (
@@ -107,4 +119,4 @@ const mapStateToProps = state => ({
   error: state.errors
 });
 
-export default connect(mapStateToProps, { getProfileByHandle, isEmpty })(Profile);
+export default connect(mapStateToProps, { getProfileByHandle, isEmpty, deleteAccount })(Profile);
