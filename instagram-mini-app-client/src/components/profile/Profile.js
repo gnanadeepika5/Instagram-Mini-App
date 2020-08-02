@@ -31,11 +31,13 @@ class Profile extends Component {
   render() {
     const { profile, loading } = this.props.profile;  
     const { auth } = this.props;
+  
     let profileContent;
 
     if (profile === null || loading) {
       profileContent = <Spinner />;
     } else {
+      
       profileContent = (
         
         <div className="page-content">
@@ -64,8 +66,8 @@ class Profile extends Component {
           </div>
           <div className="row">
            <div className="col-md-12">
-           {profile.user._id === auth.user.id ? (null) : (
-           <Link to={`/messageForm/${profile.user._id}`} className="btn btn-light float-right">
+           {profile.user === auth.user.id ? (null) : (
+           <Link to={`/messageForm/${profile.user}`} className="btn btn-light float-right">
              <i className="far fa-comment" /> Chat
             </Link>
            )}
