@@ -68,7 +68,7 @@ class messageForm extends Component {
                   
                   
                 </div>
-                <button type="submit" className="btn btn-info" ><i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i>
+                <button type="submit" className="btn btn-secondary" ><i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i>
                   Send
                 </button>
               </form>

@@ -43,12 +43,12 @@ class Profile extends Component {
         <div className="page-content">
           <div className="row">
             <div className="col-md-6">
-              <Link to="/profiles" className="btn btn-info mb-3 float-left">
+              <Link to="/profiles" className="btn btn-secondary mb-3 float-left">
                 Back To Profiles
               </Link>
             </div>
             <div className="col-md-6">
-              <Link to="/editProfile" className="btn btn-info mb-3 float-right">
+              <Link to="/editProfile" className="btn btn-secondary mb-3 float-right">
                 Edit Profile
               </Link>
               </div>

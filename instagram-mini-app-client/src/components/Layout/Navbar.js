@@ -107,7 +107,7 @@ class Navbar extends Component {
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
       <div className="container">
         <Link className="navbar-brand" to="/"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i>
-          Instagram
+          Instagram Mini
         </Link>
         <button
           className="navbar-toggler"

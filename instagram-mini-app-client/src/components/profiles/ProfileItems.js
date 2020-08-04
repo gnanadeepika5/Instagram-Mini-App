@@ -52,7 +52,7 @@ render() {
                         {isEmpty(profile.bio) ? (<span></span>) : (<span>{profile.bio}</span>)}
                     </p>
                     {/* <p>{profile.user.name}</p> */}
-                    <Link to={`/profile/${profile.handle}`} className="btn btn-info">
+                    <Link to={`/profile/${profile.handle}`} className="btn btn-secondary">
                         View Profile. Get to know about the world..!
                     </Link>
                     <p>

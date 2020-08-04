@@ -5,7 +5,8 @@ import video from '../BackgroundVideo/plexus.mp4';
 class Landing extends Component {
   render() {
     return (
-      <div className="landing">
+    
+<div className="landing">
         <div className="dark-overlay landing-inner text-light">
           <div className="container">
             <video autoPlay loop muted 
@@ -26,8 +27,9 @@ class Landing extends Component {
                 <p className="lead"> Telegram your precious memories to world.</p>
                 <p className="secondLead">Have world as your family</p>
                 <hr />
-                <Link to="/register" className="btn btn-lg btn-info mr-2">Sign Up</Link>
-                <Link to="/login" className="btn btn-lg btn-light">Login</Link>
+                <Link to="/register" className="btn btn-secondary btn-lg">Sign Up</Link>
+                <br/>
+                 <Link to="/login" className="btn btn-secondary btn-lg mt-4">Login</Link>
                </div>
             </div>
           </div>

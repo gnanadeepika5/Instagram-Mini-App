@@ -126,7 +126,7 @@ import PropTypes from 'prop-types';
             </div>
             <input 
             type="submit" 
-            className="btn btn-info btn-block mt-4" />
+            className="btn btn-secondary btn-block mt-4" />
           </form>
         </div>
       </div>
