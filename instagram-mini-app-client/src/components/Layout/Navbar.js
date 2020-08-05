@@ -66,22 +66,26 @@ class Navbar extends Component {
         </li>
         <li className="nav-item">
         <Link className="nav-link" to="/searchForm">
-        <i class="fa fa-search" aria-hidden="true"></i> 
+        <i class="fa fa-search" aria-hidden="true" title="Search at posts"></i> 
         </Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/postForm"><i className="fas fa-plus"></i></Link>              
+          <Link className="nav-link" to="/postForm"><i className="fas fa-plus"
+           title="Add a post"
+          ></i></Link>              
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/dashboard"><i className="fas fa-home"></i></Link>              
+          <Link className="nav-link" to="/dashboard"><i className="fas fa-home"
+          title="Homepage"
+          ></i></Link>              
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/profiles"><i class="fa fa-users" aria-hidden="true"></i>
+          <Link className="nav-link" to="/profiles"><i class="fa fa-users" aria-hidden="true" title="Profiles"></i>
                 {" "}
           </Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/profiles"><i class="fa fa-comments" aria-hidden="true"></i>
+          <Link className="nav-link" to="/profiles"><i class="fa fa-comments" aria-hidden="true" title="Communications"></i>
                 {" "}
           </Link>
         </li>

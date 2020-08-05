@@ -61,6 +61,12 @@ img {
   color: #bbb !important;
 }
 
+a {
+    color: #dd3d31;
+    text-decoration: none;
+    background-color: transparent;
+}
+
 .btn-secondary {
   color: #fff;
   background-color: #f4623a;
@@ -86,5 +92,9 @@ img {
   text-transform: uppercase;
   font-size: 0.95rem;
   font-weight: 700;
+}
 
+.bg-dark {
+  background-color: #424140!important;
+  background: transparent;
 }
