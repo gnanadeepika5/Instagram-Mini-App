@@ -84,7 +84,7 @@ class SearchForm extends Component {
                   
                   
                 </div>
-                <button type="submit" className="btn btn-info" ><i class="fa fa-search" aria-hidden="true"></i>
+                <button type="submit" className="btn btn-secondary" ><i class="fa fa-search" aria-hidden="true"></i>
                   Go Search
                 </button>
               </form>

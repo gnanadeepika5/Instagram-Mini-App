@@ -84,7 +84,7 @@ class PostForm extends Component{
                             error={errors.text}
                           />
                         </div>
-                        <button type="submit" className="btn btn-info btn-block mt-4">
+                        <button type="submit" className="btn btn-secondary btn-block mt-4">
                           Submit
                         </button>
                       </form>

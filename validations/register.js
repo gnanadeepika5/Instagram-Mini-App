@@ -8,6 +8,10 @@ module.exports = function validateRegisterInput(data){
     errors.name = 'Name must be between 2 and 30 characters';
   }
 
+  if (isEmpty(data.name)){
+    errors.name = 'Name is required';
+  }
+
   if (!validator.isEmail(data.email)){
     errors.email = 'Email is invalid';
   }

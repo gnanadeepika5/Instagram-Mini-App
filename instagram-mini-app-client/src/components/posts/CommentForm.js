@@ -58,7 +58,7 @@ class CommentForm extends Component {
                                       error={errors.text}
                   />
                 </div>
-                <button type="submit" className="btn btn-info">
+                <button type="submit" className="btn btn-secondary">
                   Comment
                 </button>
               </form>

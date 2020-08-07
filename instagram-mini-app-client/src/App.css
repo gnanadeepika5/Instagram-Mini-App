@@ -60,3 +60,41 @@ img {
 .form-control::placeholder {
   color: #bbb !important;
 }
+
+a {
+    color: #dd3d31;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.btn-secondary {
+  color: #fff;
+  background-color: #f4623a;
+  border-color: #f4623a;
+  border-radius: 10rem;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.btn-danger {
+  color: #fff;
+  border-radius: 10rem;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.searchButton {
+  color: #fff;
+  background-color: #f4623a;
+  border-color: #f4623a;
+  border-radius: 10rem;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.bg-dark {
+  background-color: #424140!important;
+  background: transparent;
+}
