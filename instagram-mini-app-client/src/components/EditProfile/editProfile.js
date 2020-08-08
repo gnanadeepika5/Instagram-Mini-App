@@ -87,7 +87,7 @@ class EditProfile extends Component {
         <div className="container">
           <div className="row">
             <div className=".col-12 .col-sm-12 col-md-12 .col-lg-8 .col-xl-6">
-              <Link className="btn btn-light" to={`/profiles/${profile.handle}`}>
+              <Link className="btn btn-light" to={`/profile/${profile.handle}`} >
                 Go Back
               </Link>
               <h1 className="text-center">Edit Profile</h1>

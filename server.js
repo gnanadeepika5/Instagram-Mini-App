@@ -9,9 +9,10 @@ const stories = require('./routes/api/stories');
 const search = require('./routes/api/search');
 const communications = require('./routes/api/communications');
 const logout = require('./routes/api/logout');
+const path = require('path');
 
 const app = express();
-const expressSwagger = require('express-swagger-generator')(app);
+//const expressSwagger = require('express-swgger-generator')(app);
 
 let options = {
     swaggerDefinition: {
@@ -40,7 +41,7 @@ let options = {
     files: ['./routes/**/*.js'] //Path to the API handle folder
 };
 
-expressSwagger(options)
+//expressSwagger(options)
 
 //Body parser configuration
 app.use(bodyparser.urlencoded({extended: false}));
@@ -60,7 +61,7 @@ mongoose
     .catch(err => console.log(err));
 
 //test route
-app.get('/', (req, res) => res.send('welcome :-)'));
+//app.get('/', (req, res) => res.send('welcome :-)'));
 
 //using routes
 app.use('/api/users', users);
@@ -72,11 +73,13 @@ app.use('/api/search', search);
 app.use('/api/communications', communications);
 
 //serve static assets if in production
-if (process.env.NODE_ENV == 'production') {
-    app.use('instagram-mini-app-client/build')
-    app.get('*',(req, res) =>
-            res.sendFile(path.resolve(__dirname,'instagram-mini-app-client','build','index.html')));
-        }
+if (process.env.NODE_ENV === 'production'){
+    app.use(express.static('instagram-mini-app-client/build'));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'instagram-mini-app-client', 'build', 'index.html'));
+    });
+    }
+
 //added port number
 const port = process.env.PORT || 10000;
 app.listen(port, () => console.log(`server running on port number ${port}`));

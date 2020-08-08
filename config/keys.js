@@ -1,5 +1,7 @@
-if (process.env.NODE_ENV === 'production') {
-  module.exports = require ('./keys_prod.js');
+const { model } = require("mongoose");
+
+if (process.env.NODE_ENV === 'production'){
+  module.exports = require('./keys_prod');
 } else {
-  module.exports = require ('./keys_dev.js');
+  module.exports = require('./keys_dev');
 }

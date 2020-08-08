@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 import profileReducer from '../../reducers/profileReducer';
 import { getProfileByHandle } from '../../action/profileActions';
 import NavbarCss from './Navbar.css';
+import NotFound from '../../components/profile/notFound';
+
 class Navbar extends Component {
   constructor(){
     super();
@@ -55,14 +57,14 @@ class Navbar extends Component {
                placeholder="Search by user handle"
                value={this.state.handle}
                onChange={this.onChange.bind(this)}
+               errors={this.state.errors}
         />
         {console.log(this.state.handle)}
           <Link className="nav-link search-icon" to={`/profile/${this.state.handle}`} onClick={this.onSearchClick.bind(this, this.state.handle)}>
           <button type="submit" class="searchButton">Go
             </button>
-          </Link>
-          </div>
-     
+          </Link>  
+        </div>
         </li>
         <li className="nav-item">
         <Link className="nav-link" to="/searchForm">
@@ -85,7 +87,7 @@ class Navbar extends Component {
           </Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/profiles"><i class="fa fa-comments" aria-hidden="true" title="Communications"></i>
+          <Link className="nav-link" to="/profiles"><i class="fa fa-comments" aria-hidden="true" title="Communications: select a profile to have a chat"></i>
                 {" "}
           </Link>
         </li>
@@ -110,7 +112,7 @@ class Navbar extends Component {
       
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
       <div className="container">
-        <Link className="navbar-brand" to="/"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i>
+        <Link className="navbar-brand" to="/dashboard"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i>
           Instagram Mini
         </Link>
         <button

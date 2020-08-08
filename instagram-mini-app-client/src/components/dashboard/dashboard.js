@@ -49,22 +49,6 @@ class Dashboard extends Component{
           </div>
           </div>
         );
-      } else {
-        // User is logged in but has no profile
-        dashboardContent = (
-          <div>
-          <div>
-            <p className="lead text-muted">Welcome {user.name}</p>
-            <p>You have not yet setup a profile, please add some info</p>
-            <Link to="/editProfile" className="btn btn-lg btn-info">
-              Create or Edit Profile
-            </Link>
-          </div>
-          <div>
-            <Posts/>
-          </div>
-          </div>
-        );
       }
     }
     return(
