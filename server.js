@@ -41,7 +41,7 @@ let options = {
     files: ['./routes/**/*.js'] //Path to the API handle folder
 };
 
-expressSwagger(options)
+//expressSwagger(options)
 
 //Body parser configuration
 app.use(bodyparser.urlencoded({extended: false}));
