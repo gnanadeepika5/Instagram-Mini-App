@@ -12,7 +12,7 @@ const logout = require('./routes/api/logout');
 const path = require('path');
 
 const app = express();
-const expressSwagger = require('express-swagger-generator')(app);
+//const expressSwagger = require('express-swagger-generator')(app);
 
 let options = {
     swaggerDefinition: {
