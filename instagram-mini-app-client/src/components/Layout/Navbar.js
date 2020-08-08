@@ -87,7 +87,7 @@ class Navbar extends Component {
           </Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/profiles"><i class="fa fa-comments" aria-hidden="true" title="Communications"></i>
+          <Link className="nav-link" to="/profiles"><i class="fa fa-comments" aria-hidden="true" title="Communications: select a profile to have a chat"></i>
                 {" "}
           </Link>
         </li>

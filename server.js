@@ -9,6 +9,7 @@ const stories = require('./routes/api/stories');
 const search = require('./routes/api/search');
 const communications = require('./routes/api/communications');
 const logout = require('./routes/api/logout');
+const path = require('path');
 
 const app = express();
 const expressSwagger = require('express-swagger-generator')(app);
@@ -71,6 +72,14 @@ app.use('/api/logout',logout);
 app.use('/api/search', search);
 app.use('/api/communications', communications);
 
+//serve static assets if in production
+if (process.env.NODE_ENV === 'production'){
+    app.use(express.static('instagram-mini-app-client/build'));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'instagram-mini-app-client', 'build', 'index.html'));
+    })
+    }
+
 //added port number
-const port = 10000;
+const port = process.env.PORT || 10000;
 app.listen(port, () => console.log(`server running on port number ${port}`));
