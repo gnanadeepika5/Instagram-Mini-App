@@ -12,7 +12,7 @@ const logout = require('./routes/api/logout');
 const path = require('path');
 
 const app = express();
-//const expressSwagger = require('express-swagger-generator')(app);
+//const expressSwagger = require('express-swgger-generator')(app);
 
 let options = {
     swaggerDefinition: {
@@ -61,7 +61,7 @@ mongoose
     .catch(err => console.log(err));
 
 //test route
-app.get('/', (req, res) => res.send('welcome :-)'));
+//app.get('/', (req, res) => res.send('welcome :-)'));
 
 //using routes
 app.use('/api/users', users);
